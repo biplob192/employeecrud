@@ -51,6 +51,6 @@ class LoginController extends Controller
             return redirect ("/dashboard");
         }
 
-        return view ("login");
+        return view ("auth.login");
     }
 }
