@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title></title>
 </head>
-<body bgcolor="black">
+<body bgcolor="#520097">
 	  <br>
   <form action="{{url('login')}}" method="post" align="center">
   	@csrf
@@ -13,7 +13,10 @@
 	   <input type="password" name="password" placeholder="Password" required>
 	   <input type="submit" value="Login"><br><br>
 
-  </form>
+	   @if(session()->has('error'))    
+	    <h2> <span style="color: white;">{{ session()->get('error') }}</span> </h2>
+	   @endif
+  </form>  
 </body>
 </html>
 

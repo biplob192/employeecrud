@@ -5,6 +5,10 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\ConrrespondentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\AdController;
+use App\Http\Controllers\AdsPriceController;
+use App\Http\Middleware\CheckAuth;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +23,12 @@ use App\Http\Controllers\HomeController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::view('/', 'index');
-Route::view('/login', 'index2');
+// Route::view('/', 'index');
+// Route::middleware([CheckAuth::class])->group(function () {
+
+// });
+
+
 Route::view('/tc', 'tc');
 Route::get('/dbtest', 'App\Http\Controllers\DatabaseController@dbConn');
 Route::get('/addstaff', function () {
@@ -34,19 +42,63 @@ Route::get('/mlist', [StaffController::class, 'mlist']);
 // Route::post('/updatemember', [StaffController::class, 'updateMember']);
 
 Route::post('/login', [LoginController::class, 'postLogin']);
-Route::get('/home', [HomeController::class, 'home']);
+Route::get('/login', [LoginController::class, 'login']);
 Route::get('/logout', [LoginController::class, 'logout']);
+Route::get('/', [HomeController::class, 'home']);
+Route::get('/dashboard', [HomeController::class, 'dashboard']);
 
-// correspondent
+
+// Correspondent CRUD Routes
 
 Route::get('/correspondent', [ConrrespondentController::class, 'create']);
 Route::post('/correspondent', [ConrrespondentController::class, 'store']);
+
+
 // protected route
-Route::get('/correspondents', [ConrrespondentController::class, 'index']);
-Route::get('/correspondent/{id}', [ConrrespondentController::class, 'show']);
-Route::get('/correspondent/{id}/edit', [ConrrespondentController::class, 'edit']);
-Route::put('/correspondent/{id}', [ConrrespondentController::class, 'update']);
-Route::delete('/correspondent/{id}', [ConrrespondentController::class, 'delete']);
+Route::middleware([CheckAuth::class])->group(function () {
+    Route::get('/correspondents', [ConrrespondentController::class, 'index']);
+    Route::get('/correspondent/{id}', [ConrrespondentController::class, 'show']);
+    Route::get('/correspondent/{id}/edit', [ConrrespondentController::class, 'edit']);
+    Route::put('/correspondent/{id}', [ConrrespondentController::class, 'update']);
+    Route::delete('/correspondent/{id}', [ConrrespondentController::class, 'delete']);
+
+
+    //Employee CRUD Routes
+
+    Route::get('/employee', [EmployeeController::class, 'create']);
+    Route::post('/employee', [EmployeeController::class, 'store']);
+    Route::get('/employees', [EmployeeController::class, 'index']);
+    Route::get('/employee/{id}', [EmployeeController::class, 'show']);
+    Route::get('/employee/{id}/edit', [EmployeeController::class, 'edit']);
+    Route::put('/employee/{id}', [EmployeeController::class, 'update']);
+    Route::delete('/employee/{id}', [EmployeeController::class, 'delete']);
+
+
+    //Ad CRUD Routes
+
+    Route::get('/ad', [AdController::class, 'create']);
+    Route::post('/ad', [AdController::class, 'store']);
+    Route::get('/ads', [AdController::class, 'index']);
+    Route::get('/ad/{id}', [AdController::class, 'show']);
+    Route::get('/ad/{id}/edit', [AdController::class, 'edit']);
+    Route::get('/ad/{id}/bill', [AdController::class, 'create_bill']);
+    Route::put('/ad/{id}', [AdController::class, 'update']);
+    Route::delete('/ad/{id}', [AdController::class, 'delete']);
+
+
+    //Ad_Price CRUD Routes
+
+    Route::get('/ad_price', [AdsPriceController::class, 'create']);
+    Route::post('/ad_price', [AdsPriceController::class, 'store']);
+    Route::get('/ad_prices', [AdsPriceController::class, 'index']);
+    Route::get('/ad_price/{id}', [AdsPriceController::class, 'show']);
+    Route::get('/ad_price/{id}/edit', [AdsPriceController::class, 'edit']);
+    Route::put('/ad_price/{id}', [AdsPriceController::class, 'update']);
+    Route::delete('/ad_price/{id}', [AdsPriceController::class, 'destroy']);
+
+});
+
+
 
 
 

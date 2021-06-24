@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     public function postLogin(Request $req){
-        if(Auth::attempt(['email' => $req->email,'password' => $req->password])){
-            return 'valid';
+        if(Auth::attempt(['name' => $req->name,'password' => $req->password])){
+            return redirect ("/dashboard");
         }else{
-            return 'Invalid';
+            return back()->with("error","Invalide credential");
+            // return "1234";
+            // return redirect()->back()->with('success', 'your message,here'); 
         }
     }
 
@@ -30,6 +32,7 @@ class LoginController extends Controller
         return 'valid credential';
     }
 
+
     // public function adminLogin(Request $req){
     //     if(Auth::guards('Admin')->attempt(['email' => $req->email,'password' => $req->password])){
     //         return 'valid';
@@ -41,5 +44,13 @@ class LoginController extends Controller
     public function logout(){
         Auth::logout();
         return redirect('/');
+    }
+
+    public function login(){
+        if(Auth::check()){
+            return redirect ("/dashboard");
+        }
+
+        return view ("login");
     }
 }

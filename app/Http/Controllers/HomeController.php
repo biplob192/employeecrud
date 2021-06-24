@@ -9,8 +9,18 @@ class HomeController extends Controller
 {
     public function home(){
         if(Auth::check()){
-            return Auth::user()->name;
+            return redirect('/dashboard');
+            // return view ("panel");
         }
-        return 'login please';
+        // return redirect ("login");
+
+        return "Welcome to TBT";
+    }
+
+    public function dashboard() {
+        if(Auth::check()){
+            return view ("panel");
+        }
+        return redirect ("login");
     }
 }
