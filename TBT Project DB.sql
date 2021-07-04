@@ -24,6 +24,7 @@ CREATE TABLE `ads` (
   `id` int NOT NULL AUTO_INCREMENT,
   `correspondent_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `ad_type` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `ad_position` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `rate` int NOT NULL,
   `extra_charge` int NOT NULL,
   `division` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
@@ -37,20 +38,27 @@ CREATE TABLE `ads` (
   `total_size` int NOT NULL,
   `amount` float NOT NULL,
   `payment_status` binary(1) NOT NULL,
+  `publishing_date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `ads` */
 
-insert  into `ads`(`id`,`correspondent_name`,`ad_type`,`rate`,`extra_charge`,`division`,`district`,`upazila`,`client`,`gd_no`,`order_no`,`inch`,`colum`,`total_size`,`amount`,`payment_status`,`created_at`,`updated_at`) values 
-(1,'Biplob','Govt',538,0,'Rangpur','Kurigram','Chilmari','LGED','346/21',512,10,4,40,20488,'1','2021-06-22 08:20:08','2021-06-23 08:51:47'),
-(2,'Shajib','Private',0,5000,'Rangpur','Kurigram','Ulipur','Private','347/21',231,10,5,50,50500,'1','2021-06-22 08:22:38','2021-06-24 00:44:47'),
-(3,'Shobuj','Govt',500,0,'Rangpur','Rangpur Shadar','Rangpur Shadar','LGED','348/21',234,10,5,50,25000,'1','2021-06-22 08:28:19','2021-06-22 18:40:35'),
-(4,'Mehedi Hasan','Private',0,0,'Dinajpur','Dinajpur','Dinajpur','Personal','349/21',111,15,5,75,25500,'1','2021-06-22 18:45:12','2021-06-22 18:45:12'),
-(6,'Biplob','govt',600,0,'Rangpur','Kurigram','Chilmari','PA','111',222,10,5,50,30000,'1','2021-06-23 18:39:01','2021-06-23 18:39:01'),
-(7,'FFF','govt',538,500,'Rangpur','Kurigram','Ulipur','PA','1122',334,10,5,50,27400,'1','2021-06-24 00:43:04','2021-06-24 00:43:04');
+insert  into `ads`(`id`,`correspondent_name`,`ad_type`,`ad_position`,`rate`,`extra_charge`,`division`,`district`,`upazila`,`client`,`gd_no`,`order_no`,`inch`,`colum`,`total_size`,`amount`,`payment_status`,`publishing_date`,`created_at`,`updated_at`) values 
+(1,'Biplob Mia','Govt','Front Page',560,300,'Rangpur','Kurigram','Chilmari','LGED','346/21',512,1,1,1,860,'0','30 June 2021','2021-06-22 08:20:08','2021-07-03 23:09:17'),
+(2,'Manjurul Shajib','Commercial','Back Page',700,5000,'Rangpur','Kurigram','Ulipur','Private','347/21',231,2,5,10,12000,'1','29 June 2021','2021-06-22 08:22:38','2021-07-03 23:10:38'),
+(4,'Mehedi Hasan','govt','Front Page',560,0,'Dinajpur','Dinajpur','Dinajpur','Personal','349/21',111,15,5,75,42000,'1','28 June 2021','2021-06-22 18:45:12','2021-07-01 15:06:29'),
+(6,'Billal Hossain','Govt','Front Page',560,0,'Rangpur','Kurigram','Chilmari','PA','348/21',222,10,5,50,28000,'1','27 June 2021','2021-06-23 18:39:01','2021-07-04 02:13:03'),
+(7,'Faruq Miah','Govt','Front Page',560,500,'Rangpur','Kurigram','Ulipur','PA','351/21',334,10,5,50,28500,'1','30 June 2021','2021-06-24 00:43:04','2021-07-04 02:15:26'),
+(8,'Didarul Haque','Govt','Front Page',560,0,'Rangpur','Dinajpur','Dinajpur Sdr','Police Line','350/21',333,10,5,50,28000,'1','30 June 2021','2021-06-25 21:12:18','2021-07-04 02:15:17'),
+(9,'Hamidul Islam','Govt','Front Page',560,0,'Rangpur','Kurigram','Kurigram Sdr','LGED','345/21',322,10,5,50,28000,'0','28 June 2021','2021-06-25 22:49:07','2021-07-04 02:14:48'),
+(10,'Tarikul Islam','Govt','Inner Page',538,500,'Dhaka','Dhaka','Dhaka','RAB','344/21',444,15,5,75,40850,'0','28 June 2021','2021-06-25 22:52:48','2021-07-04 02:14:26'),
+(11,'Sabbir Khan','Govt','Back Page',550,0,'ww','ww','ww','ee','343/21',33,10,5,50,27500,'0','15 June 2021','2021-06-25 23:08:52','2021-07-04 02:14:08'),
+(12,'Abdullah','Govt','Front Page',560,400,'Abdullah','Abdullah','Abdullah','Abdullah','342/21',222,2,1,2,1520,'0','01 July 2021','2021-06-28 16:49:50','2021-07-04 02:13:58'),
+(13,'SSS','Govt','Front Page',560,100,'SSS','SSS','SSS','SSS','341/21',33,5,2,10,5700,'0','29 June 2021','2021-06-28 17:26:55','2021-07-04 02:13:48'),
+(14,'Badsha','Govt','Front Page',560,0,'Rangpur','Rangpur','Rangpur','LGED','340/21',111,12,5,60,33600,'0','30 June 2021','2021-06-28 17:27:40','2021-07-04 02:13:42');
 
 /*Table structure for table `ads_price` */
 
@@ -58,31 +66,53 @@ DROP TABLE IF EXISTS `ads_price`;
 
 CREATE TABLE `ads_price` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `ads_type` enum('govt','private','commercial') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ads_position` enum('front','back','inner','inner_color') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ads_type` enum('Govt','Private','Commercial') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ads_position` enum('Front Page','Back Page','Inner Page','Inner_Color') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` int NOT NULL,
   `extra_charge` int DEFAULT NULL,
   `status` tinyint NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `ads_price` */
 
 insert  into `ads_price`(`id`,`ads_type`,`ads_position`,`price`,`extra_charge`,`status`,`created_at`,`updated_at`) values 
-(1,'govt','front',538,NULL,1,'2021-06-24 02:32:20','2021-06-24 02:32:20'),
-(2,'govt','back',538,NULL,1,'2021-06-24 02:32:44','2021-06-24 02:32:44'),
-(3,'govt','inner',50,NULL,1,'2021-06-24 02:32:51','2021-06-24 11:51:58'),
-(4,'govt','inner_color',53,NULL,1,'2021-06-24 02:33:02','2021-06-24 11:52:10'),
-(5,'private','front',500,NULL,1,'2021-06-24 02:33:18','2021-06-24 02:33:18'),
-(6,'private','back',450,NULL,1,'2021-06-24 02:33:27','2021-06-24 02:33:27'),
-(7,'private','inner',400,NULL,1,'2021-06-24 02:33:35','2021-06-24 02:33:35'),
-(8,'private','inner_color',800,NULL,1,'2021-06-24 02:33:41','2021-06-24 12:28:36'),
-(9,'commercial','front',700,NULL,1,'2021-06-24 02:33:47','2021-06-24 02:33:47'),
-(10,'commercial','back',650,NULL,1,'2021-06-24 02:33:54','2021-06-24 02:33:54'),
-(11,'commercial','inner',600,NULL,1,'2021-06-24 02:34:01','2021-06-24 02:34:01'),
-(13,'commercial','inner_color',680,NULL,1,'2021-06-24 12:17:31','2021-06-24 12:17:51');
+(1,'Govt','Front Page',560,NULL,1,'2021-06-28 16:40:33','2021-06-28 22:38:04'),
+(2,'Govt','Back Page',550,NULL,1,'2021-06-28 16:46:38','2021-06-28 22:38:42'),
+(3,'Govt','Inner Page',538,NULL,1,'2021-06-28 16:46:44','2021-06-28 16:46:44'),
+(4,'Govt','Inner_Color',540,NULL,1,'2021-06-28 16:46:48','2021-06-28 18:33:28'),
+(5,'Private','Front Page',580,NULL,1,'2021-06-28 16:47:04','2021-06-28 16:47:04'),
+(6,'Private','Back Page',580,NULL,1,'2021-06-28 16:47:12','2021-06-28 16:47:12'),
+(7,'Private','Inner Page',580,NULL,1,'2021-06-28 16:47:18','2021-06-28 16:47:18'),
+(8,'Private','Inner_Color',580,NULL,1,'2021-06-28 16:47:26','2021-06-28 16:47:26'),
+(9,'Commercial','Front Page',700,NULL,1,'2021-06-28 16:47:53','2021-06-28 16:47:53'),
+(10,'Commercial','Back Page',700,NULL,1,'2021-06-28 16:48:00','2021-06-28 16:48:00'),
+(11,'Commercial','Inner Page',700,NULL,1,'2021-06-28 16:48:05','2021-06-28 16:48:05'),
+(12,'Commercial','Inner_Color',700,NULL,1,'2021-06-28 16:48:11','2021-06-28 16:48:11');
+
+/*Table structure for table `cheques` */
+
+DROP TABLE IF EXISTS `cheques`;
+
+CREATE TABLE `cheques` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `gd_no` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `bank_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `cheque_amount` float NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `cheques` */
+
+insert  into `cheques`(`id`,`gd_no`,`bank_name`,`cheque_amount`,`created_at`,`updated_at`) values 
+(1,'346/21','DBBL',1111,'2021-07-03 21:49:57','2021-07-04 02:42:36'),
+(2,'111','SIBL',33000,'2021-07-03 21:52:56','2021-07-04 02:42:10'),
+(4,'234','Sonali Bank',30000,'2021-07-03 22:18:41','2021-07-04 02:42:22'),
+(5,'351/21','SIBL',28500,'2021-07-04 02:44:30','2021-07-04 02:44:30');
 
 /*Table structure for table `correspondents` */
 
@@ -91,18 +121,30 @@ DROP TABLE IF EXISTS `correspondents`;
 CREATE TABLE `correspondents` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `division` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `district` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `upazila` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `mobile` varchar(11) COLLATE utf8mb4_general_ci NOT NULL,
   `nid` int NOT NULL,
-  `corid` int NOT NULL,
-  `image` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `corrid` int NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `appointed_date` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `correspondents` */
+
+insert  into `correspondents`(`id`,`name`,`division`,`district`,`upazila`,`mobile`,`nid`,`corrid`,`email`,`appointed_date`,`image`,`created_at`,`updated_at`) values 
+(1,'Mamun','Chattogram','Noakhali','Noakhali','01930384330',445566,445566,'ddfff@gmail.com','14 April 2021','Biplob.jpg','2021-06-25 16:22:46','2021-06-27 20:24:12'),
+(3,'Harunor Rashid','Rangpur','Kurigram','Ulipur','01725361208',45000980,45000980,'name@gmail.com','02 May 2017','Biplob.jpg','2021-06-26 14:02:08','2021-06-27 20:15:12'),
+(4,'Shiraj Khan','Dhaka','Madaripur','Madaripur','776000980',776000980,776000980,'dot@gmail.com','10 May 2016',NULL,'2021-06-26 14:09:03','2021-06-27 19:55:21'),
+(5,'Nijam Mollah','Dhaka','Madaripur','Madaripur','01725361209',77600,77600,'fds@test.com','01 June 2021',NULL,'2021-06-26 14:10:06','2021-06-27 20:19:35'),
+(6,'Bikrom Pathan','Sylhet','Habiganj','Habiganj','01725361210',33244,33244,'drt@tr.com','03 June 2021',NULL,'2021-06-26 14:10:37','2021-06-27 20:19:44'),
+(7,'Masum Billah',NULL,'Mymensingh','Mymensingh','01788033900',8033900,8033900,'name@mail.com','02 June 2021',NULL,'2021-06-27 20:04:56','2021-06-27 20:04:56'),
+(8,'Nijam Uddin',NULL,'Natore','Natore','01725361211',36120,36120,'nijam@gmail.com','02 June 2021',NULL,'2021-06-27 20:10:00','2021-06-27 20:19:49');
 
 /*Table structure for table `employees` */
 
@@ -114,31 +156,34 @@ CREATE TABLE `employees` (
   `fathers_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `district` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `upazila` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `mobile` int NOT NULL,
+  `mobile` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `nid` int NOT NULL,
+  `emp_id` int NOT NULL,
+  `section` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `designation` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `appointed_date` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `section` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `designation` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `joining_date` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `employees` */
 
-insert  into `employees`(`id`,`name`,`fathers_name`,`district`,`upazila`,`mobile`,`email`,`nid`,`image`,`created_at`,`updated_at`,`section`,`designation`,`joining_date`) values 
-(3,'Shajib','Father','Kurigram','Ulipur',9900880,'Email',897660,'Image','2021-06-19 06:37:57','2021-06-19 06:49:00',NULL,NULL,NULL),
-(4,'Hasan','Father','Kurigram','Chilmari',990943,'mail@gmail.com',344443,'Image','2021-06-19 06:41:52','2021-06-19 06:49:37',NULL,NULL,NULL),
-(5,'Shahid','Father','Barishal','Barishal Shadar',2111211,'mail@gmail.com',77088022,'Image','2021-06-19 08:48:07','2021-06-19 08:48:07',NULL,NULL,NULL),
-(6,'Shagor','Abdul Majed','Khulna','Khulna Shadar',907768,'md@gmail.com',99800007,'Nai','2021-06-19 08:49:26','2021-06-19 08:49:26',NULL,NULL,NULL),
-(7,'Rashedul','Milon','Nilphamari','Nilphamari Shadar',900654,'mail@gmail.com',3339088,'Image','2021-06-19 08:52:42','2021-06-19 08:52:42',NULL,NULL,NULL),
-(8,'Riazul Haque','Abdul Majed','Khulna','Khulna Shadar',17253633,'md@gmail.com',77088022,'Image','2021-06-19 08:54:10','2021-06-19 08:54:10',NULL,NULL,NULL),
-(9,'Biplob Mia','Full Mia','Kurigram','Chilmari',1725361208,'biplob@gmail.com',77088022,'Image','2021-06-19 08:55:00','2021-06-19 08:55:00',NULL,NULL,NULL),
-(10,'Shahid','Abdul Majed','Nilphamari','Nilphamari Shadar',90073332,'md@gmail.com',99870,'Image','2021-06-19 17:23:05','2021-06-19 17:23:05',NULL,NULL,'2010-10-08'),
-(11,'Shahid','Full Mia','Kurigram','Kurigram Shadar',334222,'md@gmail.com',9987023,'Img','2021-06-19 17:26:36','2021-06-19 17:26:36',NULL,NULL,'2012-01-26'),
-(12,'Fazly Rabbi','Amzad Shekh','Khulna','Khulna Shadar',8897000,'mail@test.com',999000777,'koi','2021-06-21 18:09:18','2021-06-21 18:09:18',NULL,NULL,'2015-10-01');
+insert  into `employees`(`id`,`name`,`fathers_name`,`district`,`upazila`,`mobile`,`email`,`nid`,`emp_id`,`section`,`designation`,`appointed_date`,`image`,`created_at`,`updated_at`) values 
+(3,'Shajib Dud','Father','Kurigram','Ulipur','1930384220','SS@Email.com',897660,33567,'Fathersection','IT Manager','01 June 2021','1624645138.jpg','2021-06-19 06:37:57','2021-06-27 16:21:48'),
+(4,'Moniruzzaman Manik','Hasan Mahmud','Kurigram','Chilmari','1725361208','mail@gmail.com',2222,33333,'IT','Manager','01 June 2021','1624789616.jpg','2021-06-19 06:41:52','2021-06-27 16:26:57'),
+(5,'Jobaer Alam','Father\'s Name','Nilphamari','Nilphamari','01625361208','mail@gmail.com',77088022,0,'Author','Chairman & Editor','01 January 2013','1624790124.JPG','2021-06-19 08:48:07','2021-06-28 22:32:38'),
+(6,'Shagor','Abdul Majed','Khulna','Khulna Shadar','907768','md@gmail.com',99800007,0,'News','News Editor','07 June 2021','1624790174.jpg','2021-06-19 08:49:26','2021-06-27 16:36:15'),
+(7,'Rashedul','Milon','Nilphamari','Nilphamari Shadar','900654','mail@gmail.com',3339088,0,'IT','IT Executive','03 June 2021','1624790235.jpg','2021-06-19 08:52:42','2021-06-27 16:37:16'),
+(8,'Riazul Haque','Abdul Majed','Khulna','Khulna Shadar','1725361208','md@gmail.com',77088022,0,'News','Sub Editor','01 June 2021','1624807582.jpg','2021-06-19 08:54:10','2021-06-27 21:26:22'),
+(9,'Biplob Mia','Full Mia','Kurigram','Chilmari','01825361208','biplob@gmail.com',77088022,77088022,'IT','IT Executive','01 June 2021','1624652038.jpg','2021-06-19 08:55:00','2021-06-28 13:12:03'),
+(10,'Shahid','Abdul Majed','Nilphamari','Nilphamari Shadar','90073332','md@gmail.com',99870,0,'News','News Editor','2010-10-08','1624806473.jpg','2021-06-19 17:23:05','2021-06-27 21:07:53'),
+(11,'Shahid','Full Mia','Kurigram','Kurigram Shadar','334222','md@gmail.com',9987023,0,NULL,'News Editor','2012-01-26','1624825271.jpg','2021-06-19 17:26:36','2021-06-28 02:21:11'),
+(12,'Fazly Rabbi','Amzad Shekh','Khulna','Khulna Shadar','01625361202','mail@test.com',999000777,0,NULL,'News Editor','2015-10-01','1624825248.JPG','2021-06-21 18:09:18','2021-06-28 22:36:36'),
+(14,'Biju Shekh','Bayjid Shekh','Kurigram','Kurigram','1725361213','biju@gmail.com',444,555555,'Marketing','AGM','07 May 2014','1624825221.jpg','2021-06-25 23:27:48','2021-06-28 13:13:08'),
+(15,'Mahmud Hossain','Mahammod Mirza','Nilphamari','Nilphamari','1925361208','rrr@gmail.com',444,444,'News','Editor','01 June 2021','1624788947.jpg','2021-06-25 23:57:05','2021-06-28 12:53:25');
 
 /*Table structure for table `failed_jobs` */
 
@@ -176,7 +221,6 @@ CREATE TABLE `members` (
 
 insert  into `members`(`id`,`name`,`mobile`,`district`,`created_at`,`updated_at`) values 
 (1,'Abdul Karim','1733398742','Nilphamari','2021-06-18 16:18:18','2021-06-18 16:18:18'),
-(2,'Azizul Haque','1790898740','Borguna','2021-06-18 16:18:18','2021-06-18 16:18:18'),
 (3,'Baker Khan','134','Dinajpur','2021-06-18 16:18:18','2021-06-18 16:18:18'),
 (5,'Gautam Shekh','444','Bhola','2021-06-18 16:18:18','2021-06-18 16:18:18'),
 (6,'Md Biplob Mia','1208','Kurigram','2021-06-18 16:18:18','2021-06-18 16:18:18'),
