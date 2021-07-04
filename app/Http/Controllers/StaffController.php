@@ -4,29 +4,45 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\member;
+use App\Models\Correspondent;
 use Validator;
 use Exception;
 
 class StaffController extends Controller
 {
-   public function addStaff (Request $req){ 
-    try{
+    public function create(){ // show insert form
+        return view ('admin.correcpondents.office_staff');
+    }
+
+    public function store(Request $req){ // store into database
+        try{
         $validator  = Validator::make($req->all(), [
-            'staffname' => 'required|max:50',
-            'mobileno'  => 'required|unique:members,mobile',
+            'name' => 'required|max:50',            
             'district'  => 'filled', 
-            'tc'  => 'accepted',            
+            'upazila'  => 'filled', 
+            'mobile'  => 'required|unique:correspondents,mobile',
+            'nid'  => 'required|unique:correspondents,nid',
+            'corrid'  => 'required|unique:correspondents,nid',
+            'email'  => 'required',
+            'appointed_date'  => 'required',
+                        
         ]);
 
         if($validator ->fails()){
            return back()->withErrors($validator )->withInput();
         }
 
-        $member= new Member;
-        $member->name=$req->staffname;
-        $member->mobile=$req->mobileno;
-        $member->district=$req->district;
-        $member->save();
+        $correspondent= new Correspondent;
+        $correspondent->name=$req->name;
+        $correspondent->district=$req->district;
+        $correspondent->upazila=$req->upazila;
+        $correspondent->mobile=$req->mobile;
+        $correspondent->nid=$req->nid;
+        $correspondent->corrid=$req->corrid;
+        $correspondent->email=$req->email;
+        $correspondent->appointed_date=$req->appointed_date;
+        $correspondent->image=$req->image;
+        $correspondent->save();
         return back();
 
         // Member::insert([
@@ -34,10 +50,14 @@ class StaffController extends Controller
         //     'mobile'=> $req->mobileno
         // ]);
         // return redirect('/addstaff');
+        }
+        catch(Exception $e){
+            return $e->getMessage();
+        }
     }
-    catch(Exception $e){
-        return $e->getMessage();
-    }
+
+   public function addStaff (Request $req){ 
+    
    }
 
    public function mlist(){

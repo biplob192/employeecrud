@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AdController;
 use App\Http\Controllers\AdsPriceController;
+use App\Http\Controllers\ChequeController;
 use App\Http\Middleware\CheckAuth;
 
 /*
@@ -29,13 +30,12 @@ use App\Http\Middleware\CheckAuth;
 // });
 
 
-Route::view('/tc', 'tc');
 Route::get('/dbtest', 'App\Http\Controllers\DatabaseController@dbConn');
-Route::get('/addstaff', function () {
-    return view('office_staff');
-});
-Route::post('/addstaff', [StaffController::class, 'addStaff']);
-Route::get('/mlist', [StaffController::class, 'mlist']);
+// Route::get('/addstaff', function () {
+//     return view('office_staff');
+// });
+// Route::post('/addstaff', [StaffController::class, 'store']);
+// Route::get('/mlist', [StaffController::class, 'mlist']);
 
 // Route::get('/delete/{id}', [StaffController::class, 'delete']);
 // Route::get('/edit/{id}', [StaffController::class, 'edit']);
@@ -50,12 +50,14 @@ Route::get('/dashboard', [HomeController::class, 'dashboard']);
 
 // Correspondent CRUD Routes
 
-Route::get('/correspondent', [ConrrespondentController::class, 'create']);
-Route::post('/correspondent', [ConrrespondentController::class, 'store']);
+
 
 
 // protected route
 Route::middleware([CheckAuth::class])->group(function () {
+    
+    Route::get('/correspondent', [ConrrespondentController::class, 'create']);
+    Route::post('/correspondent', [ConrrespondentController::class, 'store']);
     Route::get('/correspondents', [ConrrespondentController::class, 'index']);
     Route::get('/correspondent/{id}', [ConrrespondentController::class, 'show']);
     Route::get('/correspondent/{id}/edit', [ConrrespondentController::class, 'edit']);
@@ -81,9 +83,11 @@ Route::middleware([CheckAuth::class])->group(function () {
     Route::get('/ads', [AdController::class, 'index']);
     Route::get('/ad/{id}', [AdController::class, 'show']);
     Route::get('/ad/{id}/edit', [AdController::class, 'edit']);
-    Route::get('/ad/{id}/bill', [AdController::class, 'create_bill']);
+    Route::get('/ad/{id}/bill', [AdController::class, 'print_bill']);
     Route::put('/ad/{id}', [AdController::class, 'update']);
     Route::delete('/ad/{id}', [AdController::class, 'delete']);
+
+    Route::get('/bill', [AdController::class, 'printBill']); //Sample Bill Page
 
 
     //Ad_Price CRUD Routes
@@ -95,6 +99,17 @@ Route::middleware([CheckAuth::class])->group(function () {
     Route::get('/ad_price/{id}/edit', [AdsPriceController::class, 'edit']);
     Route::put('/ad_price/{id}', [AdsPriceController::class, 'update']);
     Route::delete('/ad_price/{id}', [AdsPriceController::class, 'destroy']);
+
+    //Cheque CRUD Routes
+
+    Route::get('/cheque', [chequeController::class, 'create']);
+    Route::post('/cheque', [chequeController::class, 'store']);
+    Route::get('/cheques', [chequeController::class, 'index']);
+    Route::get('/cheque/{id}', [chequeController::class, 'show']);
+    Route::get('/cheque/{id}/edit', [chequeController::class, 'edit']);
+    Route::put('/cheque/{id}', [chequeController::class, 'update']);
+    Route::delete('/cheque/{id}', [chequeController::class, 'destroy']);
+    
 
 });
 

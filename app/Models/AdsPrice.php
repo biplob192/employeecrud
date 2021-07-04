@@ -16,7 +16,7 @@ class AdsPrice extends Model
         'ads_position',
         'price',
         'extra_charge',
-        'status',
+        'payment_status',
         'created_at',
         'updated_at',
     ];

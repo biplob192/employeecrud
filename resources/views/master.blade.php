@@ -6,9 +6,9 @@
 	<title>@yield('Title')</title>
 
 	<!-- Site favicon -->
-	<link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="vendors/images/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="vendors/images/favicon-16x16.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="{{asset('Backend')}}/vendors/images/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="{{asset('Backend')}}/vendors/images/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="{{asset('Backend')}}/vendors/images/favicon-16x16.png">
 
 	<!-- Mobile Specific Metas -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -26,7 +26,7 @@
 <body>
 	<div class="pre-loader">
 		<div class="pre-loader-box">
-			<div class="loader-logo"><img src="{{asset('Backend')}}/vendors/images/deskapp-logo.svg" alt=""></div>
+			<div class="loader-logo"><img width="100%" src="{{asset('Backend')}}/vendors/images/deskapp-logo.svg" alt=""></div>
 			<div class='loader-progress' id="progress_div">
 				<div class='bar' id='bar1'></div>
 			</div>
@@ -36,13 +36,8 @@
 			</div>
 		</div>
 	</div>
-
 	@include('inc.header')
-
-
-
 	@include('inc.sidebar')
-
 	<div class="main-container">
 		<div class="pd-ltr-20">
 			@yield('Content')

@@ -16,7 +16,7 @@ class AdsPriceController extends Controller
     public function index()
     {
         $ad_prices=AdsPrice::all();
-        return view ('ad_prices',['ad_prices'=>$ad_prices]);               
+        return view ('admin.ads.ad_prices',['ad_prices'=>$ad_prices]);               
     }
 
     /**
@@ -26,7 +26,7 @@ class AdsPriceController extends Controller
      */
     public function create()
     {
-        return view('create_ad_price');
+        return view('admin.ads.create_ad_price');
     }
 
     /**
@@ -49,11 +49,6 @@ class AdsPriceController extends Controller
            return back()->withErrors($validator )->withInput();
         }
 
-       // $data=[ 'ads_type'     => $req->ad_type,
-       //          'ads_position' => $req->ad_position,
-       //          'price'        => $req->rate
-       //      ];
-
         AdsPrice::updateOrCreate(
             [
                 'ads_type' =>  $req->ad_type,
@@ -67,27 +62,12 @@ class AdsPriceController extends Controller
                 'price'        => $req->rate
             ] // inserting data
         );
-
-        // AdsPrice::updateOrCreate(
-        //     [
-        //         'ads_type' =>  $data['ads_type'],
-        //         'ads_position' =>  $data['ads_position']
-        //     ],
-
-        //     $data // inserting data
-        // );
-
-        // $ads_price= new AdsPrice;
-        // $ads_price->ads_type=$req->ad_type; 
-        // $ads_price->ads_position=$req->ad_position; 
-        // $ads_price->price=$req->rate; 
-        // $ads_price->save();   
         return back(); 
 
-    }
-    catch(Exception $e){
-        return $e->getMessage();
-    }
+        }
+        catch(Exception $e){
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -110,7 +90,7 @@ class AdsPriceController extends Controller
     public function edit($id)
     {
         $ad_price=AdsPrice::find($id);
-        return view ('edit_ad_price',['ad_price'=>$ad_price]);
+        return view ('admin.ads.edit_ad_price',['ad_price'=>$ad_price]);
     }
 
     /**
@@ -127,7 +107,7 @@ class AdsPriceController extends Controller
         if($req->ad_type){
             $ad_price->ads_type=$req->ad_type;
         }
-        if($req->c){
+        if($req->ad_position){
             $ad_price->ads_position=$req->ad_position;
         }
         

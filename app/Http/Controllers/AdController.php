@@ -12,11 +12,11 @@ class AdController extends Controller
     public function index(){ // show all ads list
         // return view('ads');
         $ad=Ad::all();
-        return view ('ads',['ad'=>$ad]);
+        return view ('admin.ads.ads',['ad'=>$ad]);
     }
 
     public function create(){ // show insert form
-        return view('create_new_ad');
+        return view('admin.ads.create_new_ad');
     }
 
     public function store(Request $req){ // store into database
@@ -24,8 +24,7 @@ class AdController extends Controller
         $validator  = Validator::make($req->all(), [
             'name' => 'required|max:50',            
             'ad_type' => 'required',            
-            'ad_position' => 'required',            
-           
+            'ad_position' => 'required',          
             'extra_charge' => 'required',            
             'division' => 'required',            
             'district' => 'required',            
@@ -34,9 +33,7 @@ class AdController extends Controller
             'gd_no' => 'required',            
             'order_no' => 'required',            
             'inch' => 'required',            
-            'colum' => 'required',            
-            
-                      
+            'colum' => 'required',      
             'payment_status'  => 'required',            
         ]);
 
@@ -50,7 +47,8 @@ class AdController extends Controller
                 ])->first();
 
         $total_size = $req->inch*$req->colum;      
-        $amount = ($total_size*$ads_price->price)+$req->extra_charge;
+        $final_amount = ($total_size*$ads_price->price)+$req->extra_charge;
+
         $ad= new Ad;
         $ad->correspondent_name =$req->name;
         $ad->ad_type            =$req->ad_type;
@@ -63,10 +61,12 @@ class AdController extends Controller
         $ad->gd_no              =$req->gd_no;
         $ad->order_no           =$req->order_no;
         $ad->inch               =$req->inch;
+        $ad->ad_position        =$req->ad_position;
         $ad->colum              =$req->colum;
         $ad->total_size         =$total_size;
-        $ad->amount             =$amount;
+        $ad->amount             =$final_amount;
         $ad->payment_status     =$req->payment_status;
+        $ad->publishing_date    =$req->publishing_date;
         $ad->save();
         return back();
 
@@ -82,25 +82,47 @@ class AdController extends Controller
     }
 
     public function show($id){ // show single ad 
-        return 'all list';
+        $ad=Ad::find($id);
+        return view ('admin.prints.print_bill_pre',['ad'=>$ad]);
     }
 
     public function edit($id){ // show single ad  in edit form
         $ad=Ad::find($id);
-        return view ('edit_ad',['ad'=>$ad]);
+        return view ('admin.ads.edit_ad',['ad'=>$ad]);
     }
 
     public function update(Request $req){ // edit single ad
         // return $req->input();
-        $ad=Ad::find($req->id);
+        $ad =Ad::find($req->id);
+
+        if($req->inch && $req->colum){
+            $ads_price = AdsPrice::select('price')
+                ->where([
+                    'ads_type' => $req->ad_type,
+                    'ads_position' => $req->ad_position
+                ])->first();  
+
+            $total_size = $req->inch*$req->colum;  
+            $final_amount = ($total_size*$ads_price->price)+$req->extra_charge;
+
+            $ad->total_size = $total_size;
+            $ad->amount= $final_amount;
+            $ad->inch = $req->inch;
+            $ad->colum = $req->colum;
+            $ad->rate =$ads_price->price;
+        }
+
         if($req->name){
             $ad->correspondent_name=$req->name;
         }
         if($req->ad_type){
             $ad->ad_type=$req->ad_type;
         }
-        if($req->rate){
-            $ad->rate=$req->rate;
+        if($req->ad_position){
+            $ad->ad_position=$req->ad_position;
+        }
+        if($req->publishing_date){
+            $ad->publishing_date=$req->publishing_date;
         }
         if($req->extra_charge){
             $ad->extra_charge=$req->extra_charge;
@@ -122,19 +144,7 @@ class AdController extends Controller
         }
         if($req->order_no){
             $ad->order_no=$req->order_no;
-        }
-        if($req->inch){
-            $ad->inch=$req->inch;
-        }
-        if($req->colum){
-            $ad->colum=$req->colum;
-        }
-        if($req->total_size){
-            $ad->total_size=$req->total_size;
-        }
-        if($req->amount){
-            $ad->amount=$req->amount;
-        }        
+        }         
         if($req->payment_status == 1){
             $ad->payment_status=$req->payment_status;
         }
@@ -150,5 +160,10 @@ class AdController extends Controller
         $ad=Ad::find($id);
         $ad->delete();
         return back();
+    }
+
+    public function print_bill($id){
+        $ad=Ad::find($id);
+        return view ('admin.prints.print_bill',['ad'=>$ad]);
     }
 }

@@ -14,12 +14,12 @@ class HomeController extends Controller
         }
         // return redirect ("login");
 
-        return "Welcome to TBT";
+        return view ('home');
     }
 
     public function dashboard() {
         if(Auth::check()){
-            return view ("panel");
+            return view ("admin.dashboard");
         }
         return redirect ("login");
     }

@@ -1,6 +1,6 @@
 <div class="left-side-bar">
 		<div class="brand-logo">
-			<a href="index.html">
+			<a href="{{url('/dashboard')}}">
 				<img src="{{asset('Backend')}}/vendors/images/deskapp-logo.svg" alt="" class="dark-logo">
 				<img src="{{asset('Backend')}}/vendors/images/deskapp-logo-white.svg" alt="" class="light-logo">
 			</a>
@@ -11,58 +11,86 @@
 		<div class="menu-block customscroll">
 			<div class="sidebar-menu">
 				<ul id="accordion-menu">
+
+					<li>
+						<a href="{{url('/dashboard')}}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext">Dashboard</span>
+						</a>
+					</li>
+
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-house-1"></span><span class="mtext">Home</span>
+							<span class="micon dw dw-calendar1"></span><span class="mtext">Daily Ads</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="index.html">Dashboard style 1</a></li>
+							<li><a href="{{url('/ad')}}">Add New</a></li>							
+							<li><a href="{{url('/ads')}}">All Ads</a></li>
 						</ul>
 					</li>
-					<li>
-						<a href="{{url('/new')}}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-calendar1"></span><span class="mtext">New Route</span>
-						</a>
-					</li>
+
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-list3"></span><span class="mtext">Multi Level Menu</span>
+							<span class="micon dw dw-calendar1"></span><span class="mtext">Cheque</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="javascript:;">Level 1</a></li>
+							<li><a href="{{url('/cheque')}}">Add New</a></li>							
+							<li><a href="{{url('/cheques')}}">All Cheque</a></li>
+						</ul>
+					</li>
+					
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-user1"></span><span class="mtext">Correspondents</span>
+						</a>
+						<ul class="submenu">
+							<li><a href="{{url('/correspondent')}}">Add New</a></li>							
+							<li><a href="{{url('/correspondents')}}">All Correspondent</a></li>
 							<li class="dropdown">
 								<a href="javascript:;" class="dropdown-toggle">
-									<span class="micon fa fa-plug"></span><span class="mtext">Level 2</span>
+									<span class="micon fa fa-plug"></span><span class="mtext">Division List</span>
 								</a>
 								<ul class="submenu child">
-									<li><a href="javascript:;">Level 2</a></li>
-									<li><a href="javascript:;">Level 2</a></li>
+									<li><a href="javascript:;">Barisal</a></li>
+									<li><a href="javascript:;">Chattogram</a></li>
+									<li><a href="javascript:;">Dhaka</a></li>
+									<li><a href="javascript:;">Khulna</a></li>
+									<li><a href="javascript:;">Mymensingh</a></li>
+									<li><a href="javascript:;">Rajshahi</a></li>
+									<li><a href="javascript:;">Rangpur</a></li>
+									<li><a href="javascript:;">Sylhet</a></li>
 								</ul>
 							</li>
-							<li><a href="javascript:;">Level 1</a></li>
 						</ul>
 					</li>
-					<li>
-						<a href="sitemap.html" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-diagram"></span><span class="mtext">Sitemap</span>
+
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-briefcase"></span><span class="mtext">Office Staff</span>
 						</a>
+						<ul class="submenu">
+							<li><a href="{{url('employee')}}">Add New</a></li>							
+							<li><a href="{{url('employees')}}">All Staff</a></li>
+						</ul>
 					</li>
-					<li>
-						<a href="chat.html" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-chat3"></span><span class="mtext">Chat</span>
+					
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-settings2"></span><span class="mtext">Setting</span>
 						</a>
+						<ul class="submenu">
+							<li class="dropdown">
+								<a href="javascript:;" class="dropdown-toggle">
+									<span class="micon fa fa-plug"></span><span class="mtext">Ad Setting</span>
+								</a>
+								<ul class="submenu child">
+									<li><a href="{{url('/ad_prices')}}">All Ads Price</a></li>
+									<li><a href="{{url('/ad_price')}}">New Ads Price</a></li>
+								</ul>
+							</li>
+							<!-- <li><a href="javascript:;">Level 1</a></li> -->
+						</ul>
 					</li>
-					<li>
-						<a href="invoice.html" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-invoice"></span><span class="mtext">Invoice</span>
-						</a>
-					</li>
-					<li>
-						<div class="dropdown-divider"></div>
-					</li>
-					<li>
-						<div class="sidebar-small-cap">Extra</div>
-					</li>
+
 				</ul>
 			</div>
 		</div>
