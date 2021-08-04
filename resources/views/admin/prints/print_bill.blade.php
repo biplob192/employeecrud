@@ -57,20 +57,20 @@
 								<td>EXTRA</td>
 								<td>TOTAL AMMOUNT</td>
 								<td>COMMISSION</td>
-								<td>GRAND TOTAL</td>
+								<td style="text-align: center;">GRAND TOTAL</td>
 							</tr>
 						</thead>
 						<tbody>
-							<tr style="height:200px;">
-								<td>{{$ad->publishing_date}}</td>
-								<td>{{$ad->inch}}*{{$ad->colum}}</td>
-								<td>{{$ad->total_size}}</td>
-								<td>{{$ad->rate}}</td>
+							<tr style="height:200px; text-align: center;">
+								<td style="vertical-align: middle">{{$ad->publishing_date}}</td>
+								<td style="vertical-align: middle">{{$ad->inch}}*{{$ad->colum}}</td>
+								<td style="vertical-align: middle">{{$ad->total_size}}</td>
+								<td style="vertical-align: middle">{{$ad->rate}}</td>
 								
-								<td>{{$ad->extra_charge}}</td>
-								<td>{{$ad->amount}}</td>
-								<td>+ Vat 15%</td>
-								<td>{{$ad->amount}}</td>
+								<td style="vertical-align: middle">{{$ad->extra_charge}}</td>
+								<td style="vertical-align: middle">{{$ad->amount}}</td>
+								<td style="vertical-align: middle">+ Vat 15%</td>
+								<td style="text-align: center; vertical-align: middle">{{$ad->amount}}</td>
 							</tr>
 								<tr style="background:#ECECEC;">
 								<td></td>
@@ -80,7 +80,7 @@
 								<td></td>
 								<td></td>
 								<td colspan="2" style="text-align: center;"><span style="font-weight:bold;">Net Payable Amount:</span></td>
-								<td>{{$ad->amount}}</td>
+								<td style="text-align: center;">{{$ad->amount}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -89,7 +89,7 @@
 		</div>
 		<div class="container-md"style="margin-top: 15px">
 			<div class="row align-items-center">
-				<div class="col align-self-center"><span style="font-weight:bold;font-size: 1em;">In Word Taka.:&nbspOne Hundred and Three Only.</span>
+				<div class="col align-self-center"><span style="font-weight:bold;font-size: 1em;">In Word Taka.:&nbsp One Hundred and Three Only.</span>
 				</div>
 			</div>			
 		</div>

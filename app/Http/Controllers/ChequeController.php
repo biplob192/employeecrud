@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\CorrWallet;
 use App\Models\Cheque;
 use App\Models\Ad;
 use Validator;
+use Exception;
 
 class ChequeController extends Controller
 {
@@ -16,7 +18,14 @@ class ChequeController extends Controller
      */
     public function index()
     {
-        $cheques=Cheque::all();
+        // $cheques=Cheque::all();
+        $cheques=Cheque::
+        leftjoin('ads', 'cheques.gd_no', '=', 'ads.gd_no')
+        ->leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
+        ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
+        ->leftjoin('correspondents', 'cheques.correspondent_id', '=', 'correspondents.id')
+        ->get();
+        // dd($cheques);
         return view ('admin.cheques.cheques',['cheques'=>$cheques]);
     }
 
@@ -27,7 +36,8 @@ class ChequeController extends Controller
      */
     public function create()
     {
-        return view('admin.cheques.create_new_cheque');
+        $gd_no= Ad::select('gd_no')->where('payment_status', 0)->get();
+        return view('admin.cheques.create_new_cheque')->with('gd_no', $gd_no);
     }
 
     /**
@@ -42,32 +52,52 @@ class ChequeController extends Controller
             $validator  = Validator::make($req->all(), [
                 'gd_no' => 'required',            
                 'bank_name' => 'required',            
-                'cheque_amount' => 'required',            
+                'cheque_amount' => 'required|between:3,10',            
+                'cheque_number' => 'required',            
             ]);
 
             if($validator ->fails()){
-               return back()->withErrors($validator )->withInput();
+               // return back()->withErrors($validator )->withInput();
+                throw new Exception('$validation fails');                
             }
-            $ad = Ad::select('amount')->where(['gd_no' => $req->gd_no])->first();
-            if($req->cheque_amount >= $ad->amount){
-                // echo 'Payment suffecient';
-         
-                $ad->payment_status     = 1;
+            $ads = Ad::select('amount','upazila_id')->where(['gd_no' => $req->gd_no])->first();
+            
+             if($req->cheque_amount < $ads->amount * 0.7){                          //Store Cheque Data with Condition
+                throw new Exception('Cheque amount not sufficient!');
+             }                  
                 $cheque = new Cheque;
-                $cheque->gd_no          =$req->gd_no;
-                $cheque->bank_name      =$req->bank_name;
-                $cheque->cheque_amount  =$req->cheque_amount;
-                $ad->save();
-                $cheque->save();
-                return back();
-            }
-            else{
-                echo 'Payment not suffecient';
-            }
+                $cheque->correspondent_id   =$req->correspondent_id;
+                $cheque->gd_no              =$req->gd_no;
+                $cheque->bank_name          =$req->bank_name;
+                $cheque->cheque_amount      =$req->cheque_amount;
+                $cheque->cheque_number      =$req->cheque_number;
+                $cheque->ait_amount         =$ads->amount - $req->cheque_amount;
 
+                if($ads->upazila_id == 494){
+                    $cheque->commission     =$req->cheque_amount * 0.35;
+                }
+                if($ads->upazila_id != 494){
+                    $cheque->commission     =$req->cheque_amount * 0.3;
+                }
+                $cheque->save();
+
+                Ad::where('gd_no',$req->gd_no)->update(['payment_status' => 1]);    //Change Payment Status
+
+                $wallet     = new CorrWallet;                                       //Update Correspondent Commission
+                $credit     = $wallet->credit;
+                $comm       = $req->cheque_amount * 0.3;
+                $commDhaka  = $req->cheque_amount * 0.35;
+                if ($ads->upazila_id == 494) {
+                    CorrWallet::where('corr_id', $req->correspondent_id)
+                    ->update(['credit' => $credit + $commDhaka]);
+                }else {              
+                    CorrWallet::where('corr_id', $req->correspondent_id)
+                    ->update(['credit' => $credit + $comm]);
+                }                          
+                return back();                
         }
         catch(Exception $e){
-            return $e->getMessage();
+            return back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -91,6 +121,8 @@ class ChequeController extends Controller
     public function edit($id)
     {
         $cheque=Cheque::find($id);
+        // $cheque=Cheque::where('cheque_id', $id)->first();
+        // dd($cheque);
         return view ('admin.cheques.edit_cheque',['cheque'=>$cheque]);
     }
 
@@ -104,6 +136,9 @@ class ChequeController extends Controller
     public function update(Request $req, $id)
     {
         $cheque=Cheque::find($id);
+        // dd($req);
+        // $cheque=Cheque::where('cheque_id', $req->id)->first();
+        // dd($cheque);
         if($req->gd_no){
             $cheque->gd_no=$req->gd_no;
         }
@@ -112,6 +147,18 @@ class ChequeController extends Controller
         }
         if($req->cheque_amount){
             $cheque->cheque_amount=$req->cheque_amount;
+        }
+        if($req->correspondent_id){
+            $cheque->correspondent_id=$req->correspondent_id;
+        }
+        if($req->cheque_number){
+            $cheque->cheque_number=$req->cheque_number;
+        }
+        if($req->ait_amount){
+            $cheque->ait_amount=$req->ait_amount;
+        }
+        if($req->commission){
+            $cheque->commission=$req->commission;
         }
         $cheque->save();
         return redirect('/cheques');
@@ -126,7 +173,29 @@ class ChequeController extends Controller
     public function destroy($id)
     {
         $cheque=Cheque::find($id);
-        $cheque->delete();
+        if ($cheque->delete()) {
+         Ad::where('gd_no',$cheque->gd_no)->update(['payment_status' => 0]);   
+        }
         return back();
+    }
+
+    public function getGdPrice(Request $req){
+        try{
+            $ad = Ad::where('gd_no',$req->gd_no)->first();
+            if(!$ad){
+                throw new Exception("GD-No not found");
+            }
+            return response()->json(array(
+                'status' => true,
+                'data' => $ad
+            ));
+        }
+        catch(Exception $e){
+            return response()->json(array(
+            'status' => false,
+            'status_msg' => $e->getMessage()
+        ));
+
+        }
     }
 }

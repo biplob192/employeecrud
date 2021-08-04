@@ -33,8 +33,8 @@
 					<p align="center" style="margin-top: 15px;"><span style="font-weight: bold; font-size: 10;font-style: italic;">
 						BTTC Building (Level-03), 270/B, Tejgaon I/A, Dhaka-1208 <br>
 						E-mail: ads@thebangladeshtoday.com<br>
-						Tel: 02-8878026
-					</span> </p>
+						Tel: 02-8878026 </span>
+					</p>
 				</div>
 				<div class="col align-self-center">
 					
@@ -43,7 +43,7 @@
 		</div>
 		<div class="container-md"style="margin-top: 15px;">
 			<div class="row align-items-center">
-				<div class="col align-self-center">Comment<br>{{$ad->client}}<br>{{$ad->upazila}},{{$ad->district}}</div>
+				<div class="col align-self-center">Comment<br>{{$ad->client}}<br>Upazila ID: {{$ad->upazila_id}}, Zila ID: {{$ad->district_id}}</div>
 				<div class="col-md-5 align-self-center"></div>
 				<div class="col align-self-center">Bill No: GD-{{$ad->gd_no}}<br>Date: {{$ad->publishing_date}}<br>Order No: {{$ad->order_no}}<br>Date: {{$ad->publishing_date}}</div>
 			</div>			
@@ -67,20 +67,20 @@
 								<td>EXTRA</td>
 								<td>TOTAL AMMOUNT</td>
 								<td>COMMISSION</td>
-								<td>GRAND TOTAL</td>
+								<td style="text-align: center;">GRAND TOTAL</td>
 							</tr>
 						</thead>
 						<tbody>
-							<tr style="height:200px;">
-								<td>{{$ad->publishing_date}}</td>
-								<td>{{$ad->inch}}*{{$ad->colum}}</td>
-								<td>{{$ad->total_size}}</td>
-								<td>{{$ad->rate}}</td>
+							<tr style="height:200px">
+								<td style="vertical-align: middle">{{$ad->publishing_date}}</td>
+								<td style="vertical-align: middle">{{$ad->inch}}*{{$ad->colum}}</td>
+								<td style="vertical-align: middle">{{$ad->total_size}}</td>
+								<td style="vertical-align: middle">{{$ad->rate}}</td>
 								
-								<td>{{$ad->extra_charge}}</td>
-								<td>{{$ad->amount}}</td>
-								<td>+ Vat 15%</td>
-								<td>{{$ad->amount}}</td>
+								<td style="vertical-align: middle">{{$ad->extra_charge}}</td>
+								<td style="vertical-align: middle">{{$ad->amount}}</td>
+								<td style="vertical-align: middle">+ Vat 15%</td>
+								<td style="text-align: center; vertical-align: middle">{{$ad->amount}}</td>
 							</tr>
 								<tr style="background:#ECECEC;">
 								<td></td>
@@ -90,7 +90,7 @@
 								<td></td>
 								<td></td>
 								<td colspan="2" style="text-align: center;"><span style="font-weight:bold;">Net Payable Amount:</span></td>
-								<td>{{$ad->amount}}</td>
+								<td style="text-align: center;">{{$ad->amount}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -99,7 +99,8 @@
 		</div>
 		<div class="container-md"style="margin-top: 15px">
 			<div class="row align-items-center">
-				<div class="col align-self-center"><span style="font-weight:bold;font-size: 1em;">In Word Taka.:&nbspOne Hundred and Three Only.</span>
+				<div class="col align-self-center"><span style="font-weight:bold;font-size: 1em;">
+					In Word Taka.:&nbsp <?php echo NumConvert::word($ad->amount)?> only.</span>
 				</div>
 			</div>			
 		</div>

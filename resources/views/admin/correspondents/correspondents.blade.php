@@ -23,6 +23,7 @@ Correspondents
 		    <tr>
 		      	<th>S/N:</th>
 				<th>Name</th>
+				<th>Division</th>
 				<th>District</th>
 				<th>Upazila</th>	
 				<th>Mobile</th>	
@@ -36,8 +37,9 @@ Correspondents
 						<!-- <td>{{$correspondentCount}}</td>			 -->
 						<td>{{$correspondent->id}}</td>			
 						<td><a href="{{url('correspondent').'/'.$correspondent->id}}"> <strong>{{$correspondent->name}}</strong> </a></td>	
-						<td>{{$correspondent->district}}</td>			
-						<td>{{$correspondent->upazila}}</td>			
+						<td>{{$correspondent->division_name}}</td>			
+						<td>{{$correspondent->district_name}}</td>			
+						<td>{{$correspondent->upazila_name}}</td>			
 						<td>{{$correspondent->mobile}}</td>			
 
 						<td>

@@ -37,7 +37,7 @@ CREATE TABLE `ads` (
   `colum` int NOT NULL,
   `total_size` int NOT NULL,
   `amount` float NOT NULL,
-  `payment_status` binary(1) NOT NULL,
+  `payment_status` tinyint(1) NOT NULL DEFAULT '0',
   `publishing_date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -47,18 +47,18 @@ CREATE TABLE `ads` (
 /*Data for the table `ads` */
 
 insert  into `ads`(`id`,`correspondent_name`,`ad_type`,`ad_position`,`rate`,`extra_charge`,`division`,`district`,`upazila`,`client`,`gd_no`,`order_no`,`inch`,`colum`,`total_size`,`amount`,`payment_status`,`publishing_date`,`created_at`,`updated_at`) values 
-(1,'Biplob Mia','Govt','Front Page',560,300,'Rangpur','Kurigram','Chilmari','LGED','346/21',512,1,1,1,860,'0','30 June 2021','2021-06-22 08:20:08','2021-07-03 23:09:17'),
-(2,'Manjurul Shajib','Commercial','Back Page',700,5000,'Rangpur','Kurigram','Ulipur','Private','347/21',231,2,5,10,12000,'1','29 June 2021','2021-06-22 08:22:38','2021-07-03 23:10:38'),
-(4,'Mehedi Hasan','govt','Front Page',560,0,'Dinajpur','Dinajpur','Dinajpur','Personal','349/21',111,15,5,75,42000,'1','28 June 2021','2021-06-22 18:45:12','2021-07-01 15:06:29'),
-(6,'Billal Hossain','Govt','Front Page',560,0,'Rangpur','Kurigram','Chilmari','PA','348/21',222,10,5,50,28000,'1','27 June 2021','2021-06-23 18:39:01','2021-07-04 02:13:03'),
-(7,'Faruq Miah','Govt','Front Page',560,500,'Rangpur','Kurigram','Ulipur','PA','351/21',334,10,5,50,28500,'1','30 June 2021','2021-06-24 00:43:04','2021-07-04 02:15:26'),
-(8,'Didarul Haque','Govt','Front Page',560,0,'Rangpur','Dinajpur','Dinajpur Sdr','Police Line','350/21',333,10,5,50,28000,'1','30 June 2021','2021-06-25 21:12:18','2021-07-04 02:15:17'),
-(9,'Hamidul Islam','Govt','Front Page',560,0,'Rangpur','Kurigram','Kurigram Sdr','LGED','345/21',322,10,5,50,28000,'0','28 June 2021','2021-06-25 22:49:07','2021-07-04 02:14:48'),
-(10,'Tarikul Islam','Govt','Inner Page',538,500,'Dhaka','Dhaka','Dhaka','RAB','344/21',444,15,5,75,40850,'0','28 June 2021','2021-06-25 22:52:48','2021-07-04 02:14:26'),
-(11,'Sabbir Khan','Govt','Back Page',550,0,'ww','ww','ww','ee','343/21',33,10,5,50,27500,'0','15 June 2021','2021-06-25 23:08:52','2021-07-04 02:14:08'),
-(12,'Abdullah','Govt','Front Page',560,400,'Abdullah','Abdullah','Abdullah','Abdullah','342/21',222,2,1,2,1520,'0','01 July 2021','2021-06-28 16:49:50','2021-07-04 02:13:58'),
-(13,'SSS','Govt','Front Page',560,100,'SSS','SSS','SSS','SSS','341/21',33,5,2,10,5700,'0','29 June 2021','2021-06-28 17:26:55','2021-07-04 02:13:48'),
-(14,'Badsha','Govt','Front Page',560,0,'Rangpur','Rangpur','Rangpur','LGED','340/21',111,12,5,60,33600,'0','30 June 2021','2021-06-28 17:27:40','2021-07-04 02:13:42');
+(1,'Biplob Mia','Govt','Front Page',560,300,'Dhaka','Kurigram','Chilmari','LGED','346/21',512,1,1,1,860,0,'30 June 2021','2021-06-22 08:20:08','2021-07-12 15:55:28'),
+(2,'Manjurul Shajib','Commercial','Back Page',700,5000,'Rangpur','Kurigram','Ulipur','Private','347/21',231,2,5,10,12000,0,'29 June 2021','2021-06-22 08:22:38','2021-07-10 16:48:48'),
+(4,'Mehedi Hasan','Govt','Front Page',560,0,'Dinajpur','Dinajpur','Dinajpur','Personal','349/21',111,15,5,75,42000,0,'28 June 2021','2021-06-22 18:45:12','2021-07-10 16:48:46'),
+(6,'Billal Hossain','Govt','Front Page',560,0,'Rangpur','Kurigram','Chilmari','PA','348/21',222,10,5,50,28000,0,'27 June 2021','2021-06-23 18:39:01','2021-07-10 16:48:43'),
+(7,'Faruq Miah','Govt','Front Page',560,500,'Rangpur','Kurigram','Ulipur','PA','351/21',334,10,5,50,28500,0,'30 June 2021','2021-06-24 00:43:04','2021-07-10 16:46:37'),
+(8,'Didarul Haque','Govt','Front Page',560,0,'Rangpur','Dinajpur','Dinajpur Sdr','Police Line','350/21',333,10,5,50,28000,0,'30 June 2021','2021-06-25 21:12:18','2021-07-10 16:48:40'),
+(9,'Hamidul Islam','Govt','Front Page',560,0,'Rangpur','Kurigram','Kurigram Sdr','LGED','345/21',322,10,5,50,28000,0,'28 June 2021','2021-06-25 22:49:07','2021-07-10 16:47:12'),
+(10,'Tarikul Islam','Govt','Inner Page',538,500,'Dhaka','Dhaka','Dhaka','RAB','344/21',444,15,5,75,40850,1,'28 June 2021','2021-06-25 22:52:48','2021-07-13 16:53:58'),
+(11,'Sabbir Khan','Govt','Back Page',550,0,'ww','ww','ww','ee','343/21',33,10,5,50,27500,0,'15 June 2021','2021-06-25 23:08:52','2021-07-04 02:14:08'),
+(12,'Abdullah','Govt','Front Page',560,400,'Abdullah','Abdullah','Abdullah','Abdullah','342/21',222,2,1,2,1520,0,'01 July 2021','2021-06-28 16:49:50','2021-07-10 16:47:15'),
+(13,'SSS','Govt','Front Page',560,100,'SSS','SSS','SSS','SSS','341/21',33,5,2,10,5700,0,'29 June 2021','2021-06-28 17:26:55','2021-07-10 16:47:18'),
+(14,'Badsha','Govt','Front Page',560,0,'Rangpur','Rangpur','Rangpur','LGED','340/21',111,12,5,60,33600,0,'30 June 2021','2021-06-28 17:27:40','2021-07-10 15:55:50');
 
 /*Table structure for table `ads_price` */
 
@@ -104,15 +104,12 @@ CREATE TABLE `cheques` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `cheques` */
 
 insert  into `cheques`(`id`,`gd_no`,`bank_name`,`cheque_amount`,`created_at`,`updated_at`) values 
-(1,'346/21','DBBL',1111,'2021-07-03 21:49:57','2021-07-04 02:42:36'),
-(2,'111','SIBL',33000,'2021-07-03 21:52:56','2021-07-04 02:42:10'),
-(4,'234','Sonali Bank',30000,'2021-07-03 22:18:41','2021-07-04 02:42:22'),
-(5,'351/21','SIBL',28500,'2021-07-04 02:44:30','2021-07-04 02:44:30');
+(16,'344/21','sfdfd',49000,'2021-07-13 16:53:58','2021-07-13 16:53:58');
 
 /*Table structure for table `correspondents` */
 
@@ -145,6 +142,28 @@ insert  into `correspondents`(`id`,`name`,`division`,`district`,`upazila`,`mobil
 (6,'Bikrom Pathan','Sylhet','Habiganj','Habiganj','01725361210',33244,33244,'drt@tr.com','03 June 2021',NULL,'2021-06-26 14:10:37','2021-06-27 20:19:44'),
 (7,'Masum Billah',NULL,'Mymensingh','Mymensingh','01788033900',8033900,8033900,'name@mail.com','02 June 2021',NULL,'2021-06-27 20:04:56','2021-06-27 20:04:56'),
 (8,'Nijam Uddin',NULL,'Natore','Natore','01725361211',36120,36120,'nijam@gmail.com','02 June 2021',NULL,'2021-06-27 20:10:00','2021-06-27 20:19:49');
+
+/*Table structure for table `division_list` */
+
+DROP TABLE IF EXISTS `division_list`;
+
+CREATE TABLE `division_list` (
+  `division_id` int NOT NULL AUTO_INCREMENT,
+  `division_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`division_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `division_list` */
+
+insert  into `division_list`(`division_id`,`division_name`) values 
+(1,''),
+(2,''),
+(3,''),
+(4,''),
+(5,''),
+(6,''),
+(7,''),
+(8,'');
 
 /*Table structure for table `employees` */
 

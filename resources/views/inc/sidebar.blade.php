@@ -30,7 +30,7 @@
 
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-calendar1"></span><span class="mtext">Cheque</span>
+							<span class="micon dw dw-money-2"></span><span class="mtext">Cheque</span>
 						</a>
 						<ul class="submenu">
 							<li><a href="{{url('/cheque')}}">Add New</a></li>							

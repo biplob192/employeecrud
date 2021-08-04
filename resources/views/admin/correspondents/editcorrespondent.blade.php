@@ -31,19 +31,19 @@ Edit Employee
 	<div class="form-group row">
 		<label class="col-sm-12 col-md-2 col-form-label">Division</label>
 		<div class="col-sm-12 col-md-10">
-			<input class="form-control" type="text" name="division" value="{{$correspondent->division}}" placeholder="Division Here">
+			<input class="form-control" type="text" name="division" value="{{$correspondent->division_id}}" placeholder="Division Here">
 		</div>
 	</div>
 	<div class="form-group row">
 		<label class="col-sm-12 col-md-2 col-form-label">District</label>
 		<div class="col-sm-12 col-md-10">
-			<input class="form-control" type="text" name="district" value="{{$correspondent->district}}" placeholder="District Here">
+			<input class="form-control" type="text" name="district" value="{{$correspondent->district_id}}" placeholder="District Here">
 		</div>
 	</div>
 	<div class="form-group row">
 		<label class="col-sm-12 col-md-2 col-form-label">Upazila</label>
 		<div class="col-sm-12 col-md-10">
-			<input class="form-control" type="text" name="upazila" value="{{$correspondent->upazila}}" placeholder="Upazila Here">
+			<input class="form-control" type="text" name="upazila" value="{{$correspondent->upazila_id}}" placeholder="Upazila Here">
 		</div>
 	</div>
 	<div class="form-group row">

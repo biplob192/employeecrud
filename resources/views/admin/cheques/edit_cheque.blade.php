@@ -18,10 +18,10 @@ Edit Cheque
    @endforeach
 </center>
 <div class="pd-20 card-box mb-30">
-	<form action="{{url('/cheque').'/'.$cheque->id}}" method="post">
+	<form action="{{url('/cheque').'/'.$cheque->cheque_id}}" method="post">
 		{{ method_field('PUT') }}
 		@csrf
-		<input type="hidden" name="id" value="{{$cheque->id}}">
+		<input type="hidden" name="id" value="{{$cheque->cheque_id}}">
 
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">GD No</label>

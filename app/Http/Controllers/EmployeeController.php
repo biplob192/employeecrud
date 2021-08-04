@@ -144,4 +144,47 @@ class EmployeeController extends Controller
         $employee->delete();
         return back();
     }
+
+    public function search(Request $request){ 
+
+        if ($request->ajax()) {
+            $data = Employee::where('name','LIKE','%'.$request->search.'%')->get();
+            $output = '';
+            if(count($data)>0){
+
+                $output ='
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>';
+
+                        
+
+                        foreach($data as $row){
+                            $output .='
+                            <tr>
+                            <th scope="row">'.$row->id.'</th>
+                            <td>'.$row->name.'</td>
+                            </tr>
+                            ';
+                        }
+                        
+
+                $output =' 
+                    </tbody>
+                    </table>';
+
+            }
+            else{
+                $output .='No Result';
+            }
+
+            return $output;
+        }
+        
+    }
 }

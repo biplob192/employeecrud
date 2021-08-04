@@ -5,10 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Ad extends Model
+class Division extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'payment_status'
-    ];
+    protected $table = 'division_list';
 }

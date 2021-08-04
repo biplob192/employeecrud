@@ -7,9 +7,14 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AdController;
+use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\AdsPriceController;
 use App\Http\Controllers\ChequeController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\EmailController;
 use App\Http\Middleware\CheckAuth;
+use App\Http\Controllers\AutocompleteSearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +29,27 @@ use App\Http\Middleware\CheckAuth;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-// Route::view('/', 'index');
+
+// --------------------- Test Routes ------------------------------
+
+Route::get('/district', [DistrictController::class, 'index']);
+Route::view('/in', 'index');
+Route::get('/email', [EmailController::class, 'index']);
+
+Route::get('/search', [EmployeeController::class, 'search']);
+Route::get('/test', [TestController::class, 'index']);
+Route::get('/ajaxcall', [TestController::class, 'ajaxcall']);
+Route::get('/division', [DivisionController::class, 'getDivisions']);
+Route::get('/autocomplete-search', [AutocompleteSearchController::class, 'index'])->name('autocomplete.search.index');
+Route::get('/autocomplete-search-query', [AutocompleteSearchController::class, 'query'])->name('autocomplete.search.query');
+Route::get('/gd-search-query', [AdController::class, 'query'])->name('gd.search.query');
+
+
+// --------------------- Test Routes ------------------------------
+
+
+
+
 // Route::middleware([CheckAuth::class])->group(function () {
 
 // });
@@ -48,13 +73,11 @@ Route::get('/', [HomeController::class, 'home']);
 Route::get('/dashboard', [HomeController::class, 'dashboard']);
 
 
-// Correspondent CRUD Routes
-
-
-
 
 // protected route
 Route::middleware([CheckAuth::class])->group(function () {
+    
+    // Correspondent CRUD Routes
     
     Route::get('/correspondent', [ConrrespondentController::class, 'create']);
     Route::post('/correspondent', [ConrrespondentController::class, 'store']);
@@ -63,6 +86,9 @@ Route::middleware([CheckAuth::class])->group(function () {
     Route::get('/correspondent/{id}/edit', [ConrrespondentController::class, 'edit']);
     Route::put('/correspondent/{id}', [ConrrespondentController::class, 'update']);
     Route::delete('/correspondent/{id}', [ConrrespondentController::class, 'delete']);
+    Route::get('getDistrict',[ConrrespondentController::class, 'getDistrict'])->name('getDistrict');
+    Route::get('getUpazila',[ConrrespondentController::class, 'getUpazila'])->name('getUpazila');
+
 
 
     //Employee CRUD Routes
@@ -86,7 +112,8 @@ Route::middleware([CheckAuth::class])->group(function () {
     Route::get('/ad/{id}/bill', [AdController::class, 'print_bill']);
     Route::put('/ad/{id}', [AdController::class, 'update']);
     Route::delete('/ad/{id}', [AdController::class, 'delete']);
-
+    Route::get('/address', [AdController::class, 'getAddress']);
+    
     Route::get('/bill', [AdController::class, 'printBill']); //Sample Bill Page
 
 
@@ -100,6 +127,7 @@ Route::middleware([CheckAuth::class])->group(function () {
     Route::put('/ad_price/{id}', [AdsPriceController::class, 'update']);
     Route::delete('/ad_price/{id}', [AdsPriceController::class, 'destroy']);
 
+
     //Cheque CRUD Routes
 
     Route::get('/cheque', [chequeController::class, 'create']);
@@ -109,6 +137,7 @@ Route::middleware([CheckAuth::class])->group(function () {
     Route::get('/cheque/{id}/edit', [chequeController::class, 'edit']);
     Route::put('/cheque/{id}', [chequeController::class, 'update']);
     Route::delete('/cheque/{id}', [chequeController::class, 'destroy']);
+    Route::get('/gdprice', [chequeController::class, 'getGdPrice']);
     
 
 });

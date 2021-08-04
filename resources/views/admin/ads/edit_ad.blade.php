@@ -68,21 +68,21 @@ Edit Ad
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-12 col-md-2 col-form-label">Division</label>
+			<label class="col-sm-12 col-md-2 col-form-label">Division ID</label>
 			<div class="col-sm-12 col-md-10">
-				<input class="form-control" type="text" name="division" value="{{$ad->division}}" placeholder="Division">
+				<input class="form-control" type="number" name="division" value="{{$ad->division_id}}" placeholder="Division">
 			</div>
 		</div>
 			<div class="form-group row">
-			<label class="col-sm-12 col-md-2 col-form-label">District</label>
+			<label class="col-sm-12 col-md-2 col-form-label">District ID</label>
 			<div class="col-sm-12 col-md-10">
-				<input class="form-control" type="text" name="district" value="{{$ad->district}}" placeholder="District">
+				<input class="form-control" type="number" name="district" value="{{$ad->district_id}}" placeholder="District">
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-12 col-md-2 col-form-label">Upazila</label>
+			<label class="col-sm-12 col-md-2 col-form-label">Upazila ID</label>
 			<div class="col-sm-12 col-md-10">
-				<input class="form-control" type="text" name="upazila" value="{{$ad->upazila}}" placeholder="Upazila">
+				<input class="form-control" type="number" name="upazila" value="{{$ad->upazila_id}}" placeholder="Upazila">
 			</div>
 		</div>
 		<div class="form-group row">

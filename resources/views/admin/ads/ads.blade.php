@@ -17,6 +17,14 @@ TBT Ads
 
 <center> <h5>TBT ADS LIST</h5> </center> <br>
 <div class="pd-20 card-box mb-30">
+	<center>
+		<h6>
+		Total paid amount: {{$totalpaid}} <br>
+		Total un-paid amount: {{$totalunpaid}} <br>
+		</h6>
+	</center>
+</div>
+<div class="pd-20 card-box mb-30">
 	<div class="table-responsive">
 		<table class="table table-striped">
 		  <thead>
@@ -37,14 +45,20 @@ TBT Ads
 		     	@foreach($ad as $ad)
 					<tr>
 						<td>{{$ad->id}}</td>	
-						<td><a href="{{url('ad').'/'.$ad->id}}">{{$ad->correspondent_name}}</a></td>
-						<td>{{$ad->upazila}}</td>
-						<td>{{$ad->district}}</td>				
+						<td><a href="{{url('ad').'/'.$ad->id}}" target="_blank">{{$ad->correspondent_name}}</a></td>
+						<td>{{$ad->upazila_name}}</td>
+						<td>{{$ad->district_name}}</td>				
 						<td>{{$ad->publishing_date}}</td>			
 						<td>{{$ad->gd_no}}</td>			
 						<td>{{$ad->client}}</td>			
 						<td>{{$ad->amount}}</td>			
-						<td>{{$ad->payment_status}}</td>			
+						<td>
+							@if($ad->payment_status ==1)
+								<span class="badge badge-pill badge-success" style="font-size: 15px;">-Paid-</span>
+							@else
+								<span class="badge badge-pill badge-danger" style="font-size: 15px;">Unpaid</span>
+							@endif
+						</td>			
 
 						<td>
 							<div class="menu">		
