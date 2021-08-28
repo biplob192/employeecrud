@@ -57,7 +57,7 @@ insert  into `ads`(`id`,`correspondent_name`,`correspondent_id`,`ad_type`,`ad_po
 (8,'HAMIDUL BADSHAH',13,'Private','Front Page',580,0,6,45,329,'Personal','199',200,8,8,64,37120,1,'20 August 2021','2021-08-10 15:52:55','2021-08-11 00:22:18'),
 (9,'SHEKHOR BOSU',14,'Govt','Front Page',480,0,4,37,278,'RAB','211',222,5,4,20,9600,1,'15 August 2021','2021-08-13 15:12:42','2021-08-17 00:13:54'),
 (10,'SHAJIB',2,'Govt','Front Page',480,280,7,55,423,'LGED','188',188,10,6,60,29080,1,'19 August 2021','2021-08-14 00:40:01','2021-08-20 23:18:18'),
-(11,'ROKONUJJAMAN',15,'Govt','Back Page',550,235,7,55,416,'RAB','555',555,10,4,40,22235,0,'30 August 2021','2021-08-20 01:40:40','2021-08-20 22:51:29'),
+(11,'ROKONUJJAMAN',15,'Govt','Back Page',550,235,7,55,416,'RAB','555',555,10,4,40,22235,0,'30 August 2021','2021-08-20 01:40:40','2021-08-27 23:38:11'),
 (12,'MAMUN',4,'Private','Inner_Color',580,342,7,53,397,'Personal','567',567,12,4,48,28182,0,'25 August 2021','2021-08-23 17:02:18','2021-08-23 17:02:18'),
 (13,'HASIBUL',6,'Govt','Front Page',680,3500,3,21,494,'WASA','233',233,18,8,144,101420,0,'26 August 2021','2021-08-23 18:27:22','2021-08-23 18:27:22');
 
@@ -447,7 +447,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `migrations` */
 
@@ -456,7 +456,45 @@ insert  into `migrations`(`id`,`migration`,`batch`) values
 (2,'2014_10_12_100000_create_password_resets_table',1),
 (3,'2019_08_19_000000_create_failed_jobs_table',1),
 (4,'2021_06_13_090319_create_employees_table',1),
-(5,'2021_06_23_174037_create_ads_price_table',2);
+(5,'2021_06_23_174037_create_ads_price_table',2),
+(6,'2021_08_27_204551_create_permission_tables',3);
+
+/*Table structure for table `model_has_permissions` */
+
+DROP TABLE IF EXISTS `model_has_permissions`;
+
+CREATE TABLE `model_has_permissions` (
+  `permission_id` bigint unsigned NOT NULL,
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_id` bigint unsigned NOT NULL,
+  PRIMARY KEY (`permission_id`,`model_id`,`model_type`),
+  KEY `model_has_permissions_model_id_model_type_index` (`model_id`,`model_type`),
+  CONSTRAINT `model_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/*Data for the table `model_has_permissions` */
+
+insert  into `model_has_permissions`(`permission_id`,`model_type`,`model_id`) values 
+(3,'App\\Models\\User',2);
+
+/*Table structure for table `model_has_roles` */
+
+DROP TABLE IF EXISTS `model_has_roles`;
+
+CREATE TABLE `model_has_roles` (
+  `role_id` bigint unsigned NOT NULL,
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_id` bigint unsigned NOT NULL,
+  PRIMARY KEY (`role_id`,`model_id`,`model_type`),
+  KEY `model_has_roles_model_id_model_type_index` (`model_id`,`model_type`),
+  CONSTRAINT `model_has_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/*Data for the table `model_has_roles` */
+
+insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values 
+(1,'App\\Models\\User',1),
+(3,'App\\Models\\User',2);
 
 /*Table structure for table `password_resets` */
 
@@ -470,6 +508,28 @@ CREATE TABLE `password_resets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `password_resets` */
+
+/*Table structure for table `permissions` */
+
+DROP TABLE IF EXISTS `permissions`;
+
+CREATE TABLE `permissions` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `permissions_name_guard_name_unique` (`name`,`guard_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/*Data for the table `permissions` */
+
+insert  into `permissions`(`id`,`name`,`guard_name`,`created_at`,`updated_at`) values 
+(1,'create','web','2021-08-27 21:14:23','2021-08-27 21:14:23'),
+(2,'edit','web','2021-08-27 21:14:23','2021-08-27 21:14:23'),
+(3,'show','web','2021-08-27 21:14:23','2021-08-27 21:14:23'),
+(4,'delete','web','2021-08-27 21:14:23','2021-08-27 21:14:23');
 
 /*Table structure for table `reporters` */
 
@@ -485,6 +545,56 @@ CREATE TABLE `reporters` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `reporters` */
+
+/*Table structure for table `role_has_permissions` */
+
+DROP TABLE IF EXISTS `role_has_permissions`;
+
+CREATE TABLE `role_has_permissions` (
+  `permission_id` bigint unsigned NOT NULL,
+  `role_id` bigint unsigned NOT NULL,
+  PRIMARY KEY (`permission_id`,`role_id`),
+  KEY `role_has_permissions_role_id_foreign` (`role_id`),
+  CONSTRAINT `role_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `role_has_permissions_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/*Data for the table `role_has_permissions` */
+
+insert  into `role_has_permissions`(`permission_id`,`role_id`) values 
+(1,1),
+(2,1),
+(3,1),
+(4,1),
+(1,2),
+(2,2),
+(3,2),
+(4,2),
+(1,3),
+(3,3),
+(3,4);
+
+/*Table structure for table `roles` */
+
+DROP TABLE IF EXISTS `roles`;
+
+CREATE TABLE `roles` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `roles_name_guard_name_unique` (`name`,`guard_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/*Data for the table `roles` */
+
+insert  into `roles`(`id`,`name`,`guard_name`,`created_at`,`updated_at`) values 
+(1,'super_admin','web','2021-08-27 21:13:35','2021-08-27 21:13:35'),
+(2,'admin','web','2021-08-27 21:13:35','2021-08-27 21:13:35'),
+(3,'editor','web','2021-08-27 21:13:35','2021-08-27 21:13:35'),
+(4,'user','web','2021-08-27 21:13:35','2021-08-27 21:13:35');
 
 /*Table structure for table `upazila_list` */
 
