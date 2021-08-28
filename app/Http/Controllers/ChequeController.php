@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Correspondent;
 use App\Models\CorrWallet;
 use App\Models\Cheque;
 use App\Models\Ad;
+use App\Models\Log;
 use Validator;
+use Auth;
 use Exception;
+use Carbon\Carbon;
+use DB;
 
 class ChequeController extends Controller
 {
@@ -16,6 +21,19 @@ class ChequeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // public function index()
+    // {
+    //     // $cheques=Cheque::all();
+    //     $cheques=Cheque::
+    //     leftjoin('ads', 'cheques.gd_no', '=', 'ads.gd_no')
+    //     ->leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
+    //     ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
+    //     ->leftjoin('correspondents', 'cheques.correspondent_id', '=', 'correspondents.id')
+    //     ->get();
+    //     // dd($cheques);
+    //     return view ('admin.cheques.cheques',['cheques'=>$cheques]);
+    // }   
+
     public function index()
     {
         // $cheques=Cheque::all();
@@ -24,10 +42,11 @@ class ChequeController extends Controller
         ->leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
         ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
         ->leftjoin('correspondents', 'cheques.correspondent_id', '=', 'correspondents.id')
+        ->whereNull('cheques.deleted_at')
         ->get();
         // dd($cheques);
         return view ('admin.cheques.cheques',['cheques'=>$cheques]);
-    }
+    } 
 
     /**
      * Show the form for creating a new resource.
@@ -37,7 +56,10 @@ class ChequeController extends Controller
     public function create()
     {
         $gd_no= Ad::select('gd_no')->where('payment_status', 0)->get();
-        return view('admin.cheques.create_new_cheque')->with('gd_no', $gd_no);
+        $correspondents= Correspondent::select('id','name','upazila_name')
+        ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')
+        ->get();
+        return view('admin.cheques.create_new_cheque')->with('gd_no', $gd_no)->with('correspondents', $correspondents);
     }
 
     /**
@@ -64,26 +86,29 @@ class ChequeController extends Controller
             
              if($req->cheque_amount < $ads->amount * 0.7){                          //Store Cheque Data with Condition
                 throw new Exception('Cheque amount not sufficient!');
-             }                  
-                $cheque = new Cheque;
-                $cheque->correspondent_id   =$req->correspondent_id;
-                $cheque->gd_no              =$req->gd_no;
-                $cheque->bank_name          =$req->bank_name;
-                $cheque->cheque_amount      =$req->cheque_amount;
-                $cheque->cheque_number      =$req->cheque_number;
-                $cheque->ait_amount         =$ads->amount - $req->cheque_amount;
+            }                  
+            $cheque = new Cheque;
+            $cheque->correspondent_id   =$req->correspondent_id;
+            $cheque->gd_no              =$req->gd_no;
+            $cheque->bank_name          =$req->bank_name;
+            $cheque->cheque_amount      =$req->cheque_amount;
+            $cheque->cheque_number      =$req->cheque_number;
+            $cheque->ait_amount         =$ads->amount - $req->cheque_amount;
 
-                if($ads->upazila_id == 494){
-                    $cheque->commission     =$req->cheque_amount * 0.35;
-                }
-                if($ads->upazila_id != 494){
-                    $cheque->commission     =$req->cheque_amount * 0.3;
-                }
-                $cheque->save();
+            if($ads->upazila_id == 494){
+                $cheque->commission     =$req->cheque_amount * 0.35;
+            }
+            if($ads->upazila_id != 494){
+                $cheque->commission     =$req->cheque_amount * 0.3;
+            }
+            $cheque->save();
 
                 Ad::where('gd_no',$req->gd_no)->update(['payment_status' => 1]);    //Change Payment Status
 
-                $wallet     = new CorrWallet;                                       //Update Correspondent Commission
+                // $wallet     = new CorrWallet;                                       //Update Correspondent Commission
+                // $credit     = $wallet->credit;
+                // $credit     = CorrWallet::select('credit')->where('corr_id', $req->correspondent_id)->first();
+                $wallet     = CorrWallet::where('corr_id', $req->correspondent_id)->first();
                 $credit     = $wallet->credit;
                 $comm       = $req->cheque_amount * 0.3;
                 $commDhaka  = $req->cheque_amount * 0.35;
@@ -93,13 +118,19 @@ class ChequeController extends Controller
                 }else {              
                     CorrWallet::where('corr_id', $req->correspondent_id)
                     ->update(['credit' => $credit + $comm]);
-                }                          
+                }
+
+                log::insert([
+                    'user_id'           => Auth::user()->id,
+                    'data'              => json_encode($cheque),
+                    'operation_type'    => 'Insert Cheque',
+                ]);
                 return back();                
+            }
+            catch(Exception $e){
+                return back()->with('error', $e->getMessage())->withInput();
+            }
         }
-        catch(Exception $e){
-            return back()->with('error', $e->getMessage())->withInput();
-        }
-    }
 
     /**
      * Display the specified resource.
@@ -170,12 +201,38 @@ class ChequeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    // public function destroy($id)
+    // {
+    //     $cheque     =Cheque::find($id);
+    //     $wallet     =CorrWallet::where('corr_id', $cheque->correspondent_id)->first();
+    //     $credit     = $wallet->credit;
+    //     $commission = $cheque->commission;
+    //     if ($cheque->delete()) {
+    //         CorrWallet::where('corr_id', $cheque->correspondent_id)
+    //         ->update(['credit' => $credit - $commission]);
+
+    //         Ad::where('gd_no',$cheque->gd_no)->update(['payment_status' => 0]);
+    //     }
+    //     return back();
+    // }
+
+     public function destroy($id)
     {
-        $cheque=Cheque::find($id);
-        if ($cheque->delete()) {
-         Ad::where('gd_no',$cheque->gd_no)->update(['payment_status' => 0]);   
+        $cheque     =Cheque::find($id);
+        $wallet     =CorrWallet::where('corr_id', $cheque->correspondent_id)->first();
+        $credit     = $wallet->credit;
+        $commission = $cheque->commission;
+        if ($cheque->update(['deleted_at' => Carbon::now()])) {
+            CorrWallet::where('corr_id', $cheque->correspondent_id)
+            ->update(['credit' => $credit - $commission]);
+
+            Ad::where('gd_no',$cheque->gd_no)->update(['payment_status' => 0]);
         }
+        log::insert([
+            'user_id'           => Auth::user()->id,
+            'data'              => json_encode($cheque),
+            'operation_type'    => 'Delete Cheque',
+        ]);
         return back();
     }
 
@@ -192,9 +249,51 @@ class ChequeController extends Controller
         }
         catch(Exception $e){
             return response()->json(array(
-            'status' => false,
-            'status_msg' => $e->getMessage()
-        ));
+                'status' => false,
+                'status_msg' => $e->getMessage()
+            ));
+
+        }
+    }
+
+    public function indexCommission()
+    {
+        // $cheques=Cheque::all();
+        $cheques=Cheque::
+        leftjoin('ads', 'cheques.gd_no', '=', 'ads.gd_no')
+        ->leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
+        ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
+        ->leftjoin('correspondents', 'cheques.correspondent_id', '=', 'correspondents.id')
+        ->get();
+
+        $correspondents= Correspondent::select('id','name','upazila_name')
+        ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')
+        ->get();
+        // dd($cheques);
+        return view ('admin.commissions.commissions',['cheques'=>$cheques, 'correspondents'=>$correspondents]);
+    }
+
+    public function getCorrName(){ 
+        try{
+            // $correspondents= Correspondent::select('name')->get();
+            $correspondents = DB::table("correspondents")
+            ->pluck("name","id");
+            
+            if(!$correspondents){
+                throw new Exception("Correspondents not found");
+            }
+            return response()->json($correspondents);
+
+            // return response()->json(array(
+            //     'status' => true,
+            //     'data' => $correspondents
+            // ));
+        }
+        catch(Exception $e){
+            return response()->json(array(
+                'status' => false,
+                'status_msg' => $e->getMessage()
+            ));
 
         }
     }

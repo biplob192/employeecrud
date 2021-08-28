@@ -89,7 +89,10 @@
 		</div>
 		<div class="container-md"style="margin-top: 15px">
 			<div class="row align-items-center">
-				<div class="col align-self-center"><span style="font-weight:bold;font-size: 1em;">In Word Taka.:&nbsp One Hundred and Three Only.</span>
+				<div class="col align-self-center">
+					<span style="font-weight:bold;font-size: 1em;">
+						In Word Taka :&nbsp<?php echo ucfirst (NumConvert::word($ad->amount))?> only.
+					</span>
 				</div>
 			</div>			
 		</div>

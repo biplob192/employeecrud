@@ -12,21 +12,100 @@ use App\Models\District;
 use App\Models\Upazila;
 use App\Models\AdsPrice;
 use Validator;
+use Exception;
 use DB;
+use App\Exports\AdsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdController extends Controller
 {
-    public function index(){ // show all ads list
-        // return view('ads');
+    public function index(Request $req){ // show all ads list
+        if(!$req->from){
         $ad=Ad::
         leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
         ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
         ->get();
+        $count=$ad->count();
         $totalPaid=$ad->where('payment_status', 1)->sum('amount');
         $totalUnPaid=$ad->where('payment_status', 0)->sum('amount');
-        return view ('admin.ads.ads',['ad'=>$ad, 'totalpaid' =>$totalPaid, 'totalunpaid' =>$totalUnPaid]);
-        // dd ($totalUnPaid);
+        }else{
+            $date = explode(' - ',$req->from);
+            $from = $date[0];
+            $to = $date[1];
+             $ad=Ad::
+            leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
+            ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
+            ->where('ads.created_at', '>=', date('Y-m-d', strtotime($from)).' 00:00:00')
+            ->where('ads.created_at', '<=', date('Y-m-d', strtotime($to)).' 23:59:59')->get();
+            $count=$ad->count();
+            $totalPaid=$ad->where('payment_status', 1)->sum('amount');
+            
+            $totalUnPaid=$ad->where('payment_status', 0)->sum('amount');        
+                   
+        }
+        return view ('admin.ads.ads',['ad'=>$ad, 'totalpaid' =>$totalPaid, 'totalunpaid' =>$totalUnPaid, 'count' =>$count]);
     }
+
+    public function indexV2(Request $req){
+        $con= 'ads.payment_status IS NOT NULL';
+        // if($req->payment_status && $req->payment_status < 2){
+        if($req->payment_status < 2 && $req->payment_status > -1){
+            $con = 'ads.payment_status = '.$req->payment_status;
+        }
+        if($req->payment_status == 2){
+            $con = 'ads.upazila_id = 494';
+        }
+        if($req->payment_status == 3){
+            $con = 'ads.upazila_id != 494';
+        }
+        
+        if($req->filled('from')){
+            $date = explode(' - ',$req->from);
+            $from = $date[0];
+            $to = $date[1];
+            $from = date('Y-m-d', strtotime($from));
+            $to = date('Y-m-d', strtotime($to));
+            // dd($date);
+            $con .= ' AND ads.created_at between "'.$from.' 00:00:00" AND "'.$to.' 23:59:59"';
+            // dd($con);
+
+        }
+        
+        if($req->corr_id){
+            $con .= ' AND ads.correspondent_id = '.$req->corr_id;
+        }
+        
+        $ad=Ad::
+        leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
+        ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
+        ->whereRaw($con)
+        ->get();
+        // dd($ad);
+        $count=$ad->count();
+        $totalPaid=$ad->where('payment_status', 1)->sum('amount');
+        $countPaid=$ad->where('payment_status', 1)->count();
+        $totalUnPaid=$ad->where('payment_status', 0)->sum('amount');
+        $countUnPaid=$ad->where('payment_status', 0)->count(); 
+        $totalSize=$ad->sum('total_size');
+        return view ('admin.ads.ads',['ad'=>$ad, 'totalpaid' =>$totalPaid, 'totalunpaid' =>$totalUnPaid, 'count' =>$count, 'totalSize' =>$totalSize, 'countPaid' => $countPaid, 'countUnPaid' => $countUnPaid]);    
+        
+    }
+
+    // public function filterAdsDate(Request $req){
+    //     if($req->from != '' && $req->to != ''){
+    //         $ad=Ad::
+    //         leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
+    //         ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
+    //         ->where('ads.created_at', '>=', date('Y-m-d', strtotime($req->from)).' 00:00:00')
+    //         ->where('ads.created_at', '<=', date('Y-m-d', strtotime($req->to)).' 23:59:59')->get();
+    //         $count=$ad->count();
+    //         $totalPaid=$ad->where('payment_status', 1)->sum('amount');
+    //         $totalUnPaid=$ad->where('payment_status', 0)->sum('amount');
+    //         return view ('admin.ads.ads',['ad'=>$ad, 'totalpaid' =>$totalPaid, 'totalunpaid' =>$totalUnPaid, 'count' =>$count]);
+    //     }
+    //     // index();
+    //     return redirect ("ads");
+    // }
 
     public function create(){ // show insert form
         // $correspondents= Correspondent::select('name','upazila_id')->get();
@@ -65,8 +144,8 @@ class AdController extends Controller
         // dd($req->all());
         $ads_price = AdsPrice::select('price')
                 ->where([
-                    'ads_type' => $req->ad_type,
-                    'ads_position' => $req->ad_position
+                    'ads_type'      => $req->ad_type,
+                    'ads_position'  => $req->ad_position
                 ])->first();
 
         $total_size = $req->inch*$req->colum;      
@@ -247,7 +326,45 @@ class AdController extends Controller
             'status' => false,
             'status_msg' => $e->getMessage()
         ));
-
         }
+    }
+
+    public function filterAds(Request $req){  //from ads page
+        // dd($req);
+        if ($req->payment_status != '' && $req->corr_id != '') {
+            try{
+                if ($req->payment_status == 2) {
+                    $ads=Ad::
+                    leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
+                    ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
+                    ->where('correspondent_id',$req->corr_id)->get();
+                }else{
+                    $ads=Ad::
+                    leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
+                    ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
+                    ->where('correspondent_id',$req->corr_id)->where('payment_status',$req->payment_status)->get();
+                }            
+
+                if(!$ads){
+                    throw new Exception("Ads not found");
+                }
+                return response()->json(array(
+                    'status' => true,
+                    'data' => $ads
+                ));
+            }
+            catch(Exception $e){
+                return response()->json(array(
+                'status' => false,
+                'status_msg' => $e->getMessage()
+            ));
+
+            }
+        }
+           
+    }
+
+    public function exportAds(){
+        return Excel::download(new AdsExport, 'ads.xlsx');
     }
 }

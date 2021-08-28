@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class CorrWallet extends Model
 {
     use HasFactory;
-    protected $table ='corr_wallet';
+    protected $table ='corr_wallets';
     protected $fillable = [
         'corr_id', 'credit', 'created_at', 'updated_at'
     ];

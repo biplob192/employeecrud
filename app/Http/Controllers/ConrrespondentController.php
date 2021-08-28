@@ -22,13 +22,23 @@ class ConrrespondentController extends Controller
         $correspondent=Correspondent::
             leftjoin('division_list', 'correspondents.division_id', '=', 'division_list.division_id')
             ->leftjoin('district_list', 'correspondents.district_id', '=', 'district_list.district_id')
-            ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')
+            ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')->orderBy('name')
             ->get();
         // $correspondentCount=Correspondent::all()->count();
         $correspondentCount=$correspondent->count();
         // $correspondents = Correspondent::where('id', '<=', $correctedComparisons)->get();
         // $correspondentCount = $correspondents->count();
         return view ('admin.Correspondents.Correspondents',['correspondent'=>$correspondent],['correspondentCount'=>$correspondentCount]);
+    }
+
+    public function indexWallets(){
+        $wallets=CorrWallet::
+            leftjoin('correspondents', 'corr_wallets.corr_id', '=', 'correspondents.id')
+            ->leftjoin('district_list', 'correspondents.district_id', '=', 'district_list.district_id')
+            ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')->orderBy('name')
+            ->get();
+
+        return view ('admin.Correspondents.wallets',['wallets'=>$wallets]);
     }
 
     public function create(){ // show insert form
@@ -40,14 +50,14 @@ class ConrrespondentController extends Controller
     public function store(Request $req){ // store into database
         try{
         $validator  = Validator::make($req->all(), [
-            'name' => 'required|max:50',            
-            'district'  => 'filled', 
-            'upazila'  => 'filled', 
-            'mobile'  => 'required|unique:correspondents,mobile|size:11',
-            'nid'  => 'required|unique:correspondents,nid',
-            'corrid'  => 'required|unique:correspondents,corrid',
-            'email'  => 'required',
-            'appointed_date'  => 'required',
+            'name'              => 'required|unique:correspondents,name|max:50',            
+            'district'          => 'filled', 
+            'upazila'           => 'filled', 
+            'mobile'            => 'required|unique:correspondents,mobile|size:11',
+            'nid'               => 'required|unique:correspondents,nid',
+            'corrid'            => 'required|unique:correspondents,corrid',
+            'email'             => 'required',
+            'appointed_date'    => 'required',
                         
         ]);
 
@@ -79,7 +89,8 @@ class ConrrespondentController extends Controller
         $correspondent['image']=$req->image;
         $corr = Correspondent::create($correspondent);
         CorrWallet::create([
-            'corr_id'=> $corr->id
+            'corr_id'   => $corr->id,
+            'credit'    => $req->initial_balance
         ]);
         return back();
 
@@ -108,16 +119,19 @@ class ConrrespondentController extends Controller
     public function update(Request $req){ // edit single correspondent
         // return $req->input();
         $validator  = Validator::make($req->all(), [
-            'mobile'  => 'size:11',
+            'mobile'            => 'size:11',
+            'name'              => 'max:50',
         ]);
 
         if($validator ->fails()){
            return back()->withErrors($validator )->withInput();
         }
         $correspondent=Correspondent::find($req->id);
-        // $updatedata=Member::find($req->id);
-        if($req->name){
-            $correspondent->name=$req->name;
+        // $updatedata=Member::find($req->id);        
+        if($req->name != $correspondent->name){
+            if (!Correspondent::where('name',$req->name)->first()) {
+                $correspondent->name=$req->name;
+            }
         }
         if($req->division){
             $correspondent->division_id=$req->division;
@@ -133,9 +147,11 @@ class ConrrespondentController extends Controller
                 $correspondent->mobile=$req->mobile;
             }            
         }
-        if($req->email){
-            $correspondent->email=$req->email;
-        }
+        if($req->email != $correspondent->email){
+            if (!Correspondent::where('email',$req->email)->first()) {
+                $correspondent->email=$req->email;
+            }            
+        }        
         if($req->nid){
             $correspondent->nid=$req->nid;
         }

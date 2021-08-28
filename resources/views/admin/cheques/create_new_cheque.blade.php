@@ -22,10 +22,22 @@ New Cheque
 			<div class="col-sm-12 col-md-10">
 				<!-- <input class="form-control typeahead" type="text" id="gd_no" name="gd_no" value="{{old('gd_no')}}" placeholder="GD No"> -->
 				<input type="hidden" name="correspondent_id" id="correspondent_id">
-				<select class="form-control custom-select2 typeahead" id="gd_no" name="gd_no" required>
+				<select class="form-control custom-select2" id="gd_no" name="gd_no" required>
 					<option value="" selected disabled>Select GD-No</option>
+					<option value="previous_ad">This is a 'Previous Ad'</option>
 					@foreach ($gd_no as $gd)
 					<option value="{{$gd->gd_no}}">{{$gd->gd_no}}</option>
+					@endforeach
+				</select>
+			</div>
+		</div>
+		<div class="form-group row" style="display:none" id="corr_list_div">
+			<label class="col-sm-12 col-md-2 col-form-label">Correspondent</label>
+			<div class="col-sm-12 col-md-10">	
+				<select class="form-control custom-select2" id="correspondents" name="correspondents" style="width: 100%">
+					<option value="" selected disabled>Select Correspondent</option>
+					@foreach ($correspondents as $correspondent)
+					<option value="{{$correspondent->id}}">{{$correspondent->name}}, {{$correspondent->upazila_name}}</option>
 					@endforeach
 				</select>
 			</div>
@@ -39,7 +51,7 @@ New Cheque
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Cheque Amount</label>
 			<div class="col-sm-12 col-md-10">
-				<input class="form-control" type="text" id="cheque_amount" name="cheque_amount" value="{{old('cheque_amount')}}" placeholder="Cheque Amount" required>
+				<input class="form-control" type="number" id="cheque_amount" name="cheque_amount" value="{{old('cheque_amount')}}" placeholder="Cheque Amount" required>
 			</div>
 		</div>
 		<div class="form-group row">
@@ -77,35 +89,48 @@ New Cheque
 @endsection
 
 @section('Script')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js" ></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js" ></script> -->
 <script type="text/javascript">
-  var path = "{{ url('gd-search-query') }}";
-    $('input.typeahead').typeahead({
-        source:  function (query, process) {
-          return $.get(path, { query: query }, function (data) {
-              return process(data);
-          });
-        }
-    });
+  // var path = "{{ url('gd-search-query') }}";
+  //   $('input.typeahead').typeahead({
+  //       source:  function (query, process) {
+  //         return $.get(path, { query: query }, function (data) {
+  //             return process(data);
+  //         });
+  //       }
+  //   });
 
    jQuery("#gd_no").on('change',function(e){
     e.preventDefault();
     // var gd_no = $("#gd_no").val();
     var gd_number = $("#gd_no :selected").val();
-    $.ajax({
-      url:"/gdprice",
-      type:"GET",
-      data:{gd_no:gd_number},
-      success: function(res){
-      	console.log(res);
-      	if(res.status==true){
-        	$("#payable_amount").val(res.data.amount);
-        	$("#correspondent_id").val(res.data.correspondent_id);
-      	}
-     
-      }
-    });
+    if (gd_number!="previous_ad") {
+    	$("#corr_list_div").hide();
+	    $.ajax({
+	      url:"/gdprice",
+	      type:"GET",
+	      data:{gd_no:gd_number},
+	      success: function(res){
+	      	console.log(res);
+	      	if(res.status==true){
+	        	$("#payable_amount").val(res.data.amount);
+	        	$("#correspondent_id").val(res.data.correspondent_id);
+	      	}
+	      }
+	    });
+    }else{
+    	$("#payable_amount").val("");
+    	$("#correspondent_id").val("");
+    	// $('#correspondents option:first').prop('selected',true);
+    	$("#corr_list_div").show();
+    }   
+  	});
 
+   jQuery("#correspondents").on('change',function(e){
+    e.preventDefault();
+    // var gd_no = $("#gd_no").val();
+    var id = $("#correspondents :selected").val();
+    $("#correspondent_id").val(id);
   	});
 
    jQuery("#cheque_amount").on('blur',function(e){

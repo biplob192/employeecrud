@@ -12,6 +12,12 @@ class LoginController extends Controller
     public function postLogin(Request $req){
         if(Auth::attempt(['name' => $req->name,'password' => $req->password])){
             return redirect ("/dashboard");
+            // $user = Auth::user();
+            // if($user->hasRole('super_admin')){
+            //     return 'super';
+            // }else{
+            //     return 'another';
+            // }
         }else{
             return back()->with("error","Invalide credential");
             // return "1234";

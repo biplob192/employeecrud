@@ -13,9 +13,10 @@ class EmployeeController extends Controller
 {
     public function index(){ // show all correspondent list        
         // $member=Member::orderBy('name', 'asc')->get();
-        // $employee=Employee::all();
+        // $employees=Employee::all();
         // $employees = DB::table('employees')->Paginate(6);
-        $employees=Employee::orderBy('name', 'asc')->Paginate(6);        
+        // $employees=Employee::orderBy('name', 'asc')->Paginate(6);          
+        $employees=Employee::orderBy('name', 'asc')->get();            
         return view ('admin.employees.employees',['employees'=>$employees]);
     }
 

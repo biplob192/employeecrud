@@ -5,9 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Cheque extends Model
+class Log extends Model
 {
     use HasFactory;
-    protected  $primaryKey = 'cheque_id';
-    protected $fillable = ['deleted_at'];
 }

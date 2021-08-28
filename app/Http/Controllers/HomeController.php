@@ -6,8 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
-{
-    public function home(){
+{    public function home(){
         if(Auth::check()){
             return redirect('/dashboard');
             // return view ("panel");

@@ -5,9 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Cheque extends Model
+class Commission extends Model
 {
     use HasFactory;
-    protected  $primaryKey = 'cheque_id';
-    protected $fillable = ['deleted_at'];
+    protected  $primaryKey = 'commission_id';
 }

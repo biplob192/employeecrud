@@ -5,8 +5,6 @@ Employees
 @endsection
 
 @section('Style')
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
 @endsection
 
 @section('Content')
@@ -21,9 +19,10 @@ Employees
 .page-link:hover{color: #343a40}
 </style>
 <center> <h5>OFFICE EMPLOYEE LIST</h5> </center> <br>
+<input class="form-control" id="myInput" type="text" placeholder="Search..">
 <div class="pd-20 card-box mb-30">
 	<div class="table-responsive">
-		<table class="table table-striped display" id="myTable">
+		<table class="table table-striped">
 			<thead>
 				<tr>
 					<!-- <th>S/N:</th> -->
@@ -35,7 +34,7 @@ Employees
 					<th class="text-center" >Action</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="myTable">
 				@foreach($employees as $employee)
 				<tr>
 					<!-- <td>{{$employee->id}}</td>	 -->		
@@ -68,29 +67,25 @@ Employees
 			</tbody>
 		</table>
 	</div>
-
+	<!-- {{$employees->links()}} -->
+	<div class="d-flex justify-content-end">
+		<div>Showing {{$employees->firstItem()}} to {{$employees->lastItem()}} of {{$employees->total()}} Employee</div>&nbsp;&nbsp;
+		<div>{{$employees->links()}}</div>
+	</div>
 </div>
 
 @endsection
 
 @section('Script')
-<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
 <script>
-	$(document).ready(function() {
-	    $('#myTable').DataTable({
-	    	responsive: true,
-	    	"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-	        dom: 'Bfrtip',
-	        buttons: [
-	            'copy', 'csv', 'excel', 'pdf', 'print', 'pageLength'
-	        ]
-	    } );
+	$(document).ready(function(){
+
+		$("#myInput").on("keyup", function() {
+			var value = $(this).val().toLowerCase();
+			$("#myTable tr").filter(function() {
+				$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+			});
+		});
 	});
 </script>
 @endsection

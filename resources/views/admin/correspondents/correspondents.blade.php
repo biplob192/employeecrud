@@ -15,7 +15,7 @@ Correspondents
 	.delete{width: 50%;float: left;text-align: center;}
 </style>
 <center> <h5>TBT CORRESPONDENT LIST</h5> </center> <br>
-
+<input class="form-control" id="myInput" type="text" placeholder="Search..">
 <div class="pd-20 card-box mb-30">
 	<div class="table-responsive">
 		<table class="table table-striped">
@@ -30,7 +30,7 @@ Correspondents
 				<th class="text-center" >Action</th>
 		    </tr>
 		  </thead>
-		  <tbody>
+		  <tbody id="myTable">
 
 		     	@foreach($correspondent as $correspondent)
 					<tr>						
@@ -71,4 +71,14 @@ Correspondents
 @endsection
 
 @section('Script')
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
 @endsection

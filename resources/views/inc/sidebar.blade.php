@@ -27,16 +27,18 @@
 							<li><a href="{{url('/ads')}}">All Ads</a></li>
 						</ul>
 					</li>
-
+					@role('super_admin|admin')
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-money-2"></span><span class="mtext">Cheque</span>
+							<span class="micon dw dw-money-2"></span><span class="mtext">Payments</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="{{url('/cheque')}}">Add New</a></li>							
+							<li><a href="{{url('/cheque')}}">New Cheque</a></li>							
 							<li><a href="{{url('/cheques')}}">All Cheque</a></li>
+							<li><a href="{{url('/commissions')}}">Commission</a></li>
 						</ul>
 					</li>
+					@endrole
 					
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
@@ -45,6 +47,7 @@
 						<ul class="submenu">
 							<li><a href="{{url('/correspondent')}}">Add New</a></li>							
 							<li><a href="{{url('/correspondents')}}">All Correspondent</a></li>
+							<li><a href="{{url('/corrwallets')}}">Correspondent Wallet</a></li>
 							<li class="dropdown">
 								<a href="javascript:;" class="dropdown-toggle">
 									<span class="micon fa fa-plug"></span><span class="mtext">Division List</span>
