@@ -35,6 +35,7 @@ TBT Ads
 					</a>
 				</h6>
 			</div>
+			<div class="col"></div>
 		</div>	
 	</div>
 <!-- 	<div class="col-2">

@@ -49,6 +49,7 @@ Correspondents
 										<button class="btn btn-outline-dark">Edit</button>				
 									</form>
 								</div>
+								@hasanyrole('super_admin|admin|editor')
 								<div class="delete">
 									<form action="{{url('correspondent') .'/'.$correspondent->id}}" method="post">
 										@csrf
@@ -56,6 +57,7 @@ Correspondents
 										<button class="btn btn-outline-danger">Delete</button>				
 									</form>
 								</div>
+								@endhasanyrole
 							</div>
 						</td>
 					</tr>

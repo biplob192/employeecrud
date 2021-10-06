@@ -27,7 +27,7 @@
 							<li><a href="{{url('/ads')}}">All Ads</a></li>
 						</ul>
 					</li>
-					@role('super_admin|admin')
+					@role('super_admin|admin|editor')
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-money-2"></span><span class="mtext">Payments</span>
@@ -47,7 +47,9 @@
 						<ul class="submenu">
 							<li><a href="{{url('/correspondent')}}">Add New</a></li>							
 							<li><a href="{{url('/correspondents')}}">All Correspondent</a></li>
+							@hasrole('super_admin|admin|editor')
 							<li><a href="{{url('/corrwallets')}}">Correspondent Wallet</a></li>
+							@endhasrole
 							<li class="dropdown">
 								<a href="javascript:;" class="dropdown-toggle">
 									<span class="micon fa fa-plug"></span><span class="mtext">Division List</span>
@@ -71,11 +73,13 @@
 							<span class="micon dw dw-briefcase"></span><span class="mtext">Office Staff</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="{{url('employee')}}">Add New</a></li>							
+							@hasanyrole('super_admin|admin|editor')
+							<li><a href="{{url('employee')}}">Add New</a></li>
+							@endhasanyrole							
 							<li><a href="{{url('employees')}}">All Staff</a></li>
 						</ul>
 					</li>
-					
+					@hasanyrole('super_admin|admin|editor')
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-settings2"></span><span class="mtext">Setting</span>
@@ -90,9 +94,12 @@
 									<li><a href="{{url('/ad_price')}}">New Ads Price</a></li>
 								</ul>
 							</li>
-							<!-- <li><a href="javascript:;">Level 1</a></li> -->
+							
+							<li><a href="{{url('/users')}}">User</a></li>
+
 						</ul>
 					</li>
+					@endhasanyrole
 
 				</ul>
 			</div>

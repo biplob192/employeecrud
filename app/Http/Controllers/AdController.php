@@ -11,9 +11,12 @@ use App\Models\Division;
 use App\Models\District;
 use App\Models\Upazila;
 use App\Models\AdsPrice;
+use App\Models\Log;
+use Carbon\Carbon;
 use Validator;
 use Exception;
 use DB;
+use Auth;
 use App\Exports\AdsExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -78,7 +81,7 @@ class AdController extends Controller
         $ad=Ad::
         leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
         ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
-        ->whereRaw($con)
+        ->whereRaw($con)->whereNull('ads.deleted_at')
         ->get();
         // dd($ad);
         $count=$ad->count();
@@ -171,6 +174,11 @@ class AdController extends Controller
         $ad->payment_status     =$req->payment_status;
         $ad->publishing_date    =$req->publishing_date;
         $ad->save();
+        log::insert([
+            'user_id'           => Auth::user()->id,
+            'data'              => json_encode($ad),
+            'operation_type'    => 'Insert Ad',
+        ]);
         return back();
 
         // Member::insert([
@@ -191,7 +199,13 @@ class AdController extends Controller
 
     public function edit($id){ // show single ad  in edit form
         $ad=Ad::find($id);
-        return view ('admin.ads.edit_ad',['ad'=>$ad]);
+        $upazilas= Upazila::select('upazila_name','upazila_id')->get();
+        $districts= District::select('district_name','district_id')->get();
+        $divisions= Division::select('division_name','division_id')->get();
+        $correspondents= Correspondent::select('name','id','upazila_name')
+        ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')
+        ->get();
+        return view ('admin.ads.edit_ad',['ad'=>$ad, 'upazilas'=>$upazilas, 'districts'=>$districts, 'divisions'=>$divisions, 'correspondents'=>$correspondents]);
     }
 
     public function update(Request $req){ // edit single ad
@@ -215,8 +229,8 @@ class AdController extends Controller
             $ad->rate =$ads_price->price;
         }
 
-        if($req->name){
-            $ad->correspondent_name=$req->name;
+        if($req->corr_name){
+            $ad->correspondent_name=$req->corr_name;
         }
         if($req->corr_id){
             $ad->correspondent_id=$req->corr_id;
@@ -245,8 +259,10 @@ class AdController extends Controller
         if($req->client){
             $ad->client=$req->client;
         }
-        if($req->gd_no){
-            $ad->gd_no=$req->gd_no;
+        if($req->gd_no != $ad->gd_no){
+            if (!Ad::where('gd_no',$req->gd_no)->first()) {
+                $ad->gd_no=$req->gd_no;
+            }
         }
         if($req->order_no){
             $ad->order_no=$req->order_no;
@@ -259,12 +275,24 @@ class AdController extends Controller
         }
         
         $ad->save();
+        log::insert([
+            'user_id'           => Auth::user()->id,
+            'data'              => json_encode($ad),
+            'operation_type'    => 'Update Ad',
+        ]);
         return redirect('/ads');
     }
 
     public function delete($id){ // delete single ad
         $ad=Ad::find($id);
-        $ad->delete();
+        // $ad->delete();
+        if($ad->update(['deleted_at' => Carbon::now()])){
+                log::insert([
+                'user_id'           => Auth::user()->id,
+                'data'              => json_encode($ad),
+                'operation_type'    => 'Delete Ad',
+            ]);
+        }        
         return back();
     }
 

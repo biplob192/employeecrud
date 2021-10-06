@@ -40,26 +40,29 @@ CREATE TABLE `ads` (
   `amount` float unsigned NOT NULL,
   `payment_status` tinyint(1) NOT NULL DEFAULT '0',
   `publishing_date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `ads` */
 
-insert  into `ads`(`id`,`correspondent_name`,`correspondent_id`,`ad_type`,`ad_position`,`rate`,`extra_charge`,`division_id`,`district_id`,`upazila_id`,`client`,`gd_no`,`order_no`,`inch`,`colum`,`total_size`,`amount`,`payment_status`,`publishing_date`,`created_at`,`updated_at`) values 
-(1,'MD BIPLOB MIA',1,'Private','Front Page',580,0,7,55,416,'Somaj Seba','234',22,21,7,147,85260,0,'08 July 2021','2021-07-31 12:57:33','2021-08-12 02:50:30'),
-(3,'MD BIPLOB MIA',1,'Private','Back Page',580,0,7,55,416,'Personal','666',21,11,9,99,57420,0,'18 August 2021','2021-08-01 21:20:09','2021-08-17 00:05:42'),
-(4,'JASHIM UDDIN',10,'Govt','Inner Page',538,0,6,48,366,'LGED','243',16,12,10,120,64560,1,'26 August 2021','2021-08-01 22:48:40','2021-08-03 19:38:32'),
-(5,'MD BIPLOB MIA',1,'Govt','Back Page',550,0,7,55,416,'Health','222',12,14,8,112,61600,1,'18 August 2021','2021-08-03 15:58:41','2021-08-21 00:42:32'),
-(6,'MD BIPLOB MIA',1,'Private','Front Page',580,0,7,55,423,'Personal','400',10,15,6,90,52200,0,'12 August 2021','2021-08-03 18:06:47','2021-08-20 23:07:24'),
-(7,'SHAJIB',2,'Private','Back Page',580,0,7,55,423,'Personal','100',100,10,6,60,34800,0,'16 August 2021','2021-08-04 01:30:03','2021-08-14 02:58:17'),
-(8,'HAMIDUL BADSHAH',13,'Private','Front Page',580,0,6,45,329,'Personal','199',200,8,8,64,37120,1,'20 August 2021','2021-08-10 15:52:55','2021-08-11 00:22:18'),
-(9,'SHEKHOR BOSU',14,'Govt','Front Page',480,0,4,37,278,'RAB','211',222,5,4,20,9600,1,'15 August 2021','2021-08-13 15:12:42','2021-08-17 00:13:54'),
-(10,'SHAJIB',2,'Govt','Front Page',480,280,7,55,423,'LGED','188',188,10,6,60,29080,1,'19 August 2021','2021-08-14 00:40:01','2021-08-20 23:18:18'),
-(11,'ROKONUJJAMAN',15,'Govt','Back Page',550,235,7,55,416,'RAB','555',555,10,4,40,22235,0,'30 August 2021','2021-08-20 01:40:40','2021-08-27 23:38:11'),
-(12,'MAMUN',4,'Private','Inner_Color',580,342,7,53,397,'Personal','567',567,12,4,48,28182,0,'25 August 2021','2021-08-23 17:02:18','2021-08-23 17:02:18'),
-(13,'HASIBUL',6,'Govt','Front Page',680,3500,3,21,494,'WASA','233',233,18,8,144,101420,0,'26 August 2021','2021-08-23 18:27:22','2021-08-23 18:27:22');
+insert  into `ads`(`id`,`correspondent_name`,`correspondent_id`,`ad_type`,`ad_position`,`rate`,`extra_charge`,`division_id`,`district_id`,`upazila_id`,`client`,`gd_no`,`order_no`,`inch`,`colum`,`total_size`,`amount`,`payment_status`,`publishing_date`,`deleted_at`,`created_at`,`updated_at`) values 
+(1,'MD BIPLOB MIA',1,'Private','Front Page',580,0,7,55,416,'Somaj Seba','234',22,21,7,147,85260,1,'08 July 2021',NULL,'2021-07-31 12:57:33','2021-09-05 04:27:58'),
+(3,'MD BIPLOB MIA',1,'Private','Back Page',580,0,7,55,416,'Personal','666',21,11,9,99,57420,0,'18 August 2021',NULL,'2021-08-01 21:20:09','2021-08-17 00:05:42'),
+(4,'JASHIM UDDIN',10,'Govt','Inner Page',538,0,6,48,366,'LGED','243',16,12,10,120,64560,1,'26 August 2021',NULL,'2021-08-01 22:48:40','2021-08-03 19:38:32'),
+(5,'MD BIPLOB MIA',1,'Govt','Back Page',550,0,7,55,416,'Health','222',12,14,8,112,61600,1,'18 August 2021',NULL,'2021-08-03 15:58:41','2021-08-21 00:42:32'),
+(6,'MD BIPLOB MIA',1,'Private','Front Page',580,0,7,55,419,'Personal','400',10,15,6,90,52200,0,'12 August 2021',NULL,'2021-08-03 18:06:47','2021-09-06 04:04:50'),
+(7,'SHAJIB',2,'Private','Back Page',580,0,7,55,423,'Personal','100',100,10,6,60,34800,0,'16 August 2021',NULL,'2021-08-04 01:30:03','2021-08-14 02:58:17'),
+(8,'HAMIDUL BADSHAH',13,'Private','Front Page',580,0,6,45,329,'Personal','1299/21',200,8,8,64,37120,1,'20 August 2021',NULL,'2021-08-10 15:52:55','2021-09-01 02:22:35'),
+(9,'SHEKHOR BOSU',14,'Govt','Front Page',480,0,4,37,278,'RAB','211',222,5,4,20,9600,1,'15 August 2021',NULL,'2021-08-13 15:12:42','2021-08-17 00:13:54'),
+(10,'SHAJIB',2,'Govt','Front Page',480,280,7,55,423,'LGED','188',188,10,6,60,29080,1,'19 August 2021',NULL,'2021-08-14 00:40:01','2021-08-20 23:18:18'),
+(11,'ROKONUJJAMAN',15,'Govt','Back Page',550,235,7,55,416,'RAB','555',555,10,4,40,22235,0,'30 August 2021',NULL,'2021-08-20 01:40:40','2021-08-27 23:38:11'),
+(12,'MAMUN',4,'Private','Inner_Color',580,342,7,53,397,'Personal','567',567,12,4,48,28182,0,'25 August 2021',NULL,'2021-08-23 17:02:18','2021-08-23 17:02:18'),
+(13,'HASIBUL',6,'Govt','Front Page',680,3500,3,21,494,'WASA','233',233,18,8,144,101420,0,'26 August 2021',NULL,'2021-08-23 18:27:22','2021-08-23 18:27:22'),
+(14,'MAMUN',4,'Private','Back Page',580,1200,7,53,397,'Personal','1000/21',1000,10,6,60,36000,0,'02 September 2021',NULL,'2021-09-01 01:32:39','2021-09-01 02:22:10'),
+(15,'SHAJIB',2,'Govt','Front Page',680,1222,7,55,423,'RAB','239',233,10,6,60,42022,1,'05 September 2021',NULL,'2021-09-01 03:04:09','2021-09-05 16:05:49');
 
 /*Table structure for table `ads_price` */
 
@@ -106,22 +109,29 @@ CREATE TABLE `cheques` (
   `cheque_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
   `ait_amount` float unsigned NOT NULL DEFAULT '0',
   `commission` float unsigned NOT NULL DEFAULT '0',
+  `percentage` tinyint unsigned NOT NULL DEFAULT '30',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`cheque_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `cheques` */
 
-insert  into `cheques`(`cheque_id`,`correspondent_id`,`gd_no`,`bank_name`,`cheque_amount`,`cheque_number`,`ait_amount`,`commission`,`deleted_at`,`created_at`,`updated_at`) values 
-(3,10,'243','Sonali Bank',64270,'2220980',290,19281,NULL,'2021-08-03 19:38:32','2021-08-03 19:38:32'),
-(16,13,'199','Sonali Bak',37120,'37120',0,11136,NULL,'2021-08-11 00:22:18','2021-08-11 00:22:18'),
-(17,1,'400','Sonali',50200,'5220022',2000,15060,'2021-08-20 23:07:24','2021-08-12 02:57:47','2021-08-20 23:07:24'),
-(18,14,'211','SIBL',9000,'5559800',600,2700,NULL,'2021-08-13 15:18:03','2021-08-13 15:18:03'),
-(19,15,'555','Sonali Bank',20000,'555444',2235,6000,'2021-08-20 22:51:29','2021-08-20 01:52:26','2021-08-20 22:51:29'),
-(20,2,'188','DBBL',27080,'290802',2000,8124,NULL,'2021-08-20 23:18:18','2021-08-20 23:18:18'),
-(21,1,'222','DBBL',59600,'596596',2000,17880,NULL,'2021-08-21 00:42:32','2021-08-21 00:42:32');
+insert  into `cheques`(`cheque_id`,`correspondent_id`,`gd_no`,`bank_name`,`cheque_amount`,`cheque_number`,`ait_amount`,`commission`,`percentage`,`deleted_at`,`created_at`,`updated_at`) values 
+(3,10,'243','Sonali Bank',65270,'2220980',290,19581,30,NULL,'2021-08-03 19:38:32','2021-09-05 21:52:52'),
+(16,13,'199','Sonali Bank',37120,'37120',0,11136,30,NULL,'2021-08-11 00:22:18','2021-09-05 19:33:12'),
+(17,1,'400','Sonali',50200,'5220022',2000,15060,30,'2021-08-20 23:07:24','2021-08-12 02:57:47','2021-09-05 19:33:13'),
+(18,14,'211','SIBL',9000,'5559800',600,2700,30,NULL,'2021-08-13 15:18:03','2021-09-05 19:33:14'),
+(19,15,'555','Sonali Bank',20000,'555444',2235,6000,30,'2021-08-20 22:51:29','2021-08-20 01:52:26','2021-09-05 19:33:14'),
+(20,2,'188','Jamuna Bank',25080,'290802',2000,8124,30,NULL,'2021-08-20 23:18:18','2021-09-05 19:33:15'),
+(21,1,'222','DBBL',59600,'596596',2000,17880,30,NULL,'2021-08-21 00:42:32','2021-09-05 19:33:15'),
+(22,1,'234','Sonali Bank',85260,'85260',0,25578,30,NULL,'2021-09-05 04:27:58','2021-09-05 19:33:16'),
+(23,2,'previous_ad','Sonali Bank',45000,'222322',0,13500,30,NULL,'2021-09-05 04:41:07','2021-09-05 19:33:17'),
+(24,2,'previous_ad','Jamuna Bank',55000,'5567800',0,16500,30,NULL,'2021-09-05 16:02:51','2021-09-05 19:33:17'),
+(25,2,'239','Jamuna Bank',40022,'4202244',2000,12006.6,30,NULL,'2021-09-05 16:05:49','2021-09-05 19:33:18'),
+(26,12,'previous_ad','Jamuna Bank',35000,'3500022',0,12250,35,NULL,'2021-09-05 16:16:08','2021-09-05 19:36:46'),
+(27,1,'previous_ad','SIBL',33000,'3200022',0,11550,35,NULL,'2021-09-05 19:44:21','2021-09-05 21:02:58');
 
 /*Table structure for table `commissions` */
 
@@ -133,26 +143,35 @@ CREATE TABLE `commissions` (
   `previous_amount` decimal(8,2) unsigned DEFAULT NULL,
   `commission_amount` decimal(8,2) unsigned DEFAULT NULL,
   `current_amount` decimal(8,2) DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`commission_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `commissions` */
 
-insert  into `commissions`(`commission_id`,`correspondent`,`previous_amount`,`commission_amount`,`current_amount`,`created_at`,`updated_at`) values 
-(2,12,NULL,750.00,NULL,'2021-08-12 00:25:10','2021-08-12 00:25:10'),
-(3,9,NULL,751.00,NULL,'2021-08-12 00:25:52','2021-08-12 00:25:52'),
-(4,13,NULL,7000.00,NULL,'2021-08-12 00:38:46','2021-08-12 00:38:46'),
-(5,13,NULL,270.00,NULL,'2021-08-12 00:40:11','2021-08-12 00:40:11'),
-(6,1,NULL,1500.00,NULL,'2021-08-12 13:52:30','2021-08-12 13:52:30'),
-(7,1,NULL,300.00,NULL,'2021-08-13 02:43:27','2021-08-13 02:43:27'),
-(8,9,NULL,1010.00,NULL,'2021-08-13 02:49:16','2021-08-13 02:49:16'),
-(9,14,NULL,700.00,NULL,'2021-08-13 15:20:32','2021-08-13 15:20:32'),
-(10,1,NULL,150.00,NULL,'2021-08-18 02:28:50','2021-08-18 02:28:50'),
-(11,6,NULL,1200.00,NULL,'2021-08-19 05:58:27','2021-08-19 05:58:27'),
-(12,15,NULL,6500.00,NULL,'2021-08-20 01:55:41','2021-08-20 01:55:41'),
-(13,2,35444.00,580.00,34864.00,'2021-08-21 14:32:42','2021-08-21 14:32:42');
+insert  into `commissions`(`commission_id`,`correspondent`,`previous_amount`,`commission_amount`,`current_amount`,`deleted_at`,`created_at`,`updated_at`) values 
+(2,12,NULL,750.00,NULL,'2021-09-01 01:26:42','2021-08-12 00:25:10','2021-09-01 01:26:42'),
+(3,9,NULL,751.00,NULL,NULL,'2021-08-12 00:25:52','2021-08-12 00:25:52'),
+(4,13,NULL,7000.00,NULL,NULL,'2021-08-12 00:38:46','2021-08-12 00:38:46'),
+(5,13,NULL,270.00,NULL,NULL,'2021-08-12 00:40:11','2021-08-12 00:40:11'),
+(6,1,NULL,1500.00,NULL,NULL,'2021-08-12 13:52:30','2021-08-12 13:52:30'),
+(7,1,NULL,300.00,NULL,NULL,'2021-08-13 02:43:27','2021-08-13 02:43:27'),
+(8,9,NULL,1010.00,NULL,NULL,'2021-08-13 02:49:16','2021-08-13 02:49:16'),
+(9,14,NULL,700.00,NULL,NULL,'2021-08-13 15:20:32','2021-08-13 15:20:32'),
+(10,1,NULL,150.00,NULL,NULL,'2021-08-18 02:28:50','2021-08-18 02:28:50'),
+(11,6,NULL,1200.00,NULL,NULL,'2021-08-19 05:58:27','2021-08-19 05:58:27'),
+(12,15,NULL,6500.00,NULL,NULL,'2021-08-20 01:55:41','2021-08-20 01:55:41'),
+(13,2,35444.00,580.00,34864.00,NULL,'2021-08-21 14:32:42','2021-08-21 14:32:42'),
+(14,1,40861.00,230.00,40631.00,NULL,'2021-08-31 00:01:34','2021-08-31 00:01:34'),
+(15,12,17350.00,360.00,16990.00,NULL,'2021-08-31 00:02:02','2021-08-31 00:02:02'),
+(16,12,31490.00,990.00,30500.00,NULL,'2021-09-09 17:55:26','2021-09-09 17:55:26'),
+(17,1,77409.00,500.00,76909.00,NULL,'2021-09-09 18:03:39','2021-09-09 18:03:39'),
+(18,1,76909.00,909.00,76000.00,NULL,'2021-09-09 18:05:01','2021-09-09 18:05:01'),
+(19,12,30500.00,1000.00,29500.00,NULL,'2021-09-09 18:05:24','2021-09-09 18:05:24'),
+(20,1,76000.00,100.00,75900.00,NULL,'2021-09-26 21:04:41','2021-09-26 21:04:41'),
+(21,1,75900.00,900.00,75000.00,NULL,'2021-10-06 01:20:23','2021-10-06 01:20:23');
 
 /*Table structure for table `corr_wallets` */
 
@@ -171,12 +190,12 @@ CREATE TABLE `corr_wallets` (
 
 insert  into `corr_wallets`(`wallet_id`,`corr_id`,`credit`,`created_at`,`updated_at`) values 
 (2,9,26310,'2021-08-01 17:04:35','2021-08-13 02:49:16'),
-(3,10,19281,'2021-08-01 22:12:19','2021-08-03 19:38:32'),
+(3,10,19581,'2021-08-01 22:12:19','2021-09-05 21:52:52'),
 (4,11,27320,'2021-08-01 22:18:02','2021-08-13 02:15:56'),
-(5,1,40861,'2021-08-01 23:21:34','2021-08-21 00:42:32'),
-(6,12,17350,'2021-08-05 00:04:35','2021-08-13 02:16:32'),
+(5,1,75000,'2021-08-01 23:21:34','2021-10-06 01:20:23'),
+(6,12,29500,'2021-08-05 00:04:35','2021-09-09 18:05:24'),
 (7,13,20002,'2021-08-10 15:47:52','2021-08-12 00:40:11'),
-(8,2,34864,'2021-08-12 00:45:28','2021-08-21 14:32:42'),
+(8,2,63370.6,'2021-08-12 00:45:28','2021-09-05 16:05:49'),
 (9,6,41120,'2021-08-12 00:45:35','2021-08-19 05:58:27'),
 (11,14,7000,'2021-08-13 15:07:08','2021-08-13 15:20:32'),
 (12,15,23500,'2021-08-20 01:30:34','2021-08-20 22:51:29');
@@ -215,7 +234,7 @@ insert  into `correspondents`(`id`,`name`,`division_id`,`district_id`,`upazila_i
 (9,'MASUM BILLAH',2,9,61,'01788229908','88229908',8822,'masum@gmail.com','02 February 2017',NULL,'2021-08-01 17:04:35','2021-08-01 17:04:35'),
 (10,'JASHIM UDDIN',6,48,366,'01388908902','8908902',8908,'jashim@gmail.com','09 May 2013',NULL,'2021-08-01 22:12:19','2021-08-01 22:14:34'),
 (11,'HAMIDUL KHAN',1,3,17,'01988092209','988092209',9880,'hamidul@gmail.com','28 June 2021',NULL,'2021-08-01 22:18:02','2021-08-01 22:18:02'),
-(12,'AZAM KHAN',3,30,230,'01722090955','22090955',2209,'azam@gmail.com','30 May 2021',NULL,'2021-08-05 00:04:35','2021-08-05 00:04:35'),
+(12,'A.S AZAM KHAN',3,30,230,'01722090955','22090955',2209,'azam@gmail.com','30 May 2021',NULL,'2021-08-05 00:04:35','2021-09-24 13:18:36'),
 (13,'HAMIDUL BADSHAH',6,45,329,'01939384220','39384220',3938,'badsshah@gmail.com','04 February 2015',NULL,'2021-08-10 15:47:52','2021-08-10 15:47:52'),
 (14,'SHEKHOR BOSU',4,37,278,'01725676766','1725676767',172567,'bosu@gmail.com','10 August 2021',NULL,'2021-08-13 15:07:08','2021-08-13 15:08:08'),
 (15,'ROKONUJJAMAN',7,55,416,'01898990909','98990909',9899,'rokunur@gmail.com','01 March 2021',NULL,'2021-08-20 01:30:34','2021-08-20 01:30:34');
@@ -394,14 +413,23 @@ CREATE TABLE `logs` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `logs` */
 
 insert  into `logs`(`log_id`,`user_id`,`data`,`operation_type`,`created_at`,`updated_at`) values 
-(1,1,'{\"cheque_id\":17,\"correspondent_id\":1,\"gd_no\":\"400\",\"bank_name\":\"Sonali\",\"cheque_amount\":50200,\"cheque_number\":\"5220022\",\"ait_amount\":2000,\"commission\":15060,\"deleted_at\":\"2021-08-20T17:07:24.528419Z\",\"created_at\":\"2021-08-11T20:57:47.000000Z\",\"updated_at\":\"2021-08-20T17:07:24.000000Z\"}','Delete','2021-08-20 23:07:24','2021-08-20 23:07:24'),
-(2,1,'{\"correspondent_id\":\"2\",\"gd_no\":\"188\",\"bank_name\":\"DBBL\",\"cheque_amount\":\"27080\",\"cheque_number\":\"290802\",\"ait_amount\":2000,\"commission\":8124,\"updated_at\":\"2021-08-20T17:18:18.000000Z\",\"created_at\":\"2021-08-20T17:18:18.000000Z\",\"cheque_id\":20}','Insert Cheque','2021-08-20 23:18:18','2021-08-21 00:53:19'),
-(3,1,'{\"correspondent_id\":\"1\",\"gd_no\":\"222\",\"bank_name\":\"DBBL\",\"cheque_amount\":\"59600\",\"cheque_number\":\"596596\",\"ait_amount\":2000,\"commission\":17880,\"updated_at\":\"2021-08-20T18:42:32.000000Z\",\"created_at\":\"2021-08-20T18:42:32.000000Z\",\"cheque_id\":21}','Insert Cheque','2021-08-21 00:42:32','2021-08-21 00:42:32');
+(1,1,'{\"id\":4,\"name\":\"user\",\"email\":\"user@gmail.com\",\"email_verified_at\":null,\"dob\":null,\"created_at\":\"2021-09-10T09:38:59.000000Z\",\"updated_at\":\"2021-09-10T09:38:59.000000Z\"}','Update App User','2021-09-24 14:09:31','2021-09-24 14:09:31'),
+(2,1,'{\"id\":4,\"name\":\"user\",\"email\":\"user@gmail.com\",\"email_verified_at\":null,\"dob\":null,\"created_at\":\"2021-09-10T09:38:59.000000Z\",\"updated_at\":\"2021-09-10T09:38:59.000000Z\"}','Update App User','2021-09-24 22:27:26','2021-09-24 22:27:26'),
+(3,1,'{\"id\":4,\"name\":\"user\",\"email\":\"user@gmail.com\",\"email_verified_at\":null,\"dob\":null,\"created_at\":\"2021-09-10T09:38:59.000000Z\",\"updated_at\":\"2021-09-10T09:38:59.000000Z\"}','Update App User','2021-09-24 22:27:52','2021-09-24 22:27:52'),
+(4,1,'{\"id\":4,\"name\":\"user\",\"email\":\"user@gmail.com\",\"email_verified_at\":null,\"dob\":null,\"created_at\":\"2021-09-10T09:38:59.000000Z\",\"updated_at\":\"2021-09-10T09:38:59.000000Z\"}','Update App User','2021-09-24 22:29:54','2021-09-24 22:29:54'),
+(5,1,'{\"id\":4,\"name\":\"user\",\"email\":\"user@gmail.com\",\"email_verified_at\":null,\"dob\":null,\"created_at\":\"2021-09-10T09:38:59.000000Z\",\"updated_at\":\"2021-09-10T09:38:59.000000Z\"}','Update App User','2021-09-24 22:30:24','2021-09-24 22:30:24'),
+(6,1,'{\"name\":\"Rokonujjaman Sarkar\",\"email\":\"sarkar@gmail.com\",\"updated_at\":\"2021-09-24T16:32:21.000000Z\",\"created_at\":\"2021-09-24T16:32:21.000000Z\",\"id\":7,\"roles\":[{\"id\":3,\"name\":\"editor\",\"guard_name\":\"web\",\"created_at\":\"2021-08-27T15:13:35.000000Z\",\"updated_at\":\"2021-08-27T15:13:35.000000Z\",\"pivot\":{\"model_id\":7,\"role_id\":3,\"model_type\":\"App\\\\Models\\\\User\"}}]}','Insert App User','2021-09-24 22:32:21','2021-09-24 22:32:21'),
+(7,4,'{\"name\":\"Pangku\",\"email\":\"babla@gmail.com\",\"updated_at\":\"2021-09-24T16:37:29.000000Z\",\"created_at\":\"2021-09-24T16:37:29.000000Z\",\"id\":8,\"roles\":[{\"id\":4,\"name\":\"user\",\"guard_name\":\"web\",\"created_at\":\"2021-08-27T15:13:35.000000Z\",\"updated_at\":\"2021-08-27T15:13:35.000000Z\",\"pivot\":{\"model_id\":8,\"role_id\":4,\"model_type\":\"App\\\\Models\\\\User\"}}]}','Insert App User','2021-09-24 22:37:29','2021-09-24 22:37:29'),
+(8,1,'{\"id\":4,\"name\":\"user\",\"email\":\"user@gmail.com\",\"email_verified_at\":null,\"dob\":null,\"created_at\":\"2021-09-10T09:38:59.000000Z\",\"updated_at\":\"2021-09-10T09:38:59.000000Z\"}','Update App User','2021-09-24 22:42:40','2021-09-24 22:42:40'),
+(9,1,'{\"id\":4,\"name\":\"user\",\"email\":\"user@gmail.com\",\"email_verified_at\":null,\"dob\":null,\"created_at\":\"2021-09-10T09:38:59.000000Z\",\"updated_at\":\"2021-09-10T09:38:59.000000Z\"}','Update App User','2021-09-24 23:47:16','2021-09-24 23:47:16'),
+(10,1,'{\"id\":4,\"name\":\"user\",\"email\":\"user@gmail.com\",\"email_verified_at\":null,\"dob\":null,\"created_at\":\"2021-09-10T09:38:59.000000Z\",\"updated_at\":\"2021-09-10T09:38:59.000000Z\"}','Update App User','2021-09-24 23:51:38','2021-09-24 23:51:38'),
+(11,1,'{\"correspondent\":\"1\",\"previous_amount\":76000,\"commission_amount\":\"100\",\"current_amount\":75900,\"updated_at\":\"2021-09-26T15:04:41.000000Z\",\"created_at\":\"2021-09-26T15:04:41.000000Z\",\"commission_id\":20}','Insert Commission','2021-09-26 21:04:41','2021-09-26 21:04:41'),
+(12,1,'{\"correspondent\":\"1\",\"previous_amount\":75900,\"commission_amount\":\"900\",\"current_amount\":75000,\"updated_at\":\"2021-10-05T19:20:23.000000Z\",\"created_at\":\"2021-10-05T19:20:23.000000Z\",\"commission_id\":21}','Insert Commission','2021-10-06 01:20:23','2021-10-06 01:20:23');
 
 /*Table structure for table `members` */
 
@@ -494,7 +522,12 @@ CREATE TABLE `model_has_roles` (
 
 insert  into `model_has_roles`(`role_id`,`model_type`,`model_id`) values 
 (1,'App\\Models\\User',1),
-(3,'App\\Models\\User',2);
+(2,'App\\Models\\User',2),
+(3,'App\\Models\\User',3),
+(4,'App\\Models\\User',4),
+(4,'App\\Models\\User',6),
+(3,'App\\Models\\User',7),
+(4,'App\\Models\\User',8);
 
 /*Table structure for table `password_resets` */
 
@@ -1127,13 +1160,18 @@ CREATE TABLE `users` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `users` */
 
 insert  into `users`(`id`,`name`,`email`,`email_verified_at`,`password`,`remember_token`,`dob`,`created_at`,`updated_at`) values 
 (1,'Biplob','biplob@gmail.com',NULL,'$2y$10$m1.7QDdouwV9qkBfwnmhuuT9VRxqrVvqw4OJoUeNB26ebjqtRSrZi',NULL,'2021-06-23','2021-06-18 16:29:42','2021-06-18 17:16:06'),
-(2,'Shajib','shajib@gmail.com',NULL,'$2y$10$PDRGQh.s.phrSiBfQFfna.X4.jru5RSySB7xA.ZOYDwd8O5hDWihu',NULL,NULL,'2021-06-18 16:30:43','2021-06-18 16:30:43');
+(2,'Shajib','shajib@gmail.com',NULL,'$2y$10$hXItDP8i/sh72VZtOm1Ve.M5eCMMym7GCMCf.hRYxgAnu4X9yvKCW',NULL,NULL,'2021-06-18 16:30:43','2021-09-17 15:51:59'),
+(3,'tbt','tbt@gmail.com',NULL,'$2y$10$opmS3jTElgRUFdavpgvY.eezMBijjCZCoyEFzQ/ympdUkj4PkN.te',NULL,NULL,'2021-09-10 15:32:15','2021-09-10 15:32:15'),
+(4,'user','user@gmail.com',NULL,'$2y$10$obvX/P/jMPIbVvw4CeJnnOgAjFGp5DGBoawHj4fU6JIGsFkVDKkDm',NULL,NULL,'2021-09-10 15:38:59','2021-09-10 15:38:59'),
+(6,'user2','user2@gmail.com',NULL,'$2y$10$s/0hj4mxYrtXDc3SHOhlHOvD/3pJJ9CmU0Hlp9BR5/tfFsM3UXweu',NULL,NULL,'2021-09-10 15:41:34','2021-09-10 15:41:34'),
+(7,'Rokonujjaman Sarkar','sarkar@gmail.com',NULL,'$2y$10$l4LtE8YpVupwCPHtFSSeOOofRhE3j7ZUPfeM0bZ3ybOEK7jFbcena',NULL,NULL,'2021-09-24 22:32:21','2021-09-24 22:32:21'),
+(8,'Pangku','babla@gmail.com',NULL,'$2y$10$3cnb/i.0z.dLKF4zIFVj7.SoMxiPD2PCKciH0IIP4Rt/B7vg0hVU2',NULL,NULL,'2021-09-24 22:37:29','2021-09-24 22:37:29');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

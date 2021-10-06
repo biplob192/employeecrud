@@ -9,4 +9,5 @@ class Commission extends Model
 {
     use HasFactory;
     protected  $primaryKey = 'commission_id';
+    protected $fillable = ['deleted_at'];
 }

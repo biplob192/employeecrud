@@ -20,7 +20,7 @@ Commission
 		<div class="col align-self-center"></div>
 		<div class="col-md-5 align-self-center"><center> <h5>COMMISSION HISTORY</h5> </center> <br></div>
 		<div class="col align-self-center">
-			<div class="" style="float: right;">				
+			<div class="" style="float: right;">
 			  	<button class="btn btn-dark" data-toggle="modal" data-target="#CommissionModal" id="commission">New Commission</button>			
 			</div>
 		</div>
@@ -28,11 +28,10 @@ Commission
 </div>
 
 @if(session()->has('error'))    
-	    <center><h5> <span style="color: red;">{{ session()->get('error') }}</span> </h5></center> <br>
-	   @endif
+	<center><h5> <span style="color: red;">{{ session()->get('error') }}</span> </h5></center> <br>
+@endif
 
 @include('inc.chequeInsertModal')
-
 <br>
 <div class="pd-20 card-box mb-30">
 	<div class="table-responsive">

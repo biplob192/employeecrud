@@ -32,7 +32,7 @@ Employees
 					<th>Designation</th>
 					<th>Email</th>	
 					<th>Mobile</th>	
-					<th class="text-center" >Action</th>
+					@hasanyrole('super_admin|admin|editor')<th class="text-center" >Action</th>@endhasanyrole
 				</tr>
 			</thead>
 			<tbody>
@@ -46,7 +46,7 @@ Employees
 					<td>{{$employee->designation}}</td>			
 					<td>{{$employee->email}}</td>			
 					<td>{{$employee->mobile}}</td>			
-
+					@hasanyrole('super_admin|admin|editor')
 					<td>
 						<div class="menu">		
 							<div class="edit">
@@ -63,6 +63,7 @@ Employees
 							</div>
 						</div>
 					</td>
+					@endhasanyrole
 				</tr>
 				@endforeach
 			</tbody>
@@ -75,21 +76,21 @@ Employees
 
 @section('Script')
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<!-- <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+<!-- <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script> -->
+<!-- <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script> -->
 <script>
 	$(document).ready(function() {
 	    $('#myTable').DataTable({
 	    	responsive: true,
 	    	"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 	        dom: 'Bfrtip',
-	        buttons: [
-	            'copy', 'csv', 'excel', 'pdf', 'print', 'pageLength'
-	        ]
+	        // buttons: [
+	        //     'copy', 'csv', 'excel', 'pdf', 'print', 'pageLength'
+	        // ]
 	    } );
 	});
 </script>

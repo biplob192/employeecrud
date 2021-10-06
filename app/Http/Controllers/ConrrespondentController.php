@@ -106,7 +106,10 @@ class ConrrespondentController extends Controller
     }
 
     public function show($id){ // show single correspondent 
-        $correspondent=Correspondent::find($id);
+        $correspondent=Correspondent::
+        leftjoin('division_list', 'correspondents.division_id', '=', 'division_list.division_id')
+        ->leftjoin('district_list', 'correspondents.district_id', '=', 'district_list.district_id')
+        ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')->find($id);
         // return $employee;        
         return view ('admin.correspondents.correspondent',['correspondent'=>$correspondent]);
     }

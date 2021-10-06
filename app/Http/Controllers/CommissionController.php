@@ -6,8 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Commission;
 use App\Models\CorrWallet;
 use App\Models\Correspondent;
+use App\Models\Log;
+use Carbon\Carbon;
+use Auth;
 use Validator;
 use Exception;
+
 
 class CommissionController extends Controller
 {
@@ -23,7 +27,7 @@ class CommissionController extends Controller
         ->leftjoin('district_list', 'correspondents.district_id', '=', 'district_list.district_id')
         ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')
         ->orderBy('commission_id', 'DESC')
-        ->select('commissions.*', 'correspondents.name', 'upazila_list.upazila_name', 'district_list.district_name')
+        ->select('commissions.*', 'correspondents.name', 'upazila_list.upazila_name', 'district_list.district_name')->whereNull('commissions.deleted_at')
         ->get();
 
         $correspondents= Correspondent::select('id','name','upazila_name')
@@ -85,6 +89,11 @@ class CommissionController extends Controller
         $commission->current_amount  =$current_amount;
         $commission->commission_amount  =$req->commission_amount;
         $commission->save();
+        log::insert([
+            'user_id'           => Auth::user()->id,
+            'data'              => json_encode($commission),
+            'operation_type'    => 'Insert Commission',
+        ]);
         return back();
       }
         catch(Exception $e){          
@@ -139,10 +148,15 @@ class CommissionController extends Controller
         $wallet     = CorrWallet::where('corr_id', $commission->correspondent)->first();
         $credit     = $wallet->credit;
         $comm       = $commission->commission_amount;
-        if ($commission->delete()) {
+        if ($commission->update(['deleted_at' => Carbon::now()])) {
             CorrWallet::where('corr_id', $commission->correspondent)
             ->update(['credit' => $credit + $comm]);
         }
+        log::insert([
+            'user_id'           => Auth::user()->id,
+            'data'              => json_encode($commission),
+            'operation_type'    => 'Delete Commission',
+        ]);
         return back();
     }
 }

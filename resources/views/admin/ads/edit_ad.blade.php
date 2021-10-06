@@ -25,7 +25,12 @@ Edit Ad
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Name</label>
 			<div class="col-sm-12 col-md-10">
-				<input class="form-control" type="text" name="name" value="{{$ad->correspondent_name}}" placeholder="Name Here">
+				<input type="hidden" name="corr_id" id="corr_id" value="{{$ad->correspondent_id}}">
+				<select class="form-control custom-select2" id="corr_name" name="corr_name" required>					
+					@foreach ($correspondents as $correspondent)
+					<option {{($ad->correspondent_id) == $correspondent->id ? 'selected' : '' }} value="{{$correspondent->name}}">{{$correspondent->name}}, {{$correspondent->upazila_name}}</option>
+					@endforeach
+				<select>
 			</div>
 		</div>
 		<div class="form-group row">
@@ -68,21 +73,33 @@ Edit Ad
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-12 col-md-2 col-form-label">Division ID</label>
+			<label class="col-sm-12 col-md-2 col-form-label">Division Name</label>
 			<div class="col-sm-12 col-md-10">
-				<input class="form-control" type="number" name="division" value="{{$ad->division_id}}" placeholder="Division">
-			</div>
-		</div>
-			<div class="form-group row">
-			<label class="col-sm-12 col-md-2 col-form-label">District ID</label>
-			<div class="col-sm-12 col-md-10">
-				<input class="form-control" type="number" name="district" value="{{$ad->district_id}}" placeholder="District">
+				<select class="form-control custom-select2" name="division" required>					
+					@foreach ($divisions as $division)
+					<option {{($ad->division_id) == $division->division_id ? 'selected' : '' }} value="{{$division->division_id}}">{{$division->division_name}}</option>
+					@endforeach
+				<select>
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-12 col-md-2 col-form-label">Upazila ID</label>
+			<label class="col-sm-12 col-md-2 col-form-label">District Name</label>
 			<div class="col-sm-12 col-md-10">
-				<input class="form-control" type="number" name="upazila" value="{{$ad->upazila_id}}" placeholder="Upazila">
+				<select class="form-control custom-select2" name="district" required>					
+					@foreach ($districts as $district)
+					<option {{($ad->district_id) == $district->district_id ? 'selected' : '' }} value="{{$district->district_id}}">{{$district->district_name}}</option>
+					@endforeach
+				<select>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-12 col-md-2 col-form-label">Upazila Name</label>
+			<div class="col-sm-12 col-md-10">
+				<select class="form-control custom-select2" name="upazila" required>					
+					@foreach ($upazilas as $upazila)
+					<option {{($ad->upazila_id) == $upazila->upazila_id ? 'selected' : '' }} value="{{$upazila->upazila_id}}">{{$upazila->upazila_name}}</option>
+					@endforeach
+				<select>
 			</div>
 		</div>
 		<div class="form-group row">
@@ -145,4 +162,23 @@ Edit Ad
 @endsection
 
 @section('Script')
+<script type="text/javascript">
+	jQuery("#corr_name").on('change',function(e){
+    e.preventDefault();
+    var corr_name = $("#corr_name :selected").val();
+    console.log(corr_name);
+    $.ajax({
+      url:"/address",
+      type:"GET",
+      data:{corr_name:corr_name},
+      success: function(res){
+      	console.log(res);
+      	if(res.status==true){
+        	$("#corr_id").val(res.data.id);        	
+      	}     
+      }
+    });
+
+  	});
+</script>
 @endsection

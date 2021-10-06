@@ -24,9 +24,9 @@ Edit Cheque
 		<input type="hidden" name="id" value="{{$cheque->cheque_id}}">
 
 		<div class="form-group row">
-			<label class="col-sm-12 col-md-2 col-form-label">GD No</label>
+			<label class="col-sm-12 col-md-2 col-form-label">Correspondent</label>
 			<div class="col-sm-12 col-md-10">
-				<input class="form-control" type="text" name="gd_no" value="{{$cheque->gd_no}}" placeholder="GD No">
+				<input class="form-control" type="text" name="correspondent_id" value="{{$cheque->correspondent_id}}" placeholder="Correspondent ID">
 			</div>
 		</div>
 		<div class="form-group row">
@@ -36,15 +36,15 @@ Edit Cheque
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-12 col-md-2 col-form-label">Cheque Amount</label>
+			<label class="col-sm-12 col-md-2 col-form-label">Cheque Number</label>
 			<div class="col-sm-12 col-md-10">
-				<input class="form-control" type="text" name="cheque_amount" value="{{$cheque->cheque_amount}}" placeholder="Cheque Amount" >
+				<input class="form-control" type="text" name="cheque_number" value="{{$cheque->cheque_number}}" placeholder="Cheque Number" >
 			</div>
 		</div>
 		<div class="form-group row">
-			<label class="col-sm-12 col-md-2 col-form-label">Payable Amount</label>
+			<label class="col-sm-12 col-md-2 col-form-label">Cheque Amount</label>
 			<div class="col-sm-12 col-md-10">
-				<input class="form-control" type="text" name="amount" value="{{old('amount')}}" placeholder="Payable Amount" disabled>
+				<input class="form-control" type="number" name="cheque_amount" value="{{$cheque->cheque_amount}}" placeholder="Cheque Amount" >
 			</div>
 		</div>
 		<div class="form-group row">

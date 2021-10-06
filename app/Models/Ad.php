@@ -9,6 +9,6 @@ class Ad extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'payment_status'
+        'payment_status', 'deleted_at'
     ];
 }

@@ -1,6 +1,6 @@
 <div class="header">
-		<div class="header-left">
-			<div class="menu-icon dw dw-menu"></div>
+		<div class="header-left" style="float:right;">
+			<!-- <div class="menu-icon dw dw-menu"></div>
 			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
 			<div class="header-search">
 				<form>
@@ -37,9 +37,9 @@
 						</div>
 					</div>
 				</form>
-			</div>
+			</div> -->
 		</div>
-		<div class="header-right">
+		<div class="header-right" style="float:right;">
 			<div class="dashboard-setting user-notification">
 				<div class="dropdown">
 					<a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
@@ -109,7 +109,7 @@
 						<span class="user-icon">
 							<img src="{{asset('Backend')}}/vendors/images/photo1.jpg" alt="">
 						</span>
-						<span class="user-name">{{Auth::user()->name}}</span>
+						<span class="user-name" title="{{Auth::user()->roles()->pluck('name')->join('')}}">{{Auth::user()->name}}</span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>

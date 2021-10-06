@@ -42,6 +42,17 @@ New Cheque
 				</select>
 			</div>
 		</div>
+		<div class="form-group row" style="display:none" id="upazila_list">
+			<label class="col-sm-12 col-md-2 col-form-label">Upazila</label>
+			<div class="col-sm-12 col-md-10">	
+				<select class="form-control custom-select2" id="upazila" name="upazila" style="width: 100%">
+					<option value="" selected disabled>Select Upazila</option>
+					@foreach ($upazilas as $upazila)
+					<option value="{{$upazila->upazila_id}}">{{$upazila->upazila_name}}</option>
+					@endforeach
+				</select>
+			</div>
+		</div>
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Bank Name</label>
 			<div class="col-sm-12 col-md-10">
@@ -106,6 +117,7 @@ New Cheque
     var gd_number = $("#gd_no :selected").val();
     if (gd_number!="previous_ad") {
     	$("#corr_list_div").hide();
+    	$("#upazila_list").hide();
 	    $.ajax({
 	      url:"/gdprice",
 	      type:"GET",
@@ -123,6 +135,7 @@ New Cheque
     	$("#correspondent_id").val("");
     	// $('#correspondents option:first').prop('selected',true);
     	$("#corr_list_div").show();
+    	$("#upazila_list").show();
     }   
   	});
 

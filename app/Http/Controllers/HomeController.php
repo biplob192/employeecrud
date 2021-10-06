@@ -9,7 +9,6 @@ class HomeController extends Controller
 {    public function home(){
         if(Auth::check()){
             return redirect('/dashboard');
-            // return view ("panel");
         }
         // return redirect ("login");
 

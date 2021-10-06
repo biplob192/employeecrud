@@ -31,7 +31,7 @@
 							@csrf
 							  <div class="form-row">
 							    <div class="col">
-							      <input type="text" name="name" class="form-control" placeholder="User Name"required>
+							      <input type="text" name="email" class="form-control" placeholder="User Email"required>
 							    </div>
 							    <div class="col">
 							      <input type="password" name="password" class="form-control" placeholder="Password"required>

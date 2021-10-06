@@ -15,7 +15,7 @@ Cheques
 	.delete{width: 50%;float: left;text-align: center;}
 </style>
 
-<center> <h5>TBT CHEQUES LIST</h5> </center> <br>
+<center> <h5>INCOMING CHEQUE LIST</h5> </center> <br>
 <div class="pd-20 card-box mb-30">
 	<div class="table-responsive">
 		<table class="table table-striped">
@@ -38,7 +38,7 @@ Cheques
 						<td>{{$cheque->gd_no}}</td>			
 						<td>{{$cheque->cheque_number}}</td>			
 						<td>{{$cheque->bank_name}}</td>			
-						<td>{{$cheque->cheque_amount}}</td>			
+						<td><span style="font-weight:bold">&#2547; {{$cheque->cheque_amount}}</span></td>			
 						<td>
 							<div class="menu">		
 								<div class="edit">

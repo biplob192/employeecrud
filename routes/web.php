@@ -15,6 +15,7 @@ use App\Http\Controllers\ChequeController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\CommissionController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckAuth;
 
 
@@ -47,7 +48,6 @@ Route::get('/autocomplete-search-query', [AutocompleteSearchController::class, '
 Route::get('/gd-search-query', [AdController::class, 'query'])->name('gd.search.query');
 
 
-// --------------------- Test Routes ------------------------------
 
 
 
@@ -70,195 +70,113 @@ Route::get('/dbtest', 'App\Http\Controllers\DatabaseController@dbConn');
 
 Route::post('/login', [LoginController::class, 'postLogin']);
 Route::get('/login', [LoginController::class, 'login']);
-Route::get('/logout', [LoginController::class, 'logout']);
-Route::get('/', [HomeController::class, 'home']);
 Route::get('/dashboard', [HomeController::class, 'dashboard']);
+Route::get('/', [HomeController::class, 'home']);
 
 
 
-// protected route
+
+// Protected route for Login users
 Route::middleware([CheckAuth::class])->group(function () {
-    
-    // Correspondent CRUD Routes
-    
-    // Route::get('/correspondent', [ConrrespondentController::class, 'create']);
-    // Route::post('/correspondent', [ConrrespondentController::class, 'store']);
-    // Route::get('/correspondents', [ConrrespondentController::class, 'index']);
-    // Route::get('/corrwallets', [ConrrespondentController::class, 'indexWallets']);
-    // Route::get('/correspondent/{id}', [ConrrespondentController::class, 'show']);
-    // Route::get('/correspondent/{id}/edit', [ConrrespondentController::class, 'edit']);
-    // Route::put('/correspondent/{id}', [ConrrespondentController::class, 'update']);
-    // Route::delete('/correspondent/{id}', [ConrrespondentController::class, 'delete']);
-    // Route::get('getDistrict',[ConrrespondentController::class, 'getDistrict'])->name('getDistrict');
-    // Route::get('getUpazila',[ConrrespondentController::class, 'getUpazila'])->name('getUpazila');
 
-
-
-    //Employee CRUD Routes
-
-    // Route::get('/employee', [EmployeeController::class, 'create']);
-    // Route::post('/employee', [EmployeeController::class, 'store']);
-    // Route::get('/employees', [EmployeeController::class, 'index']);
-    // Route::get('/employee/{id}', [EmployeeController::class, 'show']);
-    // Route::get('/employee/{id}/edit', [EmployeeController::class, 'edit']);
-    // Route::put('/employee/{id}', [EmployeeController::class, 'update']);
-    // Route::delete('/employee/{id}', [EmployeeController::class, 'delete']);
-
-
-    //Ad CRUD Routes
-
-    // Route::get('/ad', [AdController::class, 'create']);
-    // Route::post('/ad', [AdController::class, 'store']);
-    // // Route::get('/ads', [AdController::class, 'index']);
-    // Route::get('/ads', [AdController::class, 'indexV2']);
-    // Route::get('/ads/export', [AdController::class, 'exportAds']);
-    // Route::get('/ad/{id}', [AdController::class, 'show']);
-    // Route::get('/ad/{id}/edit', [AdController::class, 'edit']);
-    // Route::get('/ad/{id}/bill', [AdController::class, 'print_bill']);
-    // Route::put('/ad/{id}', [AdController::class, 'update']);
-    // Route::delete('/ad/{id}', [AdController::class, 'delete']);
-    // Route::get('/address', [AdController::class, 'getAddress']);
-    // Route::get('/filt_ads', [AdController::class, 'filterAds']);
-    // Route::post('/ads_filter_date', [AdController::class, 'filterAdsDate']);
-    // Route::get('/bill', [AdController::class, 'printBill']);
-
-
-    // //Ad_Price CRUD Routes
-
-    // Route::get('/ad_price', [AdsPriceController::class, 'create']);
-    // Route::post('/ad_price', [AdsPriceController::class, 'store']);
-    // Route::get('/ad_prices', [AdsPriceController::class, 'index']);
-    // Route::get('/ad_price/{id}', [AdsPriceController::class, 'show']);
-    // Route::get('/ad_price/{id}/edit', [AdsPriceController::class, 'edit']);
-    // Route::put('/ad_price/{id}', [AdsPriceController::class, 'update']);
-    // Route::delete('/ad_price/{id}', [AdsPriceController::class, 'destroy']);
-    
-
-    // //Cheque CRUD Routes
-
-    // Route::get('/cheque', [chequeController::class, 'create']);
-    // Route::post('/cheque', [chequeController::class, 'store']);
-    // Route::get('/cheques', [chequeController::class, 'index']);
-    // Route::get('/cheque/{id}', [chequeController::class, 'show']);
-    // Route::get('/cheque/{id}/edit', [chequeController::class, 'edit']);
-    // Route::put('/cheque/{id}', [chequeController::class, 'update']);
-    // Route::delete('/cheque/{id}', [chequeController::class, 'destroy']);
-    // Route::get('/gdprice', [chequeController::class, 'getGdPrice']);
-
-    // //Commission CRUD Routes
-
-    // Route::get('/commission', [chequeController::class, 'createCommission']);
-    // Route::post('/commission', [CommissionController::class, 'store']);
-    // Route::get('/commissions', [CommissionController::class, 'index']);
-    // Route::get('/commission/{id}/edit', [CommissionController::class, 'edit']);
-    // Route::put('/commission/{id}', [CommissionController::class, 'update']);
-    // Route::delete('/commission/{id}', [CommissionController::class, 'destroy']);
-    // Route::get('d',[CommissionController::class, 'getCorrName']);
-    // Route::get('ds',[CommissionController::class, 'getCorrID']);
-    
+    Route::get('/logout', [LoginController::class, 'logout']);
 
 });
 
-// Routes for All
+// Routes for Role or Permission
 Route::group(['middleware' => [CheckAuth::class,'role_or_permission:admin|super_admin|edit']],function () {
-
-    
+  
 });
 
+
+// Routes for Super Admin
+Route::group(['middleware' => [CheckAuth::class,'role:super_admin']],function () {
+    Route::post('/user', [userController::class, 'store']);
+    Route::put('/user/{id}', [userController::class, 'update']);
+    Route::post('/user_update', [userController::class, 'user_update']);
+
+});
 
 // Routes for Admin & Super Admin
 Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin']],function () {
 
-    //Correspondent CRUD Routes
-
-    Route::get('/correspondent', [ConrrespondentController::class, 'create']);
-    Route::post('/correspondent', [ConrrespondentController::class, 'store']);
-    Route::get('/correspondents', [ConrrespondentController::class, 'index']);
-    Route::get('/corrwallets', [ConrrespondentController::class, 'indexWallets']);
-    Route::get('/correspondent/{id}', [ConrrespondentController::class, 'show']);
-    Route::get('/correspondent/{id}/edit', [ConrrespondentController::class, 'edit']);
-    Route::put('/correspondent/{id}', [ConrrespondentController::class, 'update']);
     Route::delete('/correspondent/{id}', [ConrrespondentController::class, 'delete']);
-    Route::get('getDistrict',[ConrrespondentController::class, 'getDistrict'])->name('getDistrict');
-    Route::get('getUpazila',[ConrrespondentController::class, 'getUpazila'])->name('getUpazila');
 
-
-    //Employee CRUD Routes
-
-    Route::get('/employee', [EmployeeController::class, 'create']);
-    Route::post('/employee', [EmployeeController::class, 'store']);
-    Route::get('/employees', [EmployeeController::class, 'index']);
-    Route::get('/employee/{id}', [EmployeeController::class, 'show']);
-    Route::get('/employee/{id}/edit', [EmployeeController::class, 'edit']);
-    Route::put('/employee/{id}', [EmployeeController::class, 'update']);
     Route::delete('/employee/{id}', [EmployeeController::class, 'delete']);
 
-    //Ad CRUD Routes
-
-    Route::get('/ad', [AdController::class, 'create']);
-    Route::post('/ad', [AdController::class, 'store']);
-    // Route::get('/ads', [AdController::class, 'indexV2']);
-    Route::get('/ads/export', [AdController::class, 'exportAds']);
-    Route::get('/ad/{id}', [AdController::class, 'show']);
-    Route::get('/ad/{id}/edit', [AdController::class, 'edit']);
-    Route::get('/ad/{id}/bill', [AdController::class, 'print_bill']);
-    Route::put('/ad/{id}', [AdController::class, 'update']);
     Route::delete('/ad/{id}', [AdController::class, 'delete']);
-    Route::get('/address', [AdController::class, 'getAddress']);
-    Route::get('/filt_ads', [AdController::class, 'filterAds']);
-    Route::post('/ads_filter_date', [AdController::class, 'filterAdsDate']);
-    Route::get('/bill', [AdController::class, 'printBill']);
 
-    //Ad_Price CRUD Routes
+    Route::delete('/ad_price/{id}', [AdsPriceController::class, 'destroy']);
+
+    Route::delete('/cheque/{id}', [chequeController::class, 'destroy']);
+
+    Route::delete('/commission/{id}', [CommissionController::class, 'destroy']);    
+
+});
+
+// Routes for Editor
+Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin|editor']],function () {
+    
+    Route::get('/users', [userController::class, 'index']);
+
+    Route::get('/ad/{id}/edit', [AdController::class, 'edit']);
+    Route::put('/ad/{id}', [AdController::class, 'update']);
+
+    Route::get('/employee', [EmployeeController::class, 'create']);
+    Route::post('/employee', [EmployeeController::class, 'store']);    
+    Route::get('/employee/{id}', [EmployeeController::class, 'show']);
+    Route::get('/employee/{id}/edit', [EmployeeController::class, 'edit']);
+    Route::put('/employee/{id}', [EmployeeController::class, 'update']); 
 
     Route::get('/ad_price', [AdsPriceController::class, 'create']);
     Route::post('/ad_price', [AdsPriceController::class, 'store']);
     Route::get('/ad_prices', [AdsPriceController::class, 'index']);
     Route::get('/ad_price/{id}', [AdsPriceController::class, 'show']);
     Route::get('/ad_price/{id}/edit', [AdsPriceController::class, 'edit']);
-    Route::put('/ad_price/{id}', [AdsPriceController::class, 'update']);
-    Route::delete('/ad_price/{id}', [AdsPriceController::class, 'destroy']);
+    Route::put('/ad_price/{id}', [AdsPriceController::class, 'update']);   
 
-    //Cheque CRUD Routes
-
-    Route::get('/cheque', [chequeController::class, 'create']);
-    Route::post('/cheque', [chequeController::class, 'store']);
-    Route::get('/cheques', [chequeController::class, 'index']);
-    Route::get('/cheque/{id}', [chequeController::class, 'show']);
     Route::get('/cheque/{id}/edit', [chequeController::class, 'edit']);
-    Route::put('/cheque/{id}', [chequeController::class, 'update']);
-    Route::delete('/cheque/{id}', [chequeController::class, 'destroy']);
-    Route::get('/gdprice', [chequeController::class, 'getGdPrice']);
+    Route::put('/cheque/{id}', [chequeController::class, 'update']);    
 
-    //Commission CRUD Routes
-
-    Route::get('/commission', [chequeController::class, 'createCommission']);
-    Route::post('/commission', [CommissionController::class, 'store']);
-    Route::get('/commissions', [CommissionController::class, 'index']);
     Route::get('/commission/{id}/edit', [CommissionController::class, 'edit']);
     Route::put('/commission/{id}', [CommissionController::class, 'update']);
-    Route::delete('/commission/{id}', [CommissionController::class, 'destroy']);
-    Route::get('d',[CommissionController::class, 'getCorrName']);
-    Route::get('ds',[CommissionController::class, 'getCorrID']);
 
-});
-
-// Routes for Editor
-Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin|editor']],function () {
-
-
+    Route::get('/corrwallets', [ConrrespondentController::class, 'indexWallets']);
+    
 });
 
 // Routes for All
 Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin|editor|user']],function () {
 
+    Route::get('/correspondent', [ConrrespondentController::class, 'create']);
+    Route::post('/correspondent', [ConrrespondentController::class, 'store']);
+    Route::get('/correspondents', [ConrrespondentController::class, 'index']);    
+    Route::get('/correspondent/{id}', [ConrrespondentController::class, 'show']);
+    Route::get('/correspondent/{id}/edit', [ConrrespondentController::class, 'edit']);
+    Route::put('/correspondent/{id}', [ConrrespondentController::class, 'update']); 
+    Route::get('getDistrict',[ConrrespondentController::class, 'getDistrict'])->name('getDistrict');
+    Route::get('getUpazila',[ConrrespondentController::class, 'getUpazila'])->name('getUpazila');
+    
+    Route::get('/employees', [EmployeeController::class, 'index']);
+
+    Route::get('/ad', [AdController::class, 'create']);
+    Route::post('/ad', [AdController::class, 'store']);
     Route::get('/ads', [AdController::class, 'indexV2']);
-  
+    Route::get('/ads/export', [AdController::class, 'exportAds']);
+    Route::get('/ad/{id}', [AdController::class, 'show']);
+    Route::get('/ad/{id}/bill', [AdController::class, 'print_bill']);
+    Route::get('/address', [AdController::class, 'getAddress']);
+    Route::get('/filt_ads', [AdController::class, 'filterAds']);
+    Route::post('/ads_filter_date', [AdController::class, 'filterAdsDate']);
+    Route::get('/bill', [AdController::class, 'printBill']);
 
+    Route::get('/cheque', [chequeController::class, 'create']);
+    Route::post('/cheque', [chequeController::class, 'store']);
+    Route::get('/cheques', [chequeController::class, 'index']);
+    Route::get('/cheque/{id}', [chequeController::class, 'show']);    
+    Route::get('/gdprice', [chequeController::class, 'getGdPrice']);
 
+    Route::get('/commission', [chequeController::class, 'createCommission']);
+    Route::post('/commission', [CommissionController::class, 'store']);
+    Route::get('/commissions', [CommissionController::class, 'index']);    
 });
-
-
-
-
-
