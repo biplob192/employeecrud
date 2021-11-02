@@ -1,15 +1,28 @@
 @extends('master')
 
 @section('Title')
-Correspondents
+Wallets
 @endsection
 
 @section('Style')
 @endsection
 
 @section('Content')
-<center> <h5>CORRESPONDENT WALLETS</h5> </center> <br>
+<!-- <center> <h5>CORRESPONDENT WALLETS</h5> </center> <br> -->
 
+<div class="container-md">
+	<div class="row align-items-center">
+		<div class="col align-self-center"></div>
+		<div class="col-md-5 align-self-center"><center> <h5>CORRESPONDENT WALLETS</h5> </center> <br></div>
+		<div class="col align-self-center">
+			<div class="" style="float: right;">
+			  	<button class="btn btn-dark" data-toggle="modal" data-target="#walletOverwriteModal" id="balance_or">Overwrite Balance</button>
+			</div>
+		</div>
+	</div>			
+</div>
+@include('inc.walletOverwriteModal')
+<br>
 <div class="pd-20 card-box mb-30">
 	<div class="table-responsive">
 		<table class="table table-striped">

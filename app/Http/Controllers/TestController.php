@@ -32,6 +32,46 @@ class TestController extends Controller
 
         }
     }
+
+    public function apiHit(){
+        $url = "http://dummy.restapiexample.com/api/v1/employees"; 
+        $url = "http://127.0.0.1:8080/api/correspondents"; 
+        $token = env('TOKEN');  
+        $authorization = "Authorization: Bearer ".$token; // Prepare the authorisation token
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));   
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);   
+        curl_setopt($ch, CURLOPT_URL, $url);   
+        $res = curl_exec($ch);
+        $res = json_decode($res);
+        if($res && $res->status == true){
+            return $res;
+        }else{
+            $res = $this->apiLogin();
+            $this->apiHit();
+        }
+        // 
+        return $res;
+    }
+
+    protected function apiLogin(){
+        $url = "http://127.0.0.1:8080/api/login"; 
+        $token = env('TOKEN');  
+        $login['email']    = 'shajib@gmail.com';
+        $login['password'] = 'shajib';
+        $login = json_encode($login);
+        $authorization = "Authorization: Bearer ".$token; // Prepare the authorisation token
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));   
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);   
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$login);
+        curl_setopt($ch, CURLOPT_URL, $url);   
+        $res = curl_exec($ch);
+        $res = json_decode($res);
+        putenv('TOKEN='.$res->data->token);
+        dd($res->data->token);
+    }
 }
 
 

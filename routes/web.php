@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AutocompleteSearchController;
 use App\Http\Controllers\StaffController;
-use App\Http\Controllers\ConrrespondentController;
+use App\Http\Controllers\CorrespondentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EmployeeController;
@@ -100,7 +100,7 @@ Route::group(['middleware' => [CheckAuth::class,'role:super_admin']],function ()
 // Routes for Admin & Super Admin
 Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin']],function () {
 
-    Route::delete('/correspondent/{id}', [ConrrespondentController::class, 'delete']);
+    Route::delete('/correspondent/{id}', [CorrespondentController::class, 'delete']);
 
     Route::delete('/employee/{id}', [EmployeeController::class, 'delete']);
 
@@ -110,7 +110,9 @@ Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin']],funct
 
     Route::delete('/cheque/{id}', [chequeController::class, 'destroy']);
 
-    Route::delete('/commission/{id}', [CommissionController::class, 'destroy']);    
+    Route::delete('/commission/{id}', [CommissionController::class, 'destroy']);  
+
+    Route::post('/overwrite-wallet', [CorrespondentController::class, 'overwriteWallet']);  
 
 });
 
@@ -141,21 +143,21 @@ Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin|editor']
     Route::get('/commission/{id}/edit', [CommissionController::class, 'edit']);
     Route::put('/commission/{id}', [CommissionController::class, 'update']);
 
-    Route::get('/corrwallets', [ConrrespondentController::class, 'indexWallets']);
+    Route::get('/corrwallets', [CorrespondentController::class, 'indexWallets']);
     
 });
 
 // Routes for All
 Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin|editor|user']],function () {
 
-    Route::get('/correspondent', [ConrrespondentController::class, 'create']);
-    Route::post('/correspondent', [ConrrespondentController::class, 'store']);
-    Route::get('/correspondents', [ConrrespondentController::class, 'index']);    
-    Route::get('/correspondent/{id}', [ConrrespondentController::class, 'show']);
-    Route::get('/correspondent/{id}/edit', [ConrrespondentController::class, 'edit']);
-    Route::put('/correspondent/{id}', [ConrrespondentController::class, 'update']); 
-    Route::get('getDistrict',[ConrrespondentController::class, 'getDistrict'])->name('getDistrict');
-    Route::get('getUpazila',[ConrrespondentController::class, 'getUpazila'])->name('getUpazila');
+    Route::get('/correspondent', [CorrespondentController::class, 'create']);
+    Route::post('/correspondent', [CorrespondentController::class, 'store']);
+    Route::get('/correspondents', [CorrespondentController::class, 'index']);    
+    Route::get('/correspondent/{id}', [CorrespondentController::class, 'show']);
+    Route::get('/correspondent/{id}/edit', [CorrespondentController::class, 'edit']);
+    Route::put('/correspondent/{id}', [CorrespondentController::class, 'update']); 
+    Route::get('getDistrict',[CorrespondentController::class, 'getDistrict'])->name('getDistrict');
+    Route::get('getUpazila',[CorrespondentController::class, 'getUpazila'])->name('getUpazila');
     
     Route::get('/employees', [EmployeeController::class, 'index']);
 
@@ -178,5 +180,8 @@ Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin|editor|u
 
     Route::get('/commission', [chequeController::class, 'createCommission']);
     Route::post('/commission', [CommissionController::class, 'store']);
-    Route::get('/commissions', [CommissionController::class, 'index']);    
+    Route::get('/commissions', [CommissionController::class, 'index']);
+    
 });
+
+Route::get('/apihit', [TestController::class, 'apiHit']);  

@@ -38,7 +38,23 @@ class ConrrespondentController extends Controller
             ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')->orderBy('name')
             ->get();
 
-        return view ('admin.Correspondents.wallets',['wallets'=>$wallets]);
+        $correspondents= Correspondent::select('id','name','upazila_name')
+        ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')
+        ->get();
+
+        return view ('admin.Correspondents.wallets',['wallets'=>$wallets, 'correspondents'=>$correspondents]);
+    }
+
+    public function overwriteWallet(Request $req){
+        $overwriteWallet = CorrWallet::where('corr_id', $req->correspondent_id)
+        ->update(['credit' => $req->amount]);
+
+        log::insert([
+            'user_id'           => Auth::user()->id,
+            'data'              => json_encode($overwriteWallet),
+            'operation_type'    => 'Overwrite Wallet',
+        ]);
+        return back();
     }
 
     public function create(){ // show insert form
