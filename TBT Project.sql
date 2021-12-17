@@ -51,7 +51,7 @@ CREATE TABLE `ads` (
 insert  into `ads`(`id`,`correspondent_name`,`correspondent_id`,`ad_type`,`ad_position`,`rate`,`extra_charge`,`division_id`,`district_id`,`upazila_id`,`client`,`gd_no`,`order_no`,`inch`,`colum`,`total_size`,`amount`,`payment_status`,`publishing_date`,`deleted_at`,`created_at`,`updated_at`) values 
 (1,'MD BIPLOB MIA',1,'Private','Front Page',580,0,7,55,416,'Somaj Seba','234',22,21,7,147,85260,1,'08 July 2021',NULL,'2021-07-31 12:57:33','2021-09-05 04:27:58'),
 (3,'MD BIPLOB MIA',1,'Private','Back Page',580,0,7,55,416,'Personal','666',21,11,9,99,57420,0,'18 August 2021',NULL,'2021-08-01 21:20:09','2021-08-17 00:05:42'),
-(4,'JASHIM UDDIN',10,'Govt','Inner Page',538,0,6,48,366,'LGED','243',16,12,10,120,64560,1,'26 August 2021',NULL,'2021-08-01 22:48:40','2021-08-03 19:38:32'),
+(4,'JASHIM UDDIN',10,'Govt','Inner Page',538,0,6,48,366,'LGED','243',16,12,10,120,64560,0,'26 August 2021',NULL,'2021-08-01 22:48:40','2021-11-29 00:23:54'),
 (5,'MD BIPLOB MIA',1,'Govt','Back Page',550,0,7,55,416,'Health','222',12,14,8,112,61600,1,'18 August 2021',NULL,'2021-08-03 15:58:41','2021-08-21 00:42:32'),
 (6,'MD BIPLOB MIA',1,'Private','Front Page',580,0,7,55,419,'Personal','400',10,15,6,90,52200,0,'12 August 2021',NULL,'2021-08-03 18:06:47','2021-09-06 04:04:50'),
 (7,'SHAJIB',2,'Private','Back Page',580,0,7,55,423,'Personal','100',100,10,6,60,34800,0,'16 August 2021',NULL,'2021-08-04 01:30:03','2021-08-14 02:58:17'),
@@ -119,7 +119,7 @@ CREATE TABLE `cheques` (
 /*Data for the table `cheques` */
 
 insert  into `cheques`(`cheque_id`,`correspondent_id`,`gd_no`,`bank_name`,`cheque_amount`,`cheque_number`,`ait_amount`,`commission`,`percentage`,`deleted_at`,`created_at`,`updated_at`) values 
-(3,10,'243','Sonali Bank',65270,'2220980',290,19581,30,NULL,'2021-08-03 19:38:32','2021-09-05 21:52:52'),
+(3,10,'243','Sonali Bank',65270,'2220980',290,19581,30,NULL,'2021-08-03 19:38:32','2021-11-29 00:28:14'),
 (16,13,'199','Sonali Bank',37120,'37120',0,11136,30,NULL,'2021-08-11 00:22:18','2021-09-05 19:33:12'),
 (17,1,'400','Sonali',50200,'5220022',2000,15060,30,'2021-08-20 23:07:24','2021-08-12 02:57:47','2021-09-05 19:33:13'),
 (18,14,'211','SIBL',9000,'5559800',600,2700,30,NULL,'2021-08-13 15:18:03','2021-09-05 19:33:14'),
@@ -180,6 +180,7 @@ DROP TABLE IF EXISTS `corr_wallets`;
 CREATE TABLE `corr_wallets` (
   `wallet_id` smallint unsigned NOT NULL AUTO_INCREMENT,
   `corr_id` smallint unsigned DEFAULT NULL,
+  `previous_due` float unsigned NOT NULL DEFAULT '0',
   `credit` float unsigned NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -188,17 +189,17 @@ CREATE TABLE `corr_wallets` (
 
 /*Data for the table `corr_wallets` */
 
-insert  into `corr_wallets`(`wallet_id`,`corr_id`,`credit`,`created_at`,`updated_at`) values 
-(2,9,26310,'2021-08-01 17:04:35','2021-08-13 02:49:16'),
-(3,10,19581,'2021-08-01 22:12:19','2021-09-05 21:52:52'),
-(4,11,27320,'2021-08-01 22:18:02','2021-08-13 02:15:56'),
-(5,1,75000,'2021-08-01 23:21:34','2021-10-06 01:20:23'),
-(6,12,29500,'2021-08-05 00:04:35','2021-09-09 18:05:24'),
-(7,13,20002,'2021-08-10 15:47:52','2021-08-12 00:40:11'),
-(8,2,63370.6,'2021-08-12 00:45:28','2021-09-05 16:05:49'),
-(9,6,41120,'2021-08-12 00:45:35','2021-08-19 05:58:27'),
-(11,14,7000,'2021-08-13 15:07:08','2021-08-13 15:20:32'),
-(12,15,23500,'2021-08-20 01:30:34','2021-08-20 22:51:29');
+insert  into `corr_wallets`(`wallet_id`,`corr_id`,`previous_due`,`credit`,`created_at`,`updated_at`) values 
+(2,9,0,26310,'2021-08-01 17:04:35','2021-08-13 02:49:16'),
+(3,10,0,10000,'2021-08-01 22:12:19','2021-12-10 15:35:11'),
+(4,11,0,27320,'2021-08-01 22:18:02','2021-08-13 02:15:56'),
+(5,1,2345,75000,'2021-08-01 23:21:34','2021-12-10 18:28:40'),
+(6,12,12000,500,'2021-08-05 00:04:35','2021-12-10 16:08:44'),
+(7,13,0,20002,'2021-08-10 15:47:52','2021-08-12 00:40:11'),
+(8,2,45000,63370.6,'2021-08-12 00:45:28','2021-12-10 16:25:13'),
+(9,6,0,41120,'2021-08-12 00:45:35','2021-08-19 05:58:27'),
+(11,14,45000,5000,'2021-08-13 15:07:08','2021-12-10 17:39:09'),
+(12,15,85000,1500,'2021-08-20 01:30:34','2021-12-10 15:52:34');
 
 /*Table structure for table `correspondents` */
 
@@ -211,10 +212,10 @@ CREATE TABLE `correspondents` (
   `district_id` tinyint unsigned NOT NULL,
   `upazila_id` smallint unsigned NOT NULL,
   `mobile` varchar(11) COLLATE utf8mb4_general_ci NOT NULL,
-  `nid` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `corrid` int NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `appointed_date` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `nid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `corrid` int DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `appointed_date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -226,16 +227,16 @@ CREATE TABLE `correspondents` (
 insert  into `correspondents`(`id`,`name`,`division_id`,`district_id`,`upazila_id`,`mobile`,`nid`,`corrid`,`email`,`appointed_date`,`image`,`created_at`,`updated_at`) values 
 (1,'MD BIPLOB MIA',7,55,416,'01725361208','5361208',5361,'biplob.net2@gmail.com','02 April 2014',NULL,'2021-07-30 21:40:01','2021-08-15 15:20:07'),
 (2,'SHAJIB',7,55,423,'01725361209','725361209',7255,'shajib@gmail.com','28 June 2021',NULL,'2021-07-30 22:11:37','2021-08-04 01:28:35'),
-(3,'SIRAJ',3,20,161,'01725341209','725341209',72531,'siraj@gmail.com','27 June 2021',NULL,'2021-07-30 23:33:44','2021-07-30 23:33:44'),
+(3,'SIRAJ',3,20,161,'01325341209','725341209',72531,'siraj@gmail.com','27 June 2021',NULL,'2021-07-30 23:33:44','2021-12-13 00:33:07'),
 (4,'MAMUN',7,53,397,'01735361109','35361109',3536,'mamun@gmail.com','27 June 2021',NULL,'2021-07-31 01:24:16','2021-07-31 01:24:16'),
-(5,'HASANUR',4,31,239,'01762448910','762448910',8910,'hasanur@gmail.com','05 January 2021','Eid UL Adha Greetings 2021-01.png','2021-08-01 01:37:58','2021-08-01 01:37:58'),
-(6,'HASIBUL',3,21,169,'01727331209','27331209',273,'hasibul@mail.com','15 June 2021',NULL,'2021-08-01 13:31:26','2021-08-01 13:31:26'),
-(7,'HASANUR RAHMAN',6,50,369,'01788980010','8980010',8980,'hasan@mail.com','01 August 2021',NULL,'2021-08-01 13:39:44','2021-08-01 13:39:44'),
+(5,'HASANUR',4,31,239,'01762448910','762448910',8910,'hasanur@gmail.com','05 January 2021','Eid UL Adha Greetings 2021-01.png','2021-08-01 01:37:58','2021-12-13 00:32:38'),
+(6,'HASIBUL',3,21,169,'01427331209','27331209',273,'hasibul@mail.com','15 June 2021',NULL,'2021-08-01 13:31:26','2021-12-13 00:32:49'),
+(7,'HASANUR RAHMAN',6,50,369,'01488980010','8980010',8980,'hasan@mail.com','01 August 2021',NULL,'2021-08-01 13:39:44','2021-12-13 00:32:44'),
 (9,'MASUM BILLAH',2,9,61,'01788229908','88229908',8822,'masum@gmail.com','02 February 2017',NULL,'2021-08-01 17:04:35','2021-08-01 17:04:35'),
 (10,'JASHIM UDDIN',6,48,366,'01388908902','8908902',8908,'jashim@gmail.com','09 May 2013',NULL,'2021-08-01 22:12:19','2021-08-01 22:14:34'),
-(11,'HAMIDUL KHAN',1,3,17,'01988092209','988092209',9880,'hamidul@gmail.com','28 June 2021',NULL,'2021-08-01 22:18:02','2021-08-01 22:18:02'),
-(12,'A.S AZAM KHAN',3,30,230,'01722090955','22090955',2209,'azam@gmail.com','30 May 2021',NULL,'2021-08-05 00:04:35','2021-09-24 13:18:36'),
-(13,'HAMIDUL BADSHAH',6,45,329,'01939384220','39384220',3938,'badsshah@gmail.com','04 February 2015',NULL,'2021-08-10 15:47:52','2021-08-10 15:47:52'),
+(11,'HAMIDUL KHAN',1,3,17,'01788092209','988092209',9880,'hamidul@gmail.com','28 June 2021',NULL,'2021-08-01 22:18:02','2021-12-13 00:32:34'),
+(12,'A.S AZAM KHAN',3,30,230,'01722090955','22090955',2209,'azam@gmail.com','30 May 2021',NULL,'2021-08-05 00:04:35','2021-12-13 00:32:26'),
+(13,'HAMIDUL BADSHAH',6,45,329,'01739384220','39384220',3938,'badsshah@gmail.com','04 February 2015',NULL,'2021-08-10 15:47:52','2021-12-13 00:32:30'),
 (14,'SHEKHOR BOSU',4,37,278,'01725676766','1725676767',172567,'bosu@gmail.com','10 August 2021',NULL,'2021-08-13 15:07:08','2021-08-13 15:08:08'),
 (15,'ROKONUJJAMAN',7,55,416,'01898990909','98990909',9899,'rokunur@gmail.com','01 March 2021',NULL,'2021-08-20 01:30:34','2021-08-20 01:30:34');
 
@@ -413,23 +414,12 @@ CREATE TABLE `logs` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `logs` */
 
 insert  into `logs`(`log_id`,`user_id`,`data`,`operation_type`,`created_at`,`updated_at`) values 
-(1,1,'{\"id\":4,\"name\":\"user\",\"email\":\"user@gmail.com\",\"email_verified_at\":null,\"dob\":null,\"created_at\":\"2021-09-10T09:38:59.000000Z\",\"updated_at\":\"2021-09-10T09:38:59.000000Z\"}','Update App User','2021-09-24 14:09:31','2021-09-24 14:09:31'),
-(2,1,'{\"id\":4,\"name\":\"user\",\"email\":\"user@gmail.com\",\"email_verified_at\":null,\"dob\":null,\"created_at\":\"2021-09-10T09:38:59.000000Z\",\"updated_at\":\"2021-09-10T09:38:59.000000Z\"}','Update App User','2021-09-24 22:27:26','2021-09-24 22:27:26'),
-(3,1,'{\"id\":4,\"name\":\"user\",\"email\":\"user@gmail.com\",\"email_verified_at\":null,\"dob\":null,\"created_at\":\"2021-09-10T09:38:59.000000Z\",\"updated_at\":\"2021-09-10T09:38:59.000000Z\"}','Update App User','2021-09-24 22:27:52','2021-09-24 22:27:52'),
-(4,1,'{\"id\":4,\"name\":\"user\",\"email\":\"user@gmail.com\",\"email_verified_at\":null,\"dob\":null,\"created_at\":\"2021-09-10T09:38:59.000000Z\",\"updated_at\":\"2021-09-10T09:38:59.000000Z\"}','Update App User','2021-09-24 22:29:54','2021-09-24 22:29:54'),
-(5,1,'{\"id\":4,\"name\":\"user\",\"email\":\"user@gmail.com\",\"email_verified_at\":null,\"dob\":null,\"created_at\":\"2021-09-10T09:38:59.000000Z\",\"updated_at\":\"2021-09-10T09:38:59.000000Z\"}','Update App User','2021-09-24 22:30:24','2021-09-24 22:30:24'),
-(6,1,'{\"name\":\"Rokonujjaman Sarkar\",\"email\":\"sarkar@gmail.com\",\"updated_at\":\"2021-09-24T16:32:21.000000Z\",\"created_at\":\"2021-09-24T16:32:21.000000Z\",\"id\":7,\"roles\":[{\"id\":3,\"name\":\"editor\",\"guard_name\":\"web\",\"created_at\":\"2021-08-27T15:13:35.000000Z\",\"updated_at\":\"2021-08-27T15:13:35.000000Z\",\"pivot\":{\"model_id\":7,\"role_id\":3,\"model_type\":\"App\\\\Models\\\\User\"}}]}','Insert App User','2021-09-24 22:32:21','2021-09-24 22:32:21'),
-(7,4,'{\"name\":\"Pangku\",\"email\":\"babla@gmail.com\",\"updated_at\":\"2021-09-24T16:37:29.000000Z\",\"created_at\":\"2021-09-24T16:37:29.000000Z\",\"id\":8,\"roles\":[{\"id\":4,\"name\":\"user\",\"guard_name\":\"web\",\"created_at\":\"2021-08-27T15:13:35.000000Z\",\"updated_at\":\"2021-08-27T15:13:35.000000Z\",\"pivot\":{\"model_id\":8,\"role_id\":4,\"model_type\":\"App\\\\Models\\\\User\"}}]}','Insert App User','2021-09-24 22:37:29','2021-09-24 22:37:29'),
-(8,1,'{\"id\":4,\"name\":\"user\",\"email\":\"user@gmail.com\",\"email_verified_at\":null,\"dob\":null,\"created_at\":\"2021-09-10T09:38:59.000000Z\",\"updated_at\":\"2021-09-10T09:38:59.000000Z\"}','Update App User','2021-09-24 22:42:40','2021-09-24 22:42:40'),
-(9,1,'{\"id\":4,\"name\":\"user\",\"email\":\"user@gmail.com\",\"email_verified_at\":null,\"dob\":null,\"created_at\":\"2021-09-10T09:38:59.000000Z\",\"updated_at\":\"2021-09-10T09:38:59.000000Z\"}','Update App User','2021-09-24 23:47:16','2021-09-24 23:47:16'),
-(10,1,'{\"id\":4,\"name\":\"user\",\"email\":\"user@gmail.com\",\"email_verified_at\":null,\"dob\":null,\"created_at\":\"2021-09-10T09:38:59.000000Z\",\"updated_at\":\"2021-09-10T09:38:59.000000Z\"}','Update App User','2021-09-24 23:51:38','2021-09-24 23:51:38'),
-(11,1,'{\"correspondent\":\"1\",\"previous_amount\":76000,\"commission_amount\":\"100\",\"current_amount\":75900,\"updated_at\":\"2021-09-26T15:04:41.000000Z\",\"created_at\":\"2021-09-26T15:04:41.000000Z\",\"commission_id\":20}','Insert Commission','2021-09-26 21:04:41','2021-09-26 21:04:41'),
-(12,1,'{\"correspondent\":\"1\",\"previous_amount\":75900,\"commission_amount\":\"900\",\"current_amount\":75000,\"updated_at\":\"2021-10-05T19:20:23.000000Z\",\"created_at\":\"2021-10-05T19:20:23.000000Z\",\"commission_id\":21}','Insert Commission','2021-10-06 01:20:23','2021-10-06 01:20:23');
+(39,1,'{\"id\":13,\"name\":\"HAMIDUL BADSHAH\",\"division_id\":\"6\",\"district_id\":\"45\",\"upazila_id\":\"329\",\"mobile\":\"01739384220\",\"nid\":\"39384220\",\"corrid\":\"3938\",\"email\":\"badsshah@gmail.com\",\"appointed_date\":\"04 February 2015\",\"image\":null,\"created_at\":\"2021-08-10T09:47:52.000000Z\",\"updated_at\":\"2021-12-12T18:32:30.000000Z\"}','Update Correspondent','2021-12-13 00:32:30','2021-12-13 00:32:30');
 
 /*Table structure for table `members` */
 

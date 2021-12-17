@@ -17,6 +17,17 @@
           <form action="{{url('/overwrite-wallet')}}" method="post">
             @csrf                        
             <div class="form-group row">
+              <label class="col-sm-12 col-md-2 col-form-label">Update</label>
+              <div class="col-sm-12 col-md-10">
+                <select class="form-control custom-select2" id="update_list" name="update_list" style="width: 100%" required>
+                  <option value="" selected disabled>Select Option</option>
+                  <option value="1">Previous Due Bill</option>
+                  <option value="2">Correspondent Balance</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group row">
               <label class="col-sm-12 col-md-2 col-form-label">Full Name</label>
               <div class="col-sm-12 col-md-10">
                 <input type="hidden" name="correspondent_id" id="correspondent_id" value="">

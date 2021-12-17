@@ -23,7 +23,7 @@ New Correspondent
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Full Name</label>
 			<div class="col-sm-12 col-md-10">
-				<input class="form-control" type="text" name="name" value="{{old('name')}}" oninput="this.value = this.value.toUpperCase()" placeholder="Correspondent Name Here">
+				<input class="form-control" type="text" name="name" value="{{old('name')}}" oninput="this.value = this.value.toUpperCase()" placeholder="Correspondent Name Here" required>
 			</div>
 		</div>
 		<div class="form-group row">
@@ -40,13 +40,13 @@ New Correspondent
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">District</label>
 			<div class="col-sm-12 col-md-10">
-				<select name="district" id="district" class="form-control"></select>
+				<select name="district" id="district" class="form-control" required></select>
 			</div>
 		</div>
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Upazila</label>
 			<div class="col-sm-12 col-md-10">
-				<select name="upazila" id="upazila" class="form-control"></select>
+				<select name="upazila" id="upazila" class="form-control" required></select>
 			</div>
 		</div>
 		<div class="form-group row">
@@ -58,7 +58,7 @@ New Correspondent
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Mobile No</label>
 			<div class="col-sm-12 col-md-10">
-				<input class="form-control" type="tex" name="mobile" value="{{old('mobile')}}" placeholder="Entre Mobile No">
+				<input class="form-control" type="tex" name="mobile" value="{{old('mobile')}}" placeholder="Entre Mobile No" required>
 			</div>
 		</div>
 		<div class="form-group row">

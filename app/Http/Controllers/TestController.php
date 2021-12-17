@@ -72,6 +72,21 @@ class TestController extends Controller
         putenv('TOKEN='.$res->data->token);
         dd($res->data->token);
     }
+
+    public function getRowsQuery(){
+        return 123;
+    }
+
+    public function getCorres(){
+         $query = Ad::query();
+         // if(){
+         //    $query->where('gd_no', 100);
+         // }
+         $query->where('gd_no', 100);
+         $ad = $query->get();
+        $ad = Ad::where('gd_no', 100)->first();
+        return response()->json($ad);
+    }
 }
 
 

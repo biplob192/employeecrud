@@ -31,19 +31,31 @@ Edit Employee
 	<div class="form-group row">
 		<label class="col-sm-12 col-md-2 col-form-label">Division</label>
 		<div class="col-sm-12 col-md-10">
-			<input class="form-control" type="text" name="division" value="{{$correspondent->division_id}}" placeholder="Division Here">
+			<select class="form-control custom-select2" name="division" required>					
+				@foreach ($divisions as $division)
+				<option {{($correspondent->division_id) == $division->division_id ? 'selected' : '' }} value="{{$division->division_id}}">{{$division->division_name}}</option>
+				@endforeach
+			<select>			
 		</div>
 	</div>
 	<div class="form-group row">
 		<label class="col-sm-12 col-md-2 col-form-label">District</label>
 		<div class="col-sm-12 col-md-10">
-			<input class="form-control" type="text" name="district" value="{{$correspondent->district_id}}" placeholder="District Here">
+			<select class="form-control custom-select2" name="district" required>					
+				@foreach ($districts as $district)
+				<option {{($correspondent->district_id) == $district->district_id ? 'selected' : '' }} value="{{$district->district_id}}">{{$district->district_name}}</option>
+				@endforeach
+			<select>
 		</div>
 	</div>
 	<div class="form-group row">
 		<label class="col-sm-12 col-md-2 col-form-label">Upazila</label>
 		<div class="col-sm-12 col-md-10">
-			<input class="form-control" type="text" name="upazila" value="{{$correspondent->upazila_id}}" placeholder="Upazila Here">
+			<select class="form-control custom-select2" name="upazila" required>					
+				@foreach ($upazilas as $upazila)
+				<option {{($correspondent->upazila_id) == $upazila->upazila_id ? 'selected' : '' }} value="{{$upazila->upazila_id}}">{{$upazila->upazila_name}}</option>
+				@endforeach
+			<select>
 		</div>
 	</div>
 	<div class="form-group row">
@@ -74,12 +86,6 @@ Edit Employee
 		<label class="col-sm-12 col-md-2 col-form-label">Joining Date</label>
 		<div class="col-sm-12 col-md-10">
 			<input class="form-control date-picker" type="text" name="appointed_date" value="{{$correspondent->appointed_date}}" placeholder="Appointed Date" >
-		</div>
-	</div>
-	<div class="form-group row">
-		<label class="col-sm-12 col-md-2 col-form-label">Image</label>
-		<div class="col-sm-12 col-md-10">
-			<input class="form-control" type="file" name="image" value="{{$correspondent->image}}">
 		</div>
 	</div>
 	<div class="form-group row">

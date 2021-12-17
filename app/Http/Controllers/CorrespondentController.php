@@ -6,12 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\member;
 use App\Models\CorrWallet;
 use App\Models\Correspondent;
+use App\Models\Log;
 use App\Models\Division;
+use App\Models\District;
+use App\Models\Upazila;
 use Validator;
 use Exception;
+use Auth;
 use DB;
 
-class ConrrespondentController extends Controller
+class CorrespondentController extends Controller
 {
     public function index(){ // show all correspondent list
         // $correspondent=Correspondent::all();
@@ -28,7 +32,7 @@ class ConrrespondentController extends Controller
         $correspondentCount=$correspondent->count();
         // $correspondents = Correspondent::where('id', '<=', $correctedComparisons)->get();
         // $correspondentCount = $correspondents->count();
-        return view ('admin.Correspondents.Correspondents',['correspondent'=>$correspondent],['correspondentCount'=>$correspondentCount]);
+        return view ('admin.correspondents.correspondents',['correspondent'=>$correspondent],['correspondentCount'=>$correspondentCount]);
     }
 
     public function indexWallets(){
@@ -42,19 +46,43 @@ class ConrrespondentController extends Controller
         ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')
         ->get();
 
-        return view ('admin.Correspondents.wallets',['wallets'=>$wallets, 'correspondents'=>$correspondents]);
+        return view ('admin.correspondents.wallets',['wallets'=>$wallets, 'correspondents'=>$correspondents]);
     }
 
     public function overwriteWallet(Request $req){
-        $overwriteWallet = CorrWallet::where('corr_id', $req->correspondent_id)
-        ->update(['credit' => $req->amount]);
+        try{
+            $validator  = Validator::make($req->all(), [
+                'update_list'      => 'required',            
+                'corr_name2'       => 'filled', 
+                'amount'           => 'filled',           
+            ]);
 
-        log::insert([
-            'user_id'           => Auth::user()->id,
-            'data'              => json_encode($overwriteWallet),
-            'operation_type'    => 'Overwrite Wallet',
-        ]);
-        return back();
+            if($validator ->fails()){
+               return back()->withErrors($validator )->withInput();
+            }
+
+            if($req->update_list==1){
+                $update['previous_due'] = $req->amount;
+            } elseif ($req->update_list==2){
+                $update['credit'] = $req->amount;
+            }
+
+            $overwriteWallet = CorrWallet::updateOrCreate(
+                ['corr_id' => $req->corr_name2],
+                $update
+            );
+
+            Log::insert([
+                'user_id'           => Auth::user()->id,
+                'data'              => json_encode($overwriteWallet),
+                'operation_type'    => 'Overwrite Wallet',
+            ]);
+            return back();
+
+        }
+        catch(Exception $e){
+            return $e->getMessage();
+        }        
     }
 
     public function create(){ // show insert form
@@ -70,10 +98,10 @@ class ConrrespondentController extends Controller
             'district'          => 'filled', 
             'upazila'           => 'filled', 
             'mobile'            => 'required|unique:correspondents,mobile|size:11',
-            'nid'               => 'required|unique:correspondents,nid',
-            'corrid'            => 'required|unique:correspondents,corrid',
-            'email'             => 'required',
-            'appointed_date'    => 'required',
+            // 'nid'               => 'required|unique:correspondents,nid',
+            // 'corrid'            => 'required|unique:correspondents,corrid',
+            // 'email'             => 'required',
+            // 'appointed_date'    => 'required',
                         
         ]);
 
@@ -132,7 +160,10 @@ class ConrrespondentController extends Controller
 
     public function edit($id){ // show single correspondent  in edit form
         $correspondent=Correspondent::find($id);
-        return view ('admin.correspondents.editcorrespondent',['correspondent'=>$correspondent]);
+        $upazilas= Upazila::select('upazila_name','upazila_id')->get();
+        $districts= District::select('district_name','district_id')->get();
+        $divisions= Division::select('division_name','division_id')->get();
+        return view ('admin.correspondents.editcorrespondent',['upazilas'=>$upazilas, 'districts'=>$districts, 'divisions'=>$divisions,'correspondent'=>$correspondent]);
     }
 
     public function update(Request $req){ // edit single correspondent
@@ -185,6 +216,12 @@ class ConrrespondentController extends Controller
         }
 
         $correspondent->save();
+
+        log::insert([
+            'user_id'           => Auth::user()->id,
+            'data'              => json_encode($correspondent),
+            'operation_type'    => 'Update Correspondent',
+        ]);
         return redirect('/correspondents');
     }
 

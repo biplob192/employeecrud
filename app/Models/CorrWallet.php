@@ -9,7 +9,8 @@ class CorrWallet extends Model
 {
     use HasFactory;
     protected $table ='corr_wallets';
+    protected  $primaryKey = 'wallet_id';
     protected $fillable = [
-        'corr_id', 'credit', 'created_at', 'updated_at'
+        'corr_id', 'credit', 'previous_due', 'created_at', 'updated_at'
     ];
 }

@@ -5,8 +5,7 @@
 	<title>Send Mail</title>
 </head>
 <body>
-	<h1>Dear  {{ $details['name']}}</h1>
-<h1>{{$details['message']}}.</h1>
-
+	<h1>Dear{{ $details['name']}}</h1>
+	<h1>{{$details['message']}}.</h1>
 </body>
 </html>

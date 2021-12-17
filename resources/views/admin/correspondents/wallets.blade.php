@@ -32,7 +32,8 @@ Wallets
 				<th>Name</th>
 				<th>Upazila</th>
 				<th>District</th>
-				<th class="text-center">Balance (Tk)</th>
+				<th class="text-center">Previous Due Bill</th>
+				<th class="text-center">Corr. Balance</th>
 		    </tr>
 		  </thead>
 		  <tbody>
@@ -43,6 +44,7 @@ Wallets
 						<td>{{$wallet->name}}</td>		
 						<td>{{$wallet->upazila_name}}</td>		
 						<td>{{$wallet->district_name}}</td>		
+						<td class="text-center">{{$wallet->previous_due}}</td>
 						<td class="text-center">{{$wallet->credit}}</td>
 					</tr>
 				@endforeach

@@ -38,6 +38,7 @@ use App\Http\Middleware\CheckAuth;
 Route::get('/district', [DistrictController::class, 'index']);
 Route::view('/in', 'index');
 Route::get('/email', [EmailController::class, 'index']);
+Route::get('/111', [TestController::class, 'getCorres']);
 
 Route::get('/search', [EmployeeController::class, 'search']);
 Route::get('/test', [TestController::class, 'index']);
