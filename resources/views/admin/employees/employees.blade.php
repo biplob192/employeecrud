@@ -40,7 +40,7 @@ Employees
 				<tr>
 					<!-- <td>{{$employee->id}}</td>	 -->		
 					<td>
-						<img src="{{asset('images').'/'.$employee->image}}" style="width:60px;height:60px;border-radius:50%;">
+						<img src="{{asset('storage/images').'/'.$employee->image}}" style="width:60px;height:60px;border-radius:50%;">
 					</td>			
 					<td><a href="{{url('employee').'/'.$employee->id}}"> <strong>{{$employee->name}}</strong> </a></td>	
 					<td>{{$employee->designation}}</td>			

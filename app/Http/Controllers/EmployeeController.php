@@ -38,7 +38,8 @@ class EmployeeController extends Controller
         }
         $image = $req->image;
         $image_name = time().'.'.$image->getClientOriginalExtension();
-        $destination = base_path().'/public/images/'.$image_name;
+        //$destination = base_path().'/public/images/'.$image_name;
+        $destination = storage_path().'/app/public/images/'.$image_name;
         Image::make($image)->resize(200, 200)->save($destination);
 
         $employee= new Employee;

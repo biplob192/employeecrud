@@ -24,7 +24,6 @@ class ChequeController extends Controller
         ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')       
         ->whereNull('cheques.deleted_at')->orderBy('cheques.cheque_id','DESC')
         ->get();
-        // dd($cheques);
         return view ('admin.cheques.cheques',['cheques'=>$cheques]);
     } 
 
@@ -83,7 +82,12 @@ class ChequeController extends Controller
                     throw new Exception('$validation fails');                
                 }
                 $upazila_id = $req->upazila;
-                $corr_id    = $req->correspondents;  
+                $corr_id    = $req->correspondents; 
+
+                $due            = CorrWallet::where('corr_id', $corr_id)->first();
+                $due_balance    = $due->previous_due;
+                $balance        = $req->cheque_amount;
+                CorrWallet::where('corr_id', $corr_id)->update(['previous_due' => $due_balance - $balance]); 
             }
            
             $cheque->correspondent_id   = $corr_id;
@@ -99,7 +103,7 @@ class ChequeController extends Controller
             if($upazila_id != 494){
                 $cheque->commission     = $req->cheque_amount * 0.3;
                 $cheque->percentage     = 30;
-            }      
+            }  
 
             $cheque->save();
 
@@ -112,47 +116,25 @@ class ChequeController extends Controller
             $comm       = $cheque->commission;
             CorrWallet::where('corr_id', $corr_id)->update(['credit' => $credit + $comm]);
 
-            // $wallet     = CorrWallet::where('corr_id', $corr_id)->first(); //Update Commission
-            // $credit     = $wallet->credit;
-            // $comm       = $req->cheque_amount * 0.3;
-            // $commDhaka  = $req->cheque_amount * 0.35;
-            // if ($ads->upazila_id == 494) {
-            //     CorrWallet::where('corr_id', $req->correspondent_id)
-            //     ->update(['credit' => $credit + $commDhaka]);
-            // }else {              
-            //     CorrWallet::where('corr_id', $req->correspondent_id)
-            //     ->update(['credit' => $credit + $comm]);
-            // }
-
             log::insert([
                 'user_id'           => Auth::user()->id,
                 'data'              => json_encode($cheque),
                 'operation_type'    => 'Insert Cheque',
             ]);
             return back();                
-            }
-            catch(Exception $e){
-                return back()->with('error', $e->getMessage())->withInput();
-            }
         }
+        catch(Exception $e){
+            return back()->with('error', $e->getMessage())->withInput();
+        }
+    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($id)
     {
         $cheque=Cheque::find($id);
@@ -161,13 +143,7 @@ class ChequeController extends Controller
         return view ('admin.cheques.edit_cheque',['cheque'=>$cheque]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $req, $id)
     {
         $cheque=Cheque::find($id);

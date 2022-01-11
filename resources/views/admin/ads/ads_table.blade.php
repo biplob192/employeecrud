@@ -39,7 +39,7 @@
 					@hasanyrole('super_admin|admin|editor')		
 					<div class="edit">
 						<form action="{{url('ad').'/'.$ad->id.'/edit'}}" method="get">	
-							<button class="btn btn-outline-dark">Edit</button>				
+							<button class="btn btn-outline-dark" onclick="confirmEdit()">Edit</button>	
 						</form>
 					</div>
 					@endhasanyrole
@@ -48,7 +48,7 @@
 						<form action="{{url('ad') .'/'.$ad->id}}" method="post">
 							@csrf
 							{{ method_field('delete') }}
-							<button class="btn btn-outline-danger">Delete</button>				
+							<button class="btn btn-outline-danger" onclick="confirmDelete()">Delete</button>	
 						</form>
 					</div>
 					@endhasanyrole

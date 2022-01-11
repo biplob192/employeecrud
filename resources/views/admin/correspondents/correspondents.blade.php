@@ -14,14 +14,13 @@ Correspondents
 	.edit{width: 50%;float: left;text-align: center;}
 	.delete{width: 50%;float: left;text-align: center;}
 </style>
-<center> <h5>TBT CORRESPONDENT LIST</h5> </center> <br>
+<center> <h5>TBT CORRESPONDENT LIST ({{$correspondentCount}})</h5> </center> <br>
 <input class="form-control" id="myInput" type="text" placeholder="Search..">
 <div class="pd-20 card-box mb-30">
 	<div class="table-responsive">
 		<table class="table table-striped">
 		  <thead>
 		    <tr>
-		      	<th>S/N:</th>
 				<th>Name</th>
 				<th>Division</th>
 				<th>District</th>
@@ -35,7 +34,6 @@ Correspondents
 		     	@foreach($correspondent as $correspondent)
 					<tr>						
 						<!-- <td>{{$correspondentCount}}</td>			 -->
-						<td>{{$correspondent->id}}</td>			
 						<td><a href="{{url('correspondent').'/'.$correspondent->id}}"> <strong>{{$correspondent->name}}</strong> </a></td>	
 						<td>{{$correspondent->division_name}}</td>			
 						<td>{{$correspondent->district_name}}</td>			
@@ -46,7 +44,7 @@ Correspondents
 							<div class="menu">		
 								<div class="edit">
 									<form action="{{url('correspondent').'/'.$correspondent->id.'/edit'}}" method="get">	
-										<button class="btn btn-outline-dark">Edit</button>				
+										<button class="btn btn-outline-dark" onclick="confirmEdit()">Edit</button>				
 									</form>
 								</div>
 								@hasanyrole('super_admin|admin|editor')
@@ -54,7 +52,7 @@ Correspondents
 									<form action="{{url('correspondent') .'/'.$correspondent->id}}" method="post">
 										@csrf
 										{{ method_field('delete') }}
-										<button class="btn btn-outline-danger">Delete</button>				
+										<button class="btn btn-outline-danger" onclick="confirmDelete()">Delete</button>				
 									</form>
 								</div>
 								@endhasanyrole
@@ -82,5 +80,24 @@ $(document).ready(function(){
     });
   });
 });
+</script>
+
+<script>
+	function confirmEdit() {
+	  	var result = confirm("Are you sure, you want to edit this record?");
+		if (result) {
+		    alert("Confirmed !!");
+		}else{
+			event.preventDefault();
+		}
+	}
+	function confirmDelete() {
+	  	var result = confirm("Are you sure, you want to delete this record?\nDeleted record will not be recover!");
+		if (result) {
+		    alert("Confirmed !!");
+		}else{
+			event.preventDefault();
+		}
+	}
 </script>
 @endsection

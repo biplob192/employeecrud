@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Ad;
+use App\Models\CorrWallet;
 use App\Models\Member;
 use App\Models\Employee;
 use App\Models\Correspondent;
@@ -77,7 +78,8 @@ class AdController extends Controller
 
         $ad=Ad::whereStatus($status)
         ->leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
-        ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')        
+        ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
+        ->whereNull('ads.deleted_at')        
         ->when($req->corr_id , fn($query) => $query->where("ads.correspondent_id", $req->corr_id))
         ->when(count($dates) > 0, function($query) use ($dates ) { 
             return $query->whereBetween('ads.created_at',$dates);
@@ -105,74 +107,74 @@ class AdController extends Controller
         ->with('division_names',$division_names)->with('district_names',$district_names)->with('upazila_names',$upazila_names);
     }
 
-    public function store(Request $req){ // store into database
+    public function store(Request $req){ // store new ads into database
         try{
-        $validator  = Validator::make($req->all(), [
-            'corr_name'     => 'required|max:50',            
-            'corr_id'       => 'required',            
-            'ad_type'       => 'required',            
-            'ad_position'   => 'required',          
-            'extra_charge'  => 'required',            
-            'div_id'        => 'required',            
-            'dist_id'       => 'required',            
-            'upazila_id'    => 'required',            
-            'client'        => 'required',            
-            'gd_no'         => 'required|unique:ads,gd_no',            
-            'order_no'      => 'required',            
-            'inch'          => 'required',            
-            'colum'         => 'required',      
-            'payment_status'=> 'required',            
-        ]);
+            $validator  = Validator::make($req->all(), [
+                'corr_name'     => 'required|max:50',            
+                'corr_id'       => 'required',            
+                'ad_type'       => 'required',            
+                'ad_position'   => 'required',          
+                'extra_charge'  => 'required',            
+                'div_id'        => 'required',            
+                'dist_id'       => 'required',            
+                'upazila_id'    => 'required',            
+                'client'        => 'required',            
+                'gd_no'         => 'required|unique:ads,gd_no',            
+                'order_no'      => 'required',            
+                'inch'          => 'required',            
+                'colum'         => 'required',      
+                'payment_status'=> 'required',            
+            ]);
 
-        if($validator ->fails()){
-           return back()->withErrors($validator )->withInput();
+            if($validator ->fails()){
+               return back()->withErrors($validator )->withInput();
+            }
+
+            // Ads will not insert if Correspondent Previous Due not set.
+            $wallet = CorrWallet::where('corr_id', $req->corr_id)->first();
+            if($wallet->previous_due == null){
+                Return "You have not set 'Previous Due Amount' for this correspondent. Please set the 'Previous Due Amount' first.";
+            }
+
+            $ads_price = AdsPrice::select('price')
+                    ->where([
+                        'ads_type'      => $req->ad_type,
+                        'ads_position'  => $req->ad_position
+                    ])->first();
+
+            $total_size = $req->inch*$req->colum;      
+            $final_amount = ($total_size*$ads_price->price)+$req->extra_charge;
+
+            $ad= new Ad;
+            $ad->correspondent_name =$req->corr_name;
+            $ad->correspondent_id   =$req->corr_id;
+            $ad->ad_type            =$req->ad_type;
+            $ad->rate               =$ads_price->price;
+            $ad->extra_charge       =$req->extra_charge;
+            $ad->division_id        =$req->div_id;
+            $ad->district_id        =$req->dist_id;
+            $ad->upazila_id         =$req->upazila_id;
+            $ad->client             =$req->client;
+            $ad->gd_no              =$req->gd_no;
+            $ad->order_no           =$req->order_no;
+            $ad->inch               =$req->inch;
+            $ad->ad_position        =$req->ad_position;
+            $ad->colum              =$req->colum;
+            $ad->total_size         =$total_size;
+            $ad->amount             =$final_amount;
+            $ad->payment_status     =$req->payment_status;
+            $ad->publishing_date    =$req->publishing_date;
+            $ad->save();
+            log::insert([
+                'user_id'           => Auth::user()->id,
+                'data'              => json_encode($ad),
+                'operation_type'    => 'Insert Ad',
+            ]);
+            return back();
         }
-        // dd($req->all());
-        $ads_price = AdsPrice::select('price')
-                ->where([
-                    'ads_type'      => $req->ad_type,
-                    'ads_position'  => $req->ad_position
-                ])->first();
-
-        $total_size = $req->inch*$req->colum;      
-        $final_amount = ($total_size*$ads_price->price)+$req->extra_charge;
-
-        $ad= new Ad;
-        $ad->correspondent_name =$req->corr_name;
-        $ad->correspondent_id   =$req->corr_id;
-        $ad->ad_type            =$req->ad_type;
-        $ad->rate               =$ads_price->price;
-        $ad->extra_charge       =$req->extra_charge;
-        $ad->division_id        =$req->div_id;
-        $ad->district_id        =$req->dist_id;
-        $ad->upazila_id         =$req->upazila_id;
-        $ad->client             =$req->client;
-        $ad->gd_no              =$req->gd_no;
-        $ad->order_no           =$req->order_no;
-        $ad->inch               =$req->inch;
-        $ad->ad_position        =$req->ad_position;
-        $ad->colum              =$req->colum;
-        $ad->total_size         =$total_size;
-        $ad->amount             =$final_amount;
-        $ad->payment_status     =$req->payment_status;
-        $ad->publishing_date    =$req->publishing_date;
-        $ad->save();
-        log::insert([
-            'user_id'           => Auth::user()->id,
-            'data'              => json_encode($ad),
-            'operation_type'    => 'Insert Ad',
-        ]);
-        return back();
-
-        // Member::insert([
-        //     'name'=> $req->staffname,
-        //     'mobile'=> $req->mobileno
-        // ]);
-        // return redirect('/addstaff');
-    }
-    catch(Exception $e){
-        return $e->getMessage();
-    }
+        catch(Exception $e){
+            return $e->getMessage();
+        }
     }
 
     public function show($id){ // show single ad 
@@ -268,7 +270,7 @@ class AdController extends Controller
 
     public function delete($id){ // delete single ad
         $ad=Ad::find($id);
-        // $ad->delete();
+        // dd($ad);
         if($ad->update(['deleted_at' => Carbon::now()])){
                 log::insert([
                 'user_id'           => Auth::user()->id,

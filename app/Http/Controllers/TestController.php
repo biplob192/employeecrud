@@ -22,7 +22,6 @@ class TestController extends Controller
                 'status' => true,
                 'data' => $ad
             ));
-
         }
         catch(Exception $e){
             return response()->json(array(
@@ -36,7 +35,7 @@ class TestController extends Controller
     public function apiHit(){
         $url = "http://dummy.restapiexample.com/api/v1/employees"; 
         $url = "http://127.0.0.1:8080/api/correspondents"; 
-        $token = env('TOKEN');  
+        $token = 'env('TOKEN')';  
         $authorization = "Authorization: Bearer ".$token; // Prepare the authorisation token
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));   
