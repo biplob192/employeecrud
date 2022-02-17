@@ -53,6 +53,17 @@ New Cheque
 				</select>
 			</div>
 		</div>
+		<div class="form-group row" style="display:none" id="ads_type">
+			<label class="col-sm-12 col-md-2 col-form-label">Ads Type</label>
+			<div class="col-sm-12 col-md-10">	
+				<select class="form-control custom-select2" id="ad_type" name="ad_type" style="width: 100%">
+					<option value="" selected disabled>Select Ads Type</option>
+					<option value="Government">Government</option>
+					<option value="Private">Private</option>
+					<option value="Commercial">Commercial</option>
+				</select>
+			</div>
+		</div>		
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Bank Name</label>
 			<div class="col-sm-12 col-md-10">
@@ -118,6 +129,7 @@ New Cheque
     if (gd_number!="previous_ad") {
     	$("#corr_list_div").hide();
     	$("#upazila_list").hide();
+    	$("#ads_type").hide();
 	    $.ajax({
 	      url:"/gdprice",
 	      type:"GET",
@@ -136,6 +148,7 @@ New Cheque
     	// $('#correspondents option:first').prop('selected',true);
     	$("#corr_list_div").show();
     	$("#upazila_list").show();
+    	$("#ads_type").show();
     }   
   	});
 
@@ -154,7 +167,9 @@ New Cheque
 			$("#ait_cut").empty();
 			
 			var gd_number = $("#gd_no :selected").val();
-			if (gd_number != "") {
+			var ads_type 	= "Default";
+			var ads_type  = $("#ad_type :selected").val();
+			if (gd_number != "Private") {
 		    $.ajax({
 		      url:"/gdprice",
 		      type:"GET",

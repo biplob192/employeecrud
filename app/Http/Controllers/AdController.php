@@ -25,13 +25,13 @@ class AdController extends Controller
 {
     public function index(Request $req){ // show all ads list
         if(!$req->from){
-        $ad=Ad::
-        leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
-        ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
-        ->get();
-        $count=$ad->count();
-        $totalPaid=$ad->where('payment_status', 1)->sum('amount');
-        $totalUnPaid=$ad->where('payment_status', 0)->sum('amount');
+            $ad=Ad::
+            leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
+            ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
+            ->get();
+            $count=$ad->count();
+            $totalPaid=$ad->where('payment_status', 1)->sum('amount');
+            $totalUnPaid=$ad->where('payment_status', 0)->sum('amount');
         }else{
             $date = explode(' - ',$req->from);
             $from = $date[0];
@@ -45,7 +45,7 @@ class AdController extends Controller
             $totalPaid=$ad->where('payment_status', 1)->sum('amount');
             
             $totalUnPaid=$ad->where('payment_status', 0)->sum('amount');        
-                   
+
         }
         return view ('admin.ads.ads',['ad'=>$ad, 'totalpaid' =>$totalPaid, 'totalunpaid' =>$totalUnPaid, 'count' =>$count]);
     }
@@ -66,6 +66,7 @@ class AdController extends Controller
         // $ad=Ad::
         // leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
         // ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
+        // ->whereNull('ads.deleted_at')
         // ->when($status == 0 || $status ==1 , fn($query) =>
         //     $query->where('ads.payment_status',$status))
         // ->when($status ==2 , fn($query) => $query->where('ads.upazila_id', 494))
@@ -120,7 +121,8 @@ class AdController extends Controller
                 'upazila_id'    => 'required',            
                 'client'        => 'required',            
                 'gd_no'         => 'required|unique:ads,gd_no',            
-                'order_no'      => 'required',            
+                'order_no'      => 'required',           
+                'order_date'    => 'required',           
                 'inch'          => 'required',            
                 'colum'         => 'required',      
                 'payment_status'=> 'required',            
@@ -128,58 +130,61 @@ class AdController extends Controller
 
             if($validator ->fails()){
                return back()->withErrors($validator )->withInput();
-            }
+           }
 
             // Ads will not insert if Correspondent Previous Due not set.
-            $wallet = CorrWallet::where('corr_id', $req->corr_id)->first();
-            if($wallet->previous_due == null){
-                Return "You have not set 'Previous Due Amount' for this correspondent. Please set the 'Previous Due Amount' first.";
-            }
+            // $wallet = CorrWallet::where('corr_id', $req->corr_id)->first();
+            // if($wallet->previous_due == null){
+            //     Return "You have not set 'Previous Due Amount' for this correspondent. Please set the 'Previous Due Amount' first.";
+            // }
 
-            $ads_price = AdsPrice::select('price')
-                    ->where([
-                        'ads_type'      => $req->ad_type,
-                        'ads_position'  => $req->ad_position
-                    ])->first();
+           $ads_price = AdsPrice::select('price')
+           ->where([
+            'ads_type'      => $req->ad_type,
+            'ads_position'  => $req->ad_position
+        ])->first();
 
-            $total_size = $req->inch*$req->colum;      
-            $final_amount = ($total_size*$ads_price->price)+$req->extra_charge;
+           $total_size = $req->inch*$req->colum;      
+           $final_amount = ($total_size*$ads_price->price)+$req->extra_charge;
 
-            $ad= new Ad;
-            $ad->correspondent_name =$req->corr_name;
-            $ad->correspondent_id   =$req->corr_id;
-            $ad->ad_type            =$req->ad_type;
-            $ad->rate               =$ads_price->price;
-            $ad->extra_charge       =$req->extra_charge;
-            $ad->division_id        =$req->div_id;
-            $ad->district_id        =$req->dist_id;
-            $ad->upazila_id         =$req->upazila_id;
-            $ad->client             =$req->client;
-            $ad->gd_no              =$req->gd_no;
-            $ad->order_no           =$req->order_no;
-            $ad->inch               =$req->inch;
-            $ad->ad_position        =$req->ad_position;
-            $ad->colum              =$req->colum;
-            $ad->total_size         =$total_size;
-            $ad->amount             =$final_amount;
-            $ad->payment_status     =$req->payment_status;
-            $ad->publishing_date    =$req->publishing_date;
-            $ad->save();
-            log::insert([
-                'user_id'           => Auth::user()->id,
-                'data'              => json_encode($ad),
-                'operation_type'    => 'Insert Ad',
-            ]);
-            return back();
-        }
-        catch(Exception $e){
-            return $e->getMessage();
-        }
+           $ad= new Ad;
+           $ad->correspondent_name =$req->corr_name;
+           $ad->correspondent_id   =$req->corr_id;
+           $ad->ad_type            =$req->ad_type;
+           $ad->rate               =$ads_price->price;
+           $ad->extra_charge       =$req->extra_charge;
+           $ad->division_id        =$req->div_id;
+           $ad->district_id        =$req->dist_id;
+           $ad->upazila_id         =$req->upazila_id;
+           $ad->client             =$req->client;
+           $ad->gd_no              =$req->gd_no;
+           $ad->order_no           =$req->order_no;
+           $ad->order_date         =$req->order_date;
+           $ad->inch               =$req->inch;
+           $ad->ad_position        =$req->ad_position;
+           $ad->colum              =$req->colum;
+           $ad->total_size         =$total_size;
+           $ad->amount             =$final_amount;
+           $ad->payment_status     =$req->payment_status;
+           $ad->publishing_date    =$req->publishing_date;
+           $ad->save();
+           log::insert([
+            'user_id'           => Auth::user()->id,
+            'data'              => json_encode($ad),
+            'operation_type'    => 'Insert Ad',
+        ]);
+           return back();
+       }
+       catch(Exception $e){
+        return $e->getMessage();
     }
+}
 
     public function show($id){ // show single ad 
         $ad=Ad::find($id);
-        return view ('admin.prints.print_bill_pre',['ad'=>$ad]);
+        $upazila= Upazila::select('upazila_name')->where('upazila_id', $ad->upazila_id)->first();
+        $district= District::select('district_name')->where('district_id', $ad->district_id)->first();
+        return view ('admin.prints.print_bill_pre',['ad'=>$ad, 'upazila'=>$upazila, 'district'=>$district]);
     }
 
     public function edit($id){ // show single ad  in edit form
@@ -199,10 +204,10 @@ class AdController extends Controller
 
         if($req->inch && $req->colum){
             $ads_price = AdsPrice::select('price')
-                ->where([
-                    'ads_type' => $req->ad_type,
-                    'ads_position' => $req->ad_position
-                ])->first();  
+            ->where([
+                'ads_type' => $req->ad_type,
+                'ads_position' => $req->ad_position
+            ])->first();  
 
             $total_size = $req->inch*$req->colum;  
             $final_amount = ($total_size*$ads_price->price)+$req->extra_charge;
@@ -272,7 +277,7 @@ class AdController extends Controller
         $ad=Ad::find($id);
         // dd($ad);
         if($ad->update(['deleted_at' => Carbon::now()])){
-                log::insert([
+            log::insert([
                 'user_id'           => Auth::user()->id,
                 'data'              => json_encode($ad),
                 'operation_type'    => 'Delete Ad',
@@ -283,7 +288,32 @@ class AdController extends Controller
 
     public function print_bill($id){
         $ad=Ad::find($id);
-        return view ('admin.prints.print_bill',['ad'=>$ad]);
+        $upazila= Upazila::select('upazila_name')->where('upazila_id', $ad->upazila_id)->first();
+        $district= District::select('district_name')->where('district_id', $ad->district_id)->first();
+        return view ('admin.prints.print_bill',['ad'=>$ad, 'upazila'=>$upazila, 'district'=>$district]);
+    }
+
+    public function previewPrintReport(Request $request){
+        $data = session()->all();
+        $corr = Correspondent::where('correspondents.id', session('corr_id'))
+        ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')
+        ->leftjoin('district_list', 'correspondents.district_id', '=', 'district_list.district_id')
+        ->first();
+        return view ('admin.prints.print_report_pre', ['data'=>$data, 'corr'=>$corr]);
+    }
+
+    public function printReport(Request $request){
+        $data = session()->all();
+        $corr = Correspondent::where('correspondents.id', session('corr_id'))
+        ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')
+        ->leftjoin('district_list', 'correspondents.district_id', '=', 'district_list.district_id')
+        ->first();
+        
+        session()->forget([
+            'count', 'total', 'totalPaid', 'countPaid', 'totalUnPaid', 'countUnPaid', 'totalSize', 'chequeAmount', 'chequeCount', 'duration', 'ad', 'previous_due', 'credit', 'last_comm', 'total_comm'
+        ]);
+
+        return view ('admin.prints.print_report', ['data'=>$data, 'corr'=>$corr]);
     }
 
     public function query(Request $request)
@@ -291,10 +321,10 @@ class AdController extends Controller
       $input = $request->all();
       $v= 'GE';
 
-        $data = Ad::select('gd_no')
-                  ->where("gd_no","LIKE","%{$input['query']}%")
-                  ->where('payment_status', '=', 0)
-                  ->pluck('gd_no')->toArray();
+      $data = Ad::select('gd_no')
+      ->where("gd_no","LIKE","%{$input['query']}%")
+      ->where('payment_status', '=', 0)
+      ->pluck('gd_no')->toArray();
 
        // ->where('client', '<>', null)
        // if($v != NULL){
@@ -306,17 +336,17 @@ class AdController extends Controller
         // foreach($data_o as $key => $value){
         //     $data[] = $value->gd_no.' , amount '.$value->amount;
         // }
-   
-        return response()->json($data);
-    }
 
-    public function getAddress(Request $req){
-        try{
+      return response()->json($data);
+  }
+
+  public function getAddress(Request $req){
+    try{
             // $correspondent= Correspondent::where('name',$req->corr_name)->first();
-            $correspondent= Correspondent::            
-            leftjoin('division_list', 'correspondents.division_id', '=', 'division_list.division_id')
-            ->leftjoin('district_list', 'correspondents.district_id', '=', 'district_list.district_id')
-            ->where('name', $req->corr_name)->first();
+        $correspondent= Correspondent::            
+        leftjoin('division_list', 'correspondents.division_id', '=', 'division_list.division_id')
+        ->leftjoin('district_list', 'correspondents.district_id', '=', 'district_list.district_id')
+        ->where('name', $req->corr_name)->first();
 
             // $correspondent= Correspondent::            
             // leftjoin('division_list', 'correspondents.division_id', '=', 'division_list.division_id')            
@@ -326,21 +356,21 @@ class AdController extends Controller
             // leftjoin('district_list', 'correspondents.district_id', '=', 'district_list.district_id')
             // ->where('name', $req->corr_name)->first();
 
-            if(!$correspondent){
-                throw new Exception("Correspondent not found");
-            }            
-            return response()->json(array(
-                'status' => true,
-                'data' => $correspondent,
-            ));
-        }
-        catch(Exception $e){
-            return response()->json(array(
+        if(!$correspondent){
+            throw new Exception("Correspondent not found");
+        }            
+        return response()->json(array(
+            'status' => true,
+            'data' => $correspondent,
+        ));
+    }
+    catch(Exception $e){
+        return response()->json(array(
             'status' => false,
             'status_msg' => $e->getMessage()
         ));
-        }
     }
+}
 
     public function filterAds(Request $req){  //from ads page
         // dd($req);
@@ -368,13 +398,13 @@ class AdController extends Controller
             }
             catch(Exception $e){
                 return response()->json(array(
-                'status' => false,
-                'status_msg' => $e->getMessage()
-            ));
+                    'status' => false,
+                    'status_msg' => $e->getMessage()
+                ));
 
             }
         }
-           
+
     }
 
     public function exportAds(){

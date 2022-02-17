@@ -85,6 +85,38 @@ class CorrespondentController extends Controller
         }        
     }
 
+    // public function overwriteWallet(Request $req){
+    //     try{
+    //         $validator  = Validator::make($req->all(), [
+    //             'update_list'      => 'required',            
+    //             'corr_name2'       => 'filled', 
+    //             'amount'           => 'filled',           
+    //         ]);
+
+    //         if($validator ->fails()){
+    //            return back()->withErrors($validator )->withInput();
+    //         }
+
+    //         if($req->update_list==1){
+    //             $update['previous_due'] = $req->amount;
+    //         } elseif ($req->update_list==2){
+    //             $update['credit'] = $req->amount;
+    //         }
+    //         $overwriteWallet = CorrWallet::where('corr_id', $req->corr_name2)->update($update);
+            
+    //         Log::insert([
+    //             'user_id'           => Auth::user()->id,
+    //             'data'              => json_encode($overwriteWallet),
+    //             'operation_type'    => 'Overwrite Wallet',
+    //         ]);
+    //         return back();
+
+    //     }
+    //     catch(Exception $e){
+    //         return $e->getMessage();
+    //     }        
+    // }
+
     public function create(){ // show insert form
         // $division_names= Division::select('division_name')->get();
         $divisions= Division::all();

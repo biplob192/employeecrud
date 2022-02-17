@@ -60,6 +60,7 @@ class CommissionController extends Controller
         $validator  = Validator::make($req->all(), [           
             'correspondent_id'      => 'required',            
             'commission_amount'     => 'required',            
+            'commission_date'     => 'required',            
         ]);
 
         if($validator ->fails()){
@@ -83,11 +84,12 @@ class CommissionController extends Controller
         $current_amount  = $credit-$req->commission_amount;
 
         $commission = new Commission;
-        $commission->correspondent      =$req->correspondent_id;
-        $commission->previous_amount  =$previous_amount;
-        $commission->commission_amount  =$req->commission_amount;
-        $commission->current_amount  =$current_amount;
-        $commission->commission_amount  =$req->commission_amount;
+        $commission->correspondent      = $req->correspondent_id;
+        $commission->previous_amount    = $previous_amount;
+        $commission->commission_amount  = $req->commission_amount;
+        $commission->current_amount     = $current_amount;
+        $commission->commission_amount  = $req->commission_amount;
+        $commission->commission_date    = $req->commission_date;
         $commission->save();
         log::insert([
             'user_id'           => Auth::user()->id,

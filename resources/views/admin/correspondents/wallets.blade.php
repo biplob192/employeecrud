@@ -26,6 +26,7 @@ Wallets
 </div>
 @include('inc.walletOverwriteModal')
 <br>
+<input class="form-control" id="myInput" type="text" placeholder="Search..">
 <div class="pd-20 card-box mb-30">
 	<div class="table-responsive">
 		<table class="table table-striped">
@@ -39,7 +40,7 @@ Wallets
 				<th class="text-center">Corr. Balance</th>
 		    </tr>
 		  </thead>
-		  <tbody>
+		  <tbody id="myTable">
 
 		     	@foreach($wallets as $wallet)
 					<tr>						
@@ -59,4 +60,14 @@ Wallets
 @endsection
 
 @section('Script')
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
 @endsection

@@ -113,6 +113,12 @@ New Ad
 			</div>
 		</div>
 		<div class="form-group row">
+			<label class="col-sm-12 col-md-2 col-form-label">Oredr Date</label>
+			<div class="col-sm-12 col-md-10">
+				<input class="form-control date-picker" type="text" name="order_date" value="{{old('order_date')}}" placeholder="Ads Order Date" required>
+			</div>
+		</div>
+		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Inch</label>
 			<div class="col-sm-12 col-md-10">
 				<input class="form-control" type="number" id="inch" name="inch" value="{{old('inch')}}" placeholder="Inch" required>
@@ -127,7 +133,7 @@ New Ad
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Extra Charge</label>
 			<div class="col-sm-12 col-md-10">
-				<input class="form-control" type="text" name="extra_charge" value="{{old('extra_charge')}}" placeholder="Extra Charge" required>
+				<input class="form-control" type="text" name="extra_charge" value="{{old('extra_charge')}}" placeholder="Extra Charge or Private Ads Amount" required>
 			</div>
 		</div>
 		<div class="form-group row">

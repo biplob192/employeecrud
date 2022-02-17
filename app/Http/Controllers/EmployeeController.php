@@ -30,7 +30,8 @@ class EmployeeController extends Controller
             'name'      => 'required||unique:employees,name|max:20',
             'mobile'    => 'required|unique:employees,mobile|size:11',
             'district'  => 'required|max:20',            
-            'upazila'   => 'required|max:20',            
+            'upazila'   => 'required|max:20',
+            'image'     => 'file|size:80',          
         ]);
 
         if($validator ->fails()){

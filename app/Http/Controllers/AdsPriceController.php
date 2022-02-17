@@ -102,20 +102,32 @@ class AdsPriceController extends Controller
      */
     public function update(Request $req, $id)
     {
-        $ad_price=AdsPrice::find($req->id);
+        // $ad_price=AdsPrice::find($req->id);
 
-        if($req->ad_type){
-            $ad_price->ads_type=$req->ad_type;
-        }
-        if($req->ad_position){
-            $ad_price->ads_position=$req->ad_position;
-        }
+        $update_ad_price = AdsPrice::updateOrCreate(
+            [
+                'ads_type' =>  $req->ad_type,
+                'ads_position' =>  $req->ad_position
+
+            ], // finding condition
+
+            [
+                'price'        => $req->rate
+            ] // inserting data
+        );
+
+        // if($req->ad_type){
+        //     $ad_price->ads_type=$req->ad_type;
+        // }
+        // if($req->ad_position){
+        //     $ad_price->ads_position=$req->ad_position;
+        // }
         
-        if($req->rate){
-            $ad_price->price=$req->rate;
-        }        
+        // if($req->rate){
+        //     $ad_price->price=$req->rate;
+        // }        
                 
-        $ad_price->save();
+        // $ad_price->save();
         return redirect('/ad_prices');
     }
 

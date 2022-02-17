@@ -10,7 +10,7 @@ Edit Cheque
 @section('Content')
 
 <center>
-	<h5>UPDATE AD DATA</h5> <br>
+	<h5>UPDATE CHEQUE DATA</h5> <br>
 	@foreach($errors->all() as $error)
         <div>
            {{$error}}
@@ -26,7 +26,8 @@ Edit Cheque
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Correspondent</label>
 			<div class="col-sm-12 col-md-10">
-				<input class="form-control" type="text" name="correspondent_id" value="{{$cheque->correspondent_id}}" placeholder="Correspondent ID">
+				<input class="form-control" type="hidden" name="correspondent_id" value="{{$cheque->correspondent_id}}" placeholder="Correspondent ID">
+				<input class="form-control" type="text" name="correspondent_name" value="{{$correspondent->name}}, {{$correspondent->upazila_name}}" disabled>
 			</div>
 		</div>
 		<div class="form-group row">

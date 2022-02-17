@@ -33,6 +33,7 @@ Commission
 
 @include('inc.chequeInsertModal')
 <br>
+<input class="form-control" id="myInput" type="text" placeholder="Search..">
 <div class="pd-20 card-box mb-30">
 	<div class="table-responsive">
 		<table class="table table-striped">
@@ -43,11 +44,12 @@ Commission
 						<th>Previous</th>	
 						<th>Amount</th>	
 						<th>Current</th>	
-						<th class="text-center">Date</th>	
+						<th class="text-center">Paying Date</th>	
+						<th class="text-center">Submit</th>	
 						<th class="text-center">Action</th>
 		    </tr>
 		  </thead>
-		  <tbody>
+		  <tbody id="myTable">
 		     	@foreach($commissions as $commission)
 					<tr>
 						<td>{{$commission->commission_id}}</td>	
@@ -55,19 +57,20 @@ Commission
 						<td>{{$commission->previous_amount}}</td>
 						<td>{{$commission->commission_amount}}</td>
 						<td>{{$commission->current_amount}}</td>
+						<td class="text-center">{{$commission->commission_date}}</td>
 						<td class="text-center">{{date('d-m-Y', strtotime($commission->created_at))}}</td>
 						<td>
 							<div class="menu">		
 								<div class="edit">
 									<form action="{{url('commission').'/'.$commission->commission_id.'/edit'}}" method="get">	
-										<button class="btn btn-outline-dark">Edit</button>				
+										<button class="btn btn-outline-dark" onclick="confirmEdit()">Edit</button>				
 									</form>
 								</div>
 								<div class="delete">
 									<form action="{{url('commission') .'/'.$commission->commission_id}}" method="post">
 										@csrf
 										{{ method_field('delete') }}
-										<button class="btn btn-outline-danger">Delete</button>				
+										<button class="btn btn-outline-danger" onclick="confirmDelete()">Delete</button>				
 									</form>
 								</div>
 							</div>
@@ -83,6 +86,17 @@ Commission
 @endsection
 
 @section('Script')
+	<script>
+		$(document).ready(function(){
+		  $("#myInput").on("keyup", function() {
+		    var value = $(this).val().toLowerCase();
+		    $("#myTable tr").filter(function() {
+		      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		    });
+		  });
+		});
+	</script>
+
 	<script>
 		// jQuery("#CommissionModal").on('load',function(e){
 		$(document).ready(function(){
@@ -142,4 +156,22 @@ Commission
 		  
 		// });
 	</script>
+	<script>
+	function confirmEdit() {
+	  	var result = confirm("Are you sure, you want to edit this record?");
+		if (result) {
+		    alert("Confirmed !!");
+		}else{
+			event.preventDefault();
+		}
+	}
+	function confirmDelete() {
+	  	var result = confirm("Are you sure, you want to delete this record?\nDeleted record will not be recover!");
+		if (result) {
+		    alert("Confirmed !!");
+		}else{
+			event.preventDefault();
+		}
+	}
+</script>
 @endsection

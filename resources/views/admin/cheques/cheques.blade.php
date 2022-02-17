@@ -16,6 +16,7 @@ Cheques
 </style>
 
 <center> <h5>INCOMING CHEQUE LIST</h5> </center> <br>
+<input class="form-control" id="myInput" type="text" placeholder="Search..">
 <div class="pd-20 card-box mb-30">
 	<div class="table-responsive">
 		<table class="table table-striped">
@@ -30,7 +31,7 @@ Cheques
 				<th class="text-center" >Action</th>
 		    </tr>
 		  </thead>
-		  <tbody>
+		  <tbody id="myTable">
 	     	@foreach($cheques as $cheque)
 				<tr>
 					<td>{{$cheque->cheque_id}}</td>	
@@ -65,6 +66,17 @@ Cheques
 @endsection
 
 @section('Script')
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+
 <script>
 	function confirmEdit() {
 	  	var result = confirm("Are you sure, you want to edit this record?");

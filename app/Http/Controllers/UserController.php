@@ -100,5 +100,25 @@ class UserController extends Controller
         ]);
         return redirect('/users');
     }
+
+    public function destroy($id)
+    {
+        $user = User::find($id);
+        $user->delete();
+        // dd($user);
+        // $wallet     = CorrWallet::where('corr_id', $commission->correspondent)->first();
+        // $credit     = $wallet->credit;
+        // $comm       = $commission->commission_amount;
+        // if ($commission->update(['deleted_at' => Carbon::now()])) {
+        //     CorrWallet::where('corr_id', $commission->correspondent)
+        //     ->update(['credit' => $credit + $comm]);
+        // }
+        log::insert([
+            'user_id'           => Auth::user()->id,
+            'data'              => json_encode($user),
+            'operation_type'    => 'Delete User',
+        ]);
+        return back();
+    }
     
 }

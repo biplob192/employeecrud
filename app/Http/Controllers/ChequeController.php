@@ -41,6 +41,13 @@ class ChequeController extends Controller
 
     public function store(Request $req)
     {
+        // dd($req->all());
+          // Ads will not insert if Correspondent Previous Due not set.
+        $wallet = CorrWallet::where('corr_id', $req->correspondent_id)->first();
+        if($wallet->previous_due == null){
+            Return "You have not set 'Previous Due Amount' for this correspondent. Please set the 'Previous Due Amount' first.";
+        }
+
         try{
             $cheque     = new Cheque;
             $upazila_id = 0;
@@ -52,26 +59,28 @@ class ChequeController extends Controller
                     'gd_no' => 'required',            
                     'bank_name' => 'required',            
                     'cheque_amount' => 'required|between:3,10',            
-                    'cheque_number' => 'required',            
+                    'cheque_number' => 'required|unique:cheques,cheque_number',            
                 ]);
 
                 if($validator ->fails()){
                     throw new Exception('$validation fails');                
                 }
-                $ads = Ad::select('amount','upazila_id')->where(['gd_no' => $req->gd_no])->first();
+                $ads = Ad::select('amount','upazila_id','ad_type')->where(['gd_no' => $req->gd_no])->first();
 
                 if($req->cheque_amount < $ads->amount * 0.7){        //Store Cheque Data with Condition
                     throw new Exception('Cheque amount not sufficient!');
                 }
                 $upazila_id = $ads->upazila_id;
-                $corr_id    = $req->correspondent_id;                
-                $ait_amount = $ads->amount - $req->cheque_amount;               
+                $ads_type   = $ads->ad_type;    
+                $corr_id    = $req->correspondent_id;    
+                $ait_amount = $ads->amount - $req->cheque_amount;             
             }
 
             if($req->gd_no == 'previous_ad'){
                 $validator  = Validator::make($req->all(), [
-                    'gd_no' => 'required', 
+                    'gd_no'         => 'required', 
                     'correspondents'=> 'required',            
+                    'ad_type'       => 'required',            
                     'upazila'       => 'required',            
                     'bank_name'     => 'required',            
                     'cheque_amount' => 'required|between:3,10',            
@@ -86,8 +95,9 @@ class ChequeController extends Controller
 
                 $due            = CorrWallet::where('corr_id', $corr_id)->first();
                 $due_balance    = $due->previous_due;
-                $balance        = $req->cheque_amount;
-                CorrWallet::where('corr_id', $corr_id)->update(['previous_due' => $due_balance - $balance]); 
+                // $cheque_balance = $req->cheque_amount;
+                $ads_type       = $req->ad_type;
+                CorrWallet::where('corr_id', $corr_id)->update(['previous_due' => $due_balance - $req->cheque_amount]); 
             }
            
             $cheque->correspondent_id   = $corr_id;
@@ -96,14 +106,18 @@ class ChequeController extends Controller
             $cheque->bank_name          = $req->bank_name;
             $cheque->cheque_amount      = $req->cheque_amount;
             $cheque->cheque_number      = $req->cheque_number;
-            if($upazila_id == 494){
+            if($upazila_id == 494 && $ads_type != 'Private'){
                 $cheque->commission     = $req->cheque_amount * 0.35;
                 $cheque->percentage     = 35;
             }
-            if($upazila_id != 494){
+            if($upazila_id != 494 && $ads_type != 'Private'){
                 $cheque->commission     = $req->cheque_amount * 0.3;
                 $cheque->percentage     = 30;
-            }  
+            }
+            if($ads_type == 'Private'){
+                $cheque->commission     = 0;
+                $cheque->percentage     = 0;
+            } 
 
             $cheque->save();
 
@@ -114,6 +128,7 @@ class ChequeController extends Controller
             $wallet     = CorrWallet::where('corr_id', $corr_id)->first(); //Update Commission
             $credit     = $wallet->credit;
             $comm       = $cheque->commission;
+            // dd($comm);
             CorrWallet::where('corr_id', $corr_id)->update(['credit' => $credit + $comm]);
 
             log::insert([
@@ -137,10 +152,13 @@ class ChequeController extends Controller
 
     public function edit($id)
     {
-        $cheque=Cheque::find($id);
+        $cheque = Cheque::find($id);
+        $correspondent = Correspondent::select('name', 'upazila_name')
+        ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')
+        ->where('id', $cheque->correspondent_id)->first(); 
         // $cheque=Cheque::where('cheque_id', $id)->first();
         // dd($cheque);
-        return view ('admin.cheques.edit_cheque',['cheque'=>$cheque]);
+        return view ('admin.cheques.edit_cheque',['cheque'=>$cheque, 'correspondent'=>$correspondent]);
     }
 
 
@@ -212,11 +230,16 @@ class ChequeController extends Controller
         $wallet     =CorrWallet::where('corr_id', $cheque->correspondent_id)->first();
         $credit     = $wallet->credit;
         $commission = $cheque->commission;
+
         if ($cheque->update(['deleted_at' => Carbon::now()])) {
-            CorrWallet::where('corr_id', $cheque->correspondent_id)
-            ->update(['credit' => $credit - $commission]);
+            CorrWallet::where('corr_id', $cheque->correspondent_id)->update(['credit' => $credit - $commission]);
 
             Ad::where('gd_no',$cheque->gd_no)->update(['payment_status' => 0]);
+
+            if($cheque->gd_no == 'previous_ad'){
+                $new_wallet_due = $wallet->previous_due + $cheque->cheque_amount;
+                CorrWallet::where('corr_id', $cheque->correspondent_id)->update(['previous_due' => $new_wallet_due]);
+            } 
         }
         log::insert([
             'user_id'           => Auth::user()->id,

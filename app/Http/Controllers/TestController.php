@@ -86,6 +86,70 @@ class TestController extends Controller
         $ad = Ad::where('gd_no', 100)->first();
         return response()->json($ad);
     }
+
+    public function renderx()
+    {
+        $loggedInUser = Auth::user();
+
+        $data['title'] = "Attendance";
+
+        if (!empty($this->search)) {
+                $users = User::where('nid','like', "%{$this->search}%")
+                    ->orWhere('first_name','like',"%{$this->search}%")
+                    ->orWhere('last_name','like',"%{$this->search}%")
+                    ->orWhere('email','like',"%{$this->search}%")
+                    ->select('id')
+                    ->get();
+
+                $user_ids = array();
+
+                if($users){
+                    foreach($users as $user){
+                        array_push($user_ids,$user->id);
+                    }
+                }
+                if (!empty($user)) {
+                    $hourlyRatedEmployees = EmployeeRate::where('rate_type', 1)->select('employee_id')->get();
+                    $hEmpId = array();
+                    if ($hourlyRatedEmployees) {
+                        foreach ($hourlyRatedEmployees as $hRate) {
+                            array_push($hEmpId, $hRate->employee_id);
+                        }
+                    }
+
+                    $hEmployee = Employee::whereIn('user_id', $user_ids)->whereIn('id', $hEmpId);
+
+                    $data['hourlyRatedEmployees'] = $hEmployee->paginate(50);
+                     // end hourly rated
+
+                    $data['employees'] = Employee::whereIn('user_id', $user_ids)->orderBy('id', 'DESC')->paginate(50);
+
+                } else {
+                    $data['employees'] = array();
+                }
+        }
+        else {
+            $data['employees'] = Employee::orderBy('id', 'DESC')->paginate(10);
+            // hourly rated employee
+            $hourlyRatedEmployees = EmployeeRate::where('rate_type', 1)->select('employee_id')->get();
+
+            $hEmpId = array();
+
+            if ($hourlyRatedEmployees) {
+                foreach ($hourlyRatedEmployees as $hRate) {
+                    array_push($hEmpId, $hRate->employee_id);
+                }
+            }
+
+            $hEmployee = Employee::whereIn('id', $hEmpId);
+
+            $data['hourlyRatedEmployees'] = $hEmployee->paginate(50); // hourly rated
+            //end hourly rated employee
+
+            $data = Employee::leftjoin('EmployeeRate', 'Employee.id', '=', 'EmployeeRate.id')->paginate(50);
+        }
+        return $this->view('livewire.admin.attendances', $data);
+    }
 }
 
 

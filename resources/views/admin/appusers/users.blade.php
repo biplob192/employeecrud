@@ -78,13 +78,13 @@ Users
 						<div class="menu">
 								
 							<div class="edit">
-								<button class="btn btn-outline-dark" data-toggle="modal" data-target="#EditUserModal" id="editUserBtn" value="{{$user->id}}" onclick="editUser({{$user}})">Edit</button>
+								<button class="btn btn-outline-dark" data-toggle="modal" data-target="#EditUserModal" id="editUserBtn" value="{{$user->id}}" onclick="editUser({{$user}})" onclick="confirmEdit()">Edit</button>
 							</div>							
 							<div class="delete">
 								<form action="{{url('user') .'/'.$user->id}}" method="post">
 									@csrf
 									{{ method_field('delete') }}
-									<button class="btn btn-outline-danger">Delete</button>				
+									<button class="btn btn-outline-danger" onclick="confirmDelete()">Delete</button>				
 								</form>
 							</div>
 						</div>
@@ -114,6 +114,24 @@ Users
   		$("#edit_user_email").val(data.email);
   		$("#edit_user_id").val(data.id);
   		
+	}
+</script>
+<script>
+	function confirmEdit() {
+	  	var result = confirm("Are you sure, you want to edit this record?");
+		if (result) {
+		    alert("Confirmed !!");
+		}else{
+			event.preventDefault();
+		}
+	}
+	function confirmDelete() {
+	  	var result = confirm("Are you sure, you want to delete this record?\nDeleted record will not be recover!");
+		if (result) {
+		    alert("Confirmed !!");
+		}else{
+			event.preventDefault();
+		}
 	}
 </script>
 

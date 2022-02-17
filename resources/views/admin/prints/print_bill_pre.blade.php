@@ -6,7 +6,18 @@
 	<title>Bill</title>
 	<link rel="stylesheet" type="text/css" href="{{asset('Backend')}}/vendors/styles/core.min.css">
 	<script src="{{asset('Backend')}}/vendors/scripts/core.min.js"></script>
-	<script src="{{asset('Backend')}}/vendors/scripts/jquery.printPage.js"></script>
+	<script src="{{asset('Backend')}}/vendors/scripts/jquery.printpage.js"></script>
+	<style type="text/css">
+		table.table-bordered > thead > tr > th{
+		    border:1px solid black;
+		}
+		table.table-bordered > thead > tr > td{
+		    border:1px solid black;
+		}
+		table.table-bordered > tbody > tr > td{
+		    border:1px solid black;
+		}
+	</style>
 </head>
 <body> 
 	<div class="container-fluid" style="margin-top: 50px;">
@@ -43,9 +54,24 @@
 		</div>
 		<div class="container-md"style="margin-top: 15px;">
 			<div class="row align-items-center">
-				<div class="col align-self-center">Comment<br>{{$ad->client}}<br>Upazila ID: {{$ad->upazila_id}}, Zila ID: {{$ad->district_id}}</div>
+				<div class="col-auto align-self-center">
+					<?php
+						if($upazila->upazila_name == 'Dhaka'){
+							$client = $ad->client;
+							$client2 = explode(',', $client);
+							echo $client2[0].',<br>';
+							echo $client2[1].',<br>';
+							echo $client2[2].', Dhaka.';
+						}
+						else{
+							echo $ad->client.',<br>'.$upazila->upazila_name.', '.$district->district_name;
+						}
+						
+					?>
+					<!-- {{$ad->client}}, <br>{{$upazila->upazila_name}}, {{$district->district_name}} -->
+				</div>
 				<div class="col-md-5 align-self-center"></div>
-				<div class="col align-self-center">Bill No: GD-{{$ad->gd_no}}<br>Date: {{$ad->publishing_date}}<br>Order No: {{$ad->order_no}}<br>Date: {{$ad->publishing_date}}</div>
+				<div class="col align-self-center">Bill No: GD-{{$ad->gd_no}}<br>Date: {{$ad->publishing_date}}<br>Order No: {{$ad->order_no}}<br>Order Date: {{$ad->order_date}}</div>
 			</div>			
 		</div>
 		<div class="container-md"style="margin-top: 75px">
@@ -56,7 +82,7 @@
 		<div class="container-md">
 			<div class="row align-items-center">
 				<div class="col table-responsive-md align-self-center">
-					<table class="table table-bordered">
+					<table class="table table-bordered ">
 						<thead>
 							<tr style="font-weight:bold;background: #ECECEC;">
 								<td>INSERT</td>
@@ -71,16 +97,17 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr style="height:200px">
+							<tr style="height:200px; text-align: center;">
 								<td style="vertical-align: middle">{{$ad->publishing_date}}</td>
 								<td style="vertical-align: middle">{{$ad->inch}}*{{$ad->colum}}</td>
-								<td style="vertical-align: middle">{{$ad->total_size}}</td>
-								<td style="vertical-align: middle">{{$ad->rate}}</td>
+								<td style="vertical-align: middle">{{$ad->total_size}}"</td>
+								<td style="vertical-align: middle"><?php echo number_format((float)$ad->rate, 2, '.', ''); ?></td>
 								
-								<td style="vertical-align: middle">{{$ad->extra_charge}}</td>
-								<td style="vertical-align: middle">{{$ad->amount}}</td>
-								<td style="vertical-align: middle">+ Vat 15%</td>
-								<td style="text-align: center; vertical-align: middle">{{$ad->amount}}</td>
+								<td style="vertical-align: middle">{{$ad->extra_charge > 0 ? $ad->extra_charge : '--'}}</td>
+								<!-- <td style="vertical-align: middle">{{$ad->amount}}</td> -->
+								<td style="vertical-align: middle"><?php echo number_format((float)$ad->amount, 2, '.', ''); ?> </td>
+								<td style="vertical-align: middle">-- </br> + Vat 15%</td>
+								<td style="text-align: center; vertical-align: middle"><?php echo number_format((float)$ad->amount, 2, '.', ''); ?> <br><?php $vat = $ad->amount * 0.15; echo number_format((float)$vat, 2, '.', ''); ?></td>
 							</tr>
 								<tr style="background:#ECECEC;">
 								<td></td>
@@ -90,7 +117,7 @@
 								<td></td>
 								<td></td>
 								<td colspan="2" style="text-align: center;"><span style="font-weight:bold;">Net Payable Amount:</span></td>
-								<td style="text-align: center;">{{$ad->amount}}</td>
+								<td style="text-align: center;"> <?php $total =  $ad->amount + $vat; echo number_format((float)$total, 2, '.', ''); ?> </td>
 							</tr>
 						</tbody>
 					</table>
@@ -101,7 +128,7 @@
 			<div class="row align-items-center">
 				<div class="col align-self-center">
 					<span style="font-weight:bold;font-size: 1em;">
-						In Word Taka :&nbsp<?php echo ucfirst(NumConvert::word($ad->amount))?> only. <br>
+						In Word Taka :&nbsp<?php echo ucfirst(NumConvert::word($total))?> only. <br>
 					</span>
 				</div>
 			</div>			
@@ -109,7 +136,7 @@
 		<div class="container-md"style="margin-top: 15px;">
 			<div class="row align-items-center">
 				<div class="col-md-auto align-self-center" style="vertical-align: middle;word-wrap: normal; border: 2px solid #111;">
-					<p style="margin-bottom: 0;"><span style="font-weight:bold;font-style:italic;">Company's Tin: 340578460965<br>Vat Reg No: 001641895<br>NID No: 19822697556370527</span></p>
+					<p style="margin-bottom: 0;"><span style="font-weight:bold;font-style:italic;">Company's Tin: 340578460965<br>Vat Reg No: 0027708340203<br>NID No: 19822697556370527</span></p>
 				</div>
 				<div class="col align-self-center"></div>
 				<div class="col align-self-center"></div>
@@ -118,7 +145,8 @@
 		<div class="container-md"style="margin-top: 15px;">
 			<div class="row align-items-center">
 				<div class="col-md-auto align-self-center" style="vertical-align: middle;word-wrap: normal; border: 1px solid #111;">
-					<span style="font-weight:bold;">(Note: Please Make the Cheque to The Bangladesh Today by Cross Account Payee)</span>
+					<span style="font-weight:bold;">*** Note: Please Make the Cheque to The Bangladesh Today by Cross Account Payee.<br>
+					*** Account Name: The Bangladesh Today. Account No: 0117233005016</span>
 				</div>
 				<div class="col align-self-center"></div>
 				<div class="col align-self-center"></div>

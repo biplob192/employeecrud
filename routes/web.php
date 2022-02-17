@@ -64,7 +64,8 @@ Route::group(['middleware' => ['ckauth','role_or_permission:admin|super_admin|ed
 // Routes for Super Admin
 Route::group(['middleware' => [CheckAuth::class,'role:super_admin']],function () {
     Route::post('/user', [userController::class, 'store']);
-    Route::put('/user/{id}', [userController::class, 'update']);
+    // Route::put('/user/{id}', [userController::class, 'update']);
+    Route::delete('/user/{id}', [userController::class, 'destroy']);
     Route::post('/user_update', [userController::class, 'user_update']);
 });
 
@@ -130,7 +131,9 @@ Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin|editor|u
     Route::get('/gdprice', [chequeController::class, 'getGdPrice']);
     Route::get('/commission', [chequeController::class, 'createCommission']);
     Route::post('/commission', [CommissionController::class, 'store']);
-    Route::get('/commissions', [CommissionController::class, 'index']);    
+    Route::get('/commissions', [CommissionController::class, 'index']);
+    Route::get('/report', [AdController::class, 'previewPrintReport']);
+    Route::get('/print-report', [AdController::class, 'printReport']);
 });
 
 Route::get('/apihit', [TestController::class, 'apiHit']);  

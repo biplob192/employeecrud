@@ -44,7 +44,13 @@
               <div class="col-sm-12 col-md-10">
                 <input class="form-control" type="number" id="commission_amount" name="commission_amount" value="{{old('commission_amount')}}" placeholder="Enter Commission Amount" required>
               </div>
-            </div>  
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-12 col-md-2 col-form-label">Date</label>
+              <div class="col-sm-12 col-md-10">
+                <input class="form-control date-picker" type="text" name="commission_date" value="{{old('commission_date')}}" placeholder="Commission Sending Date" required>
+              </div>
+            </div> 
             <div class="form-group row">
               <label class="col-sm-12 col-md-2 col-form-label">Submit</label>
               <div class="col-sm-12 col-md-10">

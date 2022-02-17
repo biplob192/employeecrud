@@ -43,7 +43,7 @@
             <div class="form-group row">
               <label class="col-sm-12 col-md-2 col-form-label">Amount</label>
               <div class="col-sm-12 col-md-10">
-                <input class="form-control" type="number" id="amount" name="amount" value="{{old('amount')}}" placeholder="Enter Amount" required>
+                <input class="form-control" type="number" step="0.01" id="amount" name="amount" value="{{old('amount')}}" placeholder="Enter Amount" required>
               </div>
             </div>  
             <div class="form-group row">
