@@ -108,51 +108,78 @@ class AdController extends Controller
         ->with('division_names',$division_names)->with('district_names',$district_names)->with('upazila_names',$upazila_names);
     }
 
-    public function store(Request $req){ // store new ads into database
+    public function store(Request $req){
+        // Ads will not insert if Correspondent Previous Due not set.
+        // $wallet = CorrWallet::where('corr_id', $req->corr_id)->first();
+        // if($wallet->previous_due == null){
+        //     Return "You have not set 'Previous Due Amount' for this correspondent. Please set the 'Previous Due Amount' first.";
+        // }
         try{
             $validator  = Validator::make($req->all(), [
-                'corr_name'     => 'required|max:50',            
-                'corr_id'       => 'required',            
-                'ad_type'       => 'required',            
-                'ad_position'   => 'required',          
-                'extra_charge'  => 'required',            
-                'div_id'        => 'required',            
-                'dist_id'       => 'required',            
-                'upazila_id'    => 'required',            
-                'client'        => 'required',            
-                'gd_no'         => 'required|unique:ads,gd_no',            
-                'order_no'      => 'required',           
-                'order_date'    => 'required',           
-                'inch'          => 'required',            
-                'colum'         => 'required',      
-                'payment_status'=> 'required',            
+                'corr_name'         => 'required|max:50',            
+                'corr_id'           => 'required',            
+                'ad_type'           => 'required',            
+                'ad_position'       => 'required',          
+                'div_id'            => 'required',            
+                'dist_id'           => 'required',            
+                'upazila_id'        => 'required',            
+                'client'            => 'required',            
+                'gd_no'             => 'required|unique:ads,gd_no',            
+                'order_no'          => 'required',           
+                'order_date'        => 'required',           
+                'inch'              => 'required',            
+                'colum'             => 'required',      
+                'payment_status'    => 'required',
+                'calculation_type'  => 'required',
             ]);
 
             if($validator ->fails()){
-               return back()->withErrors($validator )->withInput();
+                return back()->withErrors($validator )->withInput();
+            }
+
+            $total_size = $req->inch*$req->colum; 
+            $ads_price = AdsPrice::select('price')->where([
+                'ads_type'      => $req->ad_type,
+                'ads_position'  => $req->ad_position
+            ])->first();
+
+            if($req->calculation_type == 'regular'){
+                $validator2  = Validator::make($req->all(), [          
+                    'extra_charge'   => 'required',
+                ]);
+
+                if($validator2 ->fails()){
+                    return back()->withErrors($validator2 )->withInput();
+                }
+                   
+                $extra_charge = $req->extra_charge;
+                $final_amount = ($total_size*$ads_price->price)+$req->extra_charge;          
+                $custom_amount = 0;
+                $custom_commission = 0;
+            }           
+
+           if($req->calculation_type == 'custom'){
+               $validator3  = Validator::make($req->all(), [
+                    'custom_commission' => 'required',            
+                    'custom_charge'     => 'required',            
+                ]);
+
+                if($validator3 ->fails()){
+                    return back()->withErrors($validator3 )->withInput();
+                }
+
+                $extra_charge = 0;
+                $final_amount = $req->custom_charge;
+                $custom_amount = $req->custom_charge;
+                $custom_commission = $req->custom_commission;
            }
-
-            // Ads will not insert if Correspondent Previous Due not set.
-            // $wallet = CorrWallet::where('corr_id', $req->corr_id)->first();
-            // if($wallet->previous_due == null){
-            //     Return "You have not set 'Previous Due Amount' for this correspondent. Please set the 'Previous Due Amount' first.";
-            // }
-
-           $ads_price = AdsPrice::select('price')
-           ->where([
-            'ads_type'      => $req->ad_type,
-            'ads_position'  => $req->ad_position
-        ])->first();
-
-           $total_size = $req->inch*$req->colum;      
-           $final_amount = ($total_size*$ads_price->price)+$req->extra_charge;
 
            $ad= new Ad;
            $ad->correspondent_name =$req->corr_name;
            $ad->correspondent_id   =$req->corr_id;
            $ad->ad_type            =$req->ad_type;
            $ad->rate               =$ads_price->price;
-           $ad->extra_charge       =$req->extra_charge;
+           $ad->extra_charge       =$extra_charge;
            $ad->division_id        =$req->div_id;
            $ad->district_id        =$req->dist_id;
            $ad->upazila_id         =$req->upazila_id;
@@ -165,8 +192,11 @@ class AdController extends Controller
            $ad->colum              =$req->colum;
            $ad->total_size         =$total_size;
            $ad->amount             =$final_amount;
+           $ad->custom_commission  =$custom_commission;
+           $ad->custom_amount      =$custom_amount;
            $ad->payment_status     =$req->payment_status;
            $ad->publishing_date    =$req->publishing_date;
+           $ad->calculation_type   =$req->calculation_type;
            $ad->save();
            log::insert([
             'user_id'           => Auth::user()->id,
@@ -180,7 +210,8 @@ class AdController extends Controller
     }
 }
 
-    public function show($id){ // show single ad 
+    // show single ad
+    public function show($id){
         $ad=Ad::find($id);
         $upazila= Upazila::select('upazila_name')->where('upazila_id', $ad->upazila_id)->first();
         $district= District::select('district_name')->where('district_id', $ad->district_id)->first();

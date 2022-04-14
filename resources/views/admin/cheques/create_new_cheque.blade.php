@@ -194,7 +194,6 @@ New Cheque
 			$("#commission").val("");
 			$("#ait_cut").val("");
 			}
-
   });
 
 </script>

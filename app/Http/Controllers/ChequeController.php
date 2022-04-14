@@ -44,7 +44,10 @@ class ChequeController extends Controller
         // dd($req->all());
           // Ads will not insert if Correspondent Previous Due not set.
         $wallet = CorrWallet::where('corr_id', $req->correspondent_id)->first();
-        if($wallet->previous_due == null){
+        if(empty($wallet)){
+            return 'Correspondent wallet not found!';
+        }
+        else if(!empty($wallet) && $wallet->previous_due == null){
             Return "You have not set 'Previous Due Amount' for this correspondent. Please set the 'Previous Due Amount' first.";
         }
 
@@ -53,6 +56,7 @@ class ChequeController extends Controller
             $upazila_id = 0;
             $corr_id    = 0;
             $ait_amount = 0;
+            $calculation_type = 'regular';
 
             if($req->gd_no != 'previous_ad'){
                 $validator  = Validator::make($req->all(), [
@@ -65,7 +69,7 @@ class ChequeController extends Controller
                 if($validator ->fails()){
                     throw new Exception('$validation fails');                
                 }
-                $ads = Ad::select('amount','upazila_id','ad_type')->where(['gd_no' => $req->gd_no])->first();
+                $ads = Ad::select('amount','upazila_id','ad_type','custom_commission','calculation_type')->where(['gd_no' => $req->gd_no])->first();
 
                 if($req->cheque_amount < $ads->amount * 0.7){        //Store Cheque Data with Condition
                     throw new Exception('Cheque amount not sufficient!');
@@ -73,10 +77,16 @@ class ChequeController extends Controller
                 $upazila_id = $ads->upazila_id;
                 $ads_type   = $ads->ad_type;    
                 $corr_id    = $req->correspondent_id;    
-                $ait_amount = $ads->amount - $req->cheque_amount;             
+                $ait_amount = $ads->amount - $req->cheque_amount;
+
+                if($ads->calculation_type == 'custom'){
+                    $calculation_type = 'custom';
+                    $cheque->commission = $ads->custom_commission;
+                    $cheque->percentage     = ($ads->custom_commission * 100)/$req->cheque_amount;
+                }
             }
 
-            if($req->gd_no == 'previous_ad'){
+            else if($req->gd_no == 'previous_ad'){
                 $validator  = Validator::make($req->all(), [
                     'gd_no'         => 'required', 
                     'correspondents'=> 'required',            
@@ -84,7 +94,7 @@ class ChequeController extends Controller
                     'upazila'       => 'required',            
                     'bank_name'     => 'required',            
                     'cheque_amount' => 'required|between:3,10',            
-                    'cheque_number' => 'required',            
+                    'cheque_number' => 'required|unique:cheques,cheque_number',            
                 ]);
 
                 if($validator ->fails()){
@@ -106,15 +116,16 @@ class ChequeController extends Controller
             $cheque->bank_name          = $req->bank_name;
             $cheque->cheque_amount      = $req->cheque_amount;
             $cheque->cheque_number      = $req->cheque_number;
-            if($upazila_id == 494 && $ads_type != 'Private'){
+
+            if($upazila_id == 494 && $ads_type != 'Private' && $calculation_type == 'regular'){
                 $cheque->commission     = $req->cheque_amount * 0.35;
                 $cheque->percentage     = 35;
             }
-            if($upazila_id != 494 && $ads_type != 'Private'){
+            else if($upazila_id != 494 && $ads_type != 'Private' && $calculation_type == 'regular'){
                 $cheque->commission     = $req->cheque_amount * 0.3;
                 $cheque->percentage     = 30;
             }
-            if($ads_type == 'Private'){
+            else if($ads_type == 'Private' && $calculation_type == 'regular'){
                 $cheque->commission     = 0;
                 $cheque->percentage     = 0;
             } 
