@@ -5,10 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>Bill</title>
 	<link rel="stylesheet" type="text/css" href="{{asset('Backend')}}/vendors/styles/core.min.css">
-	<link rel="stylesheet" type="text/css" href="{{asset('Backend')}}/vendors/styles/mystyle.css">
 	<script src="{{asset('Backend')}}/vendors/scripts/core.min.js"></script>
 	<script src="{{asset('Backend')}}/vendors/scripts/jquery.printpage.js"></script>
-<!-- 	<style type="text/css">
+	<style type="text/css">
 		table.table-bordered > thead > tr > th{
 		    border:1px solid black;
 		}
@@ -18,7 +17,7 @@
 		table.table-bordered > tbody > tr > td{
 		    border:1px solid black;
 		}
-	</style> -->
+	</style>
 </head>
 <body> 
 	<div class="container-fluid" style="margin-top: 50px;">
@@ -54,52 +53,25 @@
 			</div>			
 		</div>
 		<div class="container-md"style="margin-top: 15px;">
-			<div class="row align-items-center justify-content-between">
-				<div class="col-8 align-self-center">
+			<div class="row align-items-center">
+				<div class="col-auto align-self-center">
 					<?php
 						if($upazila->upazila_name == 'Dhaka'){
 							$client = $ad->client;
 							$client2 = explode(',', $client);
-							$size = count($client2);
-
 							echo $client2[0].',<br>';
-							if(array_key_exists(1, $client2)){
-								if($size == 2){
-									echo $client2[1].', Dhaka';
-								} else echo $client2[1].',<br>';
-							}
-							if(array_key_exists(2, $client2)){
-								if($size == 3){
-									echo $client2[2].', Dhaka';
-								} else echo $client2[2].',<br>';
-							}
-							if(array_key_exists(3, $client2)){
-								if($size == 4){
-									echo $client2[3].', Dhaka';
-								} else echo $client2[3].',<br>';
-							}
+							echo $client2[1].',<br>';
+							echo $client2[2].', Dhaka.';
 						}
 						else{
-							$client = $ad->client;
-							$client2 = explode(',', $client);
-
-							echo $client2[0].',<br>';
-							if(array_key_exists(1, $client2)){
-								echo $client2[1].',<br>';
-							}
-							if(array_key_exists(2, $client2)){
-								echo $client2[2].',<br>';
-							}
-							if(array_key_exists(3, $client2)){
-								echo $client2[3].',<br>';
-							}
-							echo $upazila->upazila_name.', '.$district->district_name;
+							echo $ad->client.',<br>'.$upazila->upazila_name.', '.$district->district_name;
 						}
 						
 					?>
 					<!-- {{$ad->client}}, <br>{{$upazila->upazila_name}}, {{$district->district_name}} -->
 				</div>
-				<div class="col-auto align-self-center">Bill No: GD-{{$ad->gd_no}}<br>Date: {{$ad->publishing_date}}<br>Order No: {{$ad->order_no}}<br>Order Date: {{$ad->order_date}}</div>
+				<div class="col-md-5 align-self-center"></div>
+				<div class="col align-self-center">Bill No: GD-{{$ad->gd_no}}<br>Date: {{$ad->publishing_date}}<br>Order No: {{$ad->order_no}}<br>Order Date: {{$ad->order_date}}</div>
 			</div>			
 		</div>
 		<div class="container-md"style="margin-top: 75px">
@@ -127,7 +99,7 @@
 						<tbody>
 							<tr style="height:200px; text-align: center;">
 								<td style="vertical-align: middle">{{$ad->publishing_date}}</td>
-								<td style="vertical-align: middle">{{$ad->inch}}X{{$ad->colum}}</td>
+								<td style="vertical-align: middle">{{$ad->inch}}*{{$ad->colum}}</td>
 								<td style="vertical-align: middle">{{$ad->total_size}}"</td>
 								<td style="vertical-align: middle"><?php echo number_format((float)$ad->rate, 2, '.', ''); ?></td>
 								

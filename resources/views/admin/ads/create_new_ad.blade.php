@@ -20,13 +20,19 @@ New Ad
 		@csrf
 		<div class="form-group row">
 			<label class="col-sm-12 col-md-2 col-form-label">Full Name</label>
-			<div class="col-sm-12 col-md-10">
+			<div class="col-sm-12 col-md-5">
 				<input type="hidden" name="corr_id" id="corr_id" value="">
 				<select class="form-control custom-select2" id="corr_name" name="corr_name" required>
 					<option value="" selected disabled>Select Name</option>
 					@foreach ($correspondents as $correspondent)
 					<option value="{{$correspondent->name}}">{{$correspondent->name}}, {{$correspondent->upazila_name}}</option>
 					@endforeach
+				</select>
+			</div>
+			<div class="col-sm-12 col-md-5" id="calculation_type_div">
+				<select class="form-control" id="calculation_type" name="calculation_type" >
+					<option value="regular" selected>Regular Calculation</option>
+					<option value="custom">Custom Calculation</option>
 				</select>
 			</div>
 		</div>
@@ -130,10 +136,22 @@ New Ad
 				<input class="form-control" type="number" id="colum" name="colum" value="{{old('colum')}}" placeholder="Colum" required>
 			</div>
 		</div>
-		<div class="form-group row">
+		<div class="form-group row" id="extra_charge_div">
 			<label class="col-sm-12 col-md-2 col-form-label">Extra Charge</label>
 			<div class="col-sm-12 col-md-10">
-				<input class="form-control" type="text" name="extra_charge" value="{{old('extra_charge')}}" placeholder="Extra Charge or Private Ads Amount" required>
+				<input class="form-control" type="number" id="extra_charge" name="extra_charge" value="{{old('extra_charge')}}" placeholder="Extra Charge or Private Ads Amount">
+			</div>
+		</div>
+		<div class="form-group row" id="custom_charge_div">
+			<label class="col-sm-12 col-md-2 col-form-label">Custom Charge</label>
+			<div class="col-sm-12 col-md-10">
+				<input class="form-control" type="number" id="custom_charge" name="custom_charge" value="{{old('custom_charge')}}" placeholder="Custom Charge For This Ads">
+			</div>
+		</div>
+		<div class="form-group row" id="custom_commission_div">
+			<label class="col-sm-12 col-md-2 col-form-label">Custom Commission</label>
+			<div class="col-sm-12 col-md-10">
+				<input class="form-control" type="number" id="custom_commission" name="custom_commission" value="{{old('custom_commission')}}" placeholder="Custom Commission For This Ads">
 			</div>
 		</div>
 		<div class="form-group row">
@@ -175,7 +193,35 @@ New Ad
 
 @section('Script')
 
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script type="text/javascript">
+	$("#calculation_type").select2();
+	$("#calculation_type").select2({
+	    minimumResultsForSearch: Infinity
+	});
+
+	$("#custom_charge_div").hide();
+	$("#custom_commission_div").hide();
+	$('#calculation_type').on('change', function(e){
+		e.preventDefault();
+
+		var calculation_type = $("#calculation_type :selected").val();
+		console.log(calculation_type);
+		if(calculation_type=='custom'){
+			$("#custom_charge_div").show();
+			$("#custom_commission_div").show();
+			$("#extra_charge").val(null);
+			$("#extra_charge_div").hide();
+		}
+		if(calculation_type=='regular'){
+			$("#extra_charge_div").show();
+			$("#custom_charge").val(null);
+			$("#custom_commission").val(null);
+			$("#custom_charge_div").hide();
+			$("#custom_commission_div").hide();
+		}
+	});
+	
 	jQuery("#corr_name").on('change',function(e){
     e.preventDefault();
     // var gd_no = $("#gd_no").val();
