@@ -22,24 +22,26 @@ Cheques
 		<table class="table table-striped">
 		  <thead>
 		    <tr>
-		      	<th>S/N</th>
+		      	<!-- <th>S/N</th> -->
 		      	<th>Name & Address</th>
 				<th>GD No</th>	
 				<th>Cheque No</th>	
 				<th>Bank Name</th>	
-				<th>Amount</th>	
+				<th>Amount</th>
+				<th>Commission</th>
 				<th class="text-center" >Action</th>
 		    </tr>
 		  </thead>
 		  <tbody id="myTable">
 	     	@foreach($cheques as $cheque)
 				<tr>
-					<td>{{$cheque->cheque_id}}</td>	
+					<!-- <td>{{$cheque->cheque_id}}</td> -->
 					<td>{{$cheque->name}}, {{$cheque->upazila_name}}</td>	
 					<td>{{$cheque->gd_no}}</td>			
 					<td>{{$cheque->cheque_number}}</td>			
 					<td>{{$cheque->bank_name}}</td>			
-					<td><span style="font-weight:bold">&#2547; {{$cheque->cheque_amount}}</span></td>			
+					<td><span style="font-weight:bold">&#2547; {{$cheque->cheque_amount}}</span></td>
+					<td><span style="font-weight:bold">&#2547; {{$cheque->commission}}</span></td>
 					<td>
 						<div class="menu">		
 							<div class="edit">
@@ -81,7 +83,7 @@ $(document).ready(function(){
 	function confirmEdit() {
 	  	var result = confirm("Are you sure, you want to edit this record?");
 		if (result) {
-		    alert("Confirmed !!");
+		    
 		}else{
 			event.preventDefault();
 		}
@@ -89,7 +91,7 @@ $(document).ready(function(){
 	function confirmDelete() {
 	  	var result = confirm("Are you sure, you want to delete this record?\nDeleted record will not be recover!");
 		if (result) {
-		    alert("Confirmed !!");
+		    
 		}else{
 			event.preventDefault();
 		}

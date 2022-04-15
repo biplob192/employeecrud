@@ -19,7 +19,7 @@ class ChequeController extends Controller
 {
     public function index()
     {
-        $cheques=Cheque::select('cheques.cheque_id','cheques.gd_no','cheques.bank_name','cheques.cheque_amount','cheques.cheque_number','correspondents.name','upazila_list.upazila_name')       
+        $cheques=Cheque::select('cheques.cheque_id','cheques.gd_no','cheques.bank_name','cheques.cheque_amount','cheques.commission','cheques.cheque_number','correspondents.name','upazila_list.upazila_name')       
         ->leftjoin('correspondents', 'cheques.correspondent_id', '=', 'correspondents.id')
         ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')       
         ->whereNull('cheques.deleted_at')->orderBy('cheques.cheque_id','DESC')

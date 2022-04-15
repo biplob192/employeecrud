@@ -125,7 +125,7 @@ TBT Ads
 	function confirmEdit() {
 	  	var result = confirm("Are you sure, you want to edit this record?");
 		if (result) {
-		    alert("Confirmed !!");
+		    
 		}else{
 			event.preventDefault();
 		}
@@ -133,7 +133,7 @@ TBT Ads
 	function confirmDelete() {
 	  	var result = confirm("Are you sure, you want to delete this record?\nDeleted record will not be recover!");
 		if (result) {
-		    alert("Confirmed !!");
+		    
 		}else{
 			event.preventDefault();
 		}
