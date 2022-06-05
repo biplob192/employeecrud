@@ -58,7 +58,7 @@ Route::middleware([CheckAuth::class])->group(function () {
 
 // Routes for Role or Permission
 Route::group(['middleware' => ['ckauth','role_or_permission:admin|super_admin|edit']],function () {
-  
+
 });
 
 // Routes for Super Admin
@@ -81,15 +81,15 @@ Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin']],funct
 });
 
 // Routes for Editor
-Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin|editor']],function () {    
+Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin|editor']],function () {
     Route::get('/users', [userController::class, 'index']);
     Route::get('/ad/{id}/edit', [AdController::class, 'edit']);
     Route::put('/ad/{id}', [AdController::class, 'update']);
     Route::get('/employee', [EmployeeController::class, 'create']);
-    Route::post('/employee', [EmployeeController::class, 'store']);    
+    Route::post('/employee', [EmployeeController::class, 'store']);
     Route::get('/employee/{id}', [EmployeeController::class, 'show']);
     Route::get('/employee/{id}/edit', [EmployeeController::class, 'edit']);
-    Route::put('/employee/{id}', [EmployeeController::class, 'update']); 
+    Route::put('/employee/{id}', [EmployeeController::class, 'update']);
     Route::get('/ad_price', [AdsPriceController::class, 'create']);
     Route::post('/ad_price', [AdsPriceController::class, 'store']);
     Route::get('/ad_prices', [AdsPriceController::class, 'index']);
@@ -100,19 +100,19 @@ Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin|editor']
     Route::put('/cheque/{id}', [chequeController::class, 'update']);
     Route::get('/commission/{id}/edit', [CommissionController::class, 'edit']);
     Route::put('/commission/{id}', [CommissionController::class, 'update']);
-    Route::get('/corrwallets', [CorrespondentController::class, 'indexWallets']);    
+    Route::get('/corrwallets', [CorrespondentController::class, 'indexWallets']);
 });
 
 // Routes for All
 Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin|editor|user']],function () {
     Route::get('/correspondent', [CorrespondentController::class, 'create']);
     Route::post('/correspondent', [CorrespondentController::class, 'store']);
-    Route::get('/correspondents', [CorrespondentController::class, 'index']);    
+    Route::get('/correspondents', [CorrespondentController::class, 'index']);
     Route::get('/correspondent/{id}', [CorrespondentController::class, 'show']);
     Route::get('/correspondent/{id}/edit', [CorrespondentController::class, 'edit']);
-    Route::put('/correspondent/{id}', [CorrespondentController::class, 'update']); 
+    Route::put('/correspondent/{id}', [CorrespondentController::class, 'update']);
     Route::get('getDistrict', [CorrespondentController::class, 'getDistrict'])->name('getDistrict');
-    Route::get('getUpazila', [CorrespondentController::class, 'getUpazila'])->name('getUpazila');    
+    Route::get('getUpazila', [CorrespondentController::class, 'getUpazila'])->name('getUpazila');
     Route::get('/employees', [EmployeeController::class, 'index']);
     Route::get('/ad', [AdController::class, 'create']);
     Route::post('/ad', [AdController::class, 'store']);
@@ -127,7 +127,7 @@ Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin|editor|u
     Route::get('/cheque', [chequeController::class, 'create']);
     Route::post('/cheque', [chequeController::class, 'store']);
     Route::get('/cheques', [chequeController::class, 'index']);
-    Route::get('/cheque/{id}', [chequeController::class, 'show']);    
+    Route::get('/cheque/{id}', [chequeController::class, 'show']);
     Route::get('/gdprice', [chequeController::class, 'getGdPrice']);
     Route::get('/commission', [chequeController::class, 'createCommission']);
     Route::post('/commission', [CommissionController::class, 'store']);
@@ -136,4 +136,5 @@ Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin|editor|u
     Route::get('/print-report', [AdController::class, 'printReport']);
 });
 
-Route::get('/apihit', [TestController::class, 'apiHit']);  
+Route::get('/apihit', [TestController::class, 'apiHit']);
+Route::get('/test', [TestController::class, 'time']);

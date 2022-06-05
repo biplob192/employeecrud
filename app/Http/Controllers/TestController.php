@@ -12,7 +12,66 @@ class TestController extends Controller
         return view("test");
     }
 
-     public function ajaxcall(Request $req){
+    public function time(){
+        $dateFrom = "2021-07-31 00:00:00";
+        $dateTo = "2021-09-01 23:59:59";
+        $timeFrom = "0000-00-00 15:00:00";
+        $timeTo = "0000-00-00 18:00:00";
+        $dates = [$dateFrom, $dateTo];
+
+        $allADS = Ad::whereBetween('created_at',$dates)->get();
+
+        $adsID = array();
+        foreach($allADS as $ad){
+            $time = $ad->created_at->format('H:i:s');
+            $timeFrom = "15:00:00";
+            $timeTo = "18:00:00";
+            if($time >= $timeFrom && $time <= $timeTo){
+                $adsID[] = $ad->id;
+            }
+        }
+        return $allADS->whereIn('id', $adsID);
+
+        $allADS2 = Ad::whereBetween('created_at',$dates)->
+        whereTime('created_at', '>=',$timeFrom)
+        ->whereTime('created_at', '<=',$timeTo)
+        ->get();
+        return $allADS2;
+
+        // solution 2
+
+        $allADS = Ad::with('selfilter')
+            ->whereDate('created_at', '>=',$dateFrom)
+            ->whereDate('created_at', '<=',$dateTo)
+            ->whereHas('selfilter', function($query) use ( $timeFrom,  $timeTo){
+            return $query->whereTime('created_at', '>=',$timeFrom)
+            ->whereTime('created_at', '<=',$timeTo);
+        })
+        ->get();
+        //  ->toSql();
+        ddd($allADS);
+
+        // $dateFrom = "2021-07-31 12:57:33";
+        // $dateTo = "2021-09-01 03:04:09";
+        // $timeFrom = "15:00:00";
+        // $timeTo = "18:00:00";
+        // $dateFrom = "2021-07-31";
+        // $dateTo = "2021-09-01";
+
+        // $from = date('Y-m-d', strtotime($from));
+        // $to = date('Y-m-d', strtotime($to));
+        // $dates = [$from.' 00:00:00',$to.' 23:59:59'];
+        // $times = [$timeFrom, $timeTo];
+
+
+        // $ads = Ad::whereBetween('created_at',$dates)->get();
+        // return $ads->whereBetween('created_at',$times);
+        // return $ads->where('payment_status', 1);
+        // return $ads->where('payment_status', 1)->first();
+        // return Ad::whereBetween('created_at',$dates)->where(created_at->format('H:i:s'))->get();
+    }
+
+    public function ajaxcall(Request $req){
         try{
             $ad = Ad::where('gd_no',$req->gd_no)->first();
             if(!$ad){
@@ -33,14 +92,14 @@ class TestController extends Controller
     }
 
     public function apiHit(){
-        $url = "http://dummy.restapiexample.com/api/v1/employees"; 
-        $url = "http://127.0.0.1:8080/api/correspondents"; 
-        $token = 'env('TOKEN')';  
+        $url = "http://dummy.restapiexample.com/api/v1/employees";
+        $url = "http://127.0.0.1:8080/api/correspondents";
+        $token = 'env('TOKEN')';
         $authorization = "Authorization: Bearer ".$token; // Prepare the authorisation token
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));   
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);   
-        curl_setopt($ch, CURLOPT_URL, $url);   
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL, $url);
         $res = curl_exec($ch);
         $res = json_decode($res);
         if($res && $res->status == true){
@@ -49,23 +108,23 @@ class TestController extends Controller
             $res = $this->apiLogin();
             $this->apiHit();
         }
-        // 
+        //
         return $res;
     }
 
     protected function apiLogin(){
-        $url = "http://127.0.0.1:8080/api/login"; 
-        $token = env('TOKEN');  
+        $url = "http://127.0.0.1:8080/api/login";
+        $token = env('TOKEN');
         $login['email']    = 'shajib@gmail.com';
         $login['password'] = 'shajib';
         $login = json_encode($login);
         $authorization = "Authorization: Bearer ".$token; // Prepare the authorisation token
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));   
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);   
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS,$login);
-        curl_setopt($ch, CURLOPT_URL, $url);   
+        curl_setopt($ch, CURLOPT_URL, $url);
         $res = curl_exec($ch);
         $res = json_decode($res);
         putenv('TOKEN='.$res->data->token);
