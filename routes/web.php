@@ -117,6 +117,8 @@ Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin|editor|u
     Route::get('/ad', [AdController::class, 'create']);
     Route::post('/ad', [AdController::class, 'store']);
     Route::get('/ads', [AdController::class, 'indexV2']);
+    Route::get('/daily_ads', [AdController::class, 'dailyAds']);
+    Route::post('/daily_ads', [AdController::class, 'dailyAdsPost']);
     Route::get('/ads/export', [AdController::class, 'exportAds']);
     Route::get('/ad/{id}', [AdController::class, 'show']);
     Route::get('/ad/{id}/bill', [AdController::class, 'print_bill']);

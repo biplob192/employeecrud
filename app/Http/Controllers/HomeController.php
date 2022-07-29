@@ -27,7 +27,7 @@ class HomeController extends Controller
             $totalPaid      = 0;
             $countPaid      = 0;
             $totalUnPaid    = 0;
-            $countUnPaid    = 0; 
+            $countUnPaid    = 0;
             $totalSize      = 0;
             $total          = 0;
             $ad             = [];
@@ -49,9 +49,9 @@ class HomeController extends Controller
                 $ad=Ad::whereStatus($status)
                 ->leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
                 ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
-                ->whereNull('ads.deleted_at')        
+                ->whereNull('ads.deleted_at')
                 ->when($req->corr_id , fn($query) => $query->where("ads.correspondent_id", $req->corr_id))
-                ->when(count($dates) > 0, function($query) use ($dates ) { 
+                ->when(count($dates) > 0, function($query) use ($dates ) {
                     return $query->whereBetween('ads.created_at',$dates);
                 })
                 ->get();
@@ -62,12 +62,12 @@ class HomeController extends Controller
                 // dd($ad[0]->amount);
 
                 $cheque = Cheque::where('correspondent_id', $req->corr_id)
-                ->when(count($dates) > 0, function($query) use ($dates ) { 
+                ->when(count($dates) > 0, function($query) use ($dates ) {
                     return $query->whereBetween('created_at',$dates);
                 })->get();
 
                 $commission = Commission::where('correspondent', $req->corr_id)
-                ->when(count($dates) > 0, function($query) use ($dates ) { 
+                ->when(count($dates) > 0, function($query) use ($dates ) {
                     return $query->whereBetween('created_at',$dates);
                 })->get();
 
@@ -79,7 +79,7 @@ class HomeController extends Controller
                 $totalPaid      = $ad->where('payment_status', 1)->sum('amount');
                 $countPaid      = $ad->where('payment_status', 1)->count();
                 $totalUnPaid    = $ad->where('payment_status', 0)->sum('amount');
-                $countUnPaid    = $ad->where('payment_status', 0)->count(); 
+                $countUnPaid    = $ad->where('payment_status', 0)->count();
                 $totalSize      = $ad->sum('total_size');
 
                 $chequeAmount   = $cheque->sum('cheque_amount');

@@ -8,14 +8,14 @@
 	<script src="{{asset('Backend')}}/vendors/scripts/core.min.js"></script>
 	<script src="{{asset('Backend')}}/vendors/scripts/jquery.printpage.js"></script>
 </head>
-<body> 
+<body>
 	<div class="container-fluid" style="margin-top: 30px;">
 		<div class="container-md">
 			<div class="row align-items-center">
 				<div class="col align-self-center"></div>
 				<div class="col align-self-center"><img src="{{asset('Backend')}}/vendors/images/tbt-logo.svg" style="width: 400px;"></div>
 				<div class="col align-self-center"></div>
-			</div>			
+			</div>
 		</div>
 		<div class="container-md">
 			<div class="row align-items-center">
@@ -28,20 +28,20 @@
 					</span> </p>
 				</div>
 				<div class="col align-self-center"></div>
-			</div>			
+			</div>
 		</div>
 		<div class="container-md"style="margin-top: 15px;">
 			<div class="row align-items-center">
 				<div class="col align-self-center">{{$corr->name}}, ({{$corr->upazila_name}}, {{$corr->district_name}}) <br>Report Period: {{$data['duration']}}<br> <b>Printed: <?php echo date("h:i:sa, ").'at '.date(" d-m-Y");?></b> </div>
 				<div class="col align-self-center"></div>
 				<div class="col align-self-center"></div>
-			</div>			
+			</div>
 		</div>
 		<div class="container-md"style="margin-top: 75px">
 			<div class="row align-items-center">
 				<div class="col align-self-center"><p align="center"><span style="font-weight:bold; font-style:italic;text-decoration: underline;font-size: 1.5em;">Correspondent Report</span></p>
 				</div>
-			</div>			
+			</div>
 		</div>
 
 		<div class="container-md">
@@ -92,9 +92,9 @@
 				@foreach ($data['ad'] as $ad)
 				@if($ad['payment_status'] == 0)
 				{{$ad['gd_no']}},
-				@endif					
-				@endforeach				
-			</div>		
+				@endif
+				@endforeach
+			</div>
 		</div>
 
 <!-- 		<div class="container-md"style="margin-top: 15px">
@@ -104,7 +104,7 @@
 						In Word Taka :&nbsp<?php echo ucfirst (NumConvert::word($data['total']))?> only.
 					</span>
 				</div>
-			</div>			
+			</div>
 		</div> -->
 
 		<div class="container-md"style="margin-top: 15px;">
@@ -114,7 +114,7 @@
 				</div>
 				<div class="col align-self-center"></div>
 				<div class="col align-self-center"></div>
-			</div>			
+			</div>
 		</div>
 		<div class="container-md"style="margin-top: 15px;">
 			<div class="row align-items-center">
@@ -123,7 +123,7 @@
 				</div>
 				<div class="col align-self-center"></div>
 				<div class="col align-self-center"></div>
-			</div>			
+			</div>
 		</div>
 		<div class="container-md"style="margin-top: 195px;margin-bottom: 175px;">
 			<div class="row align-items-center">
@@ -131,8 +131,8 @@
 				<div class="col align-self-center"><span style="font-weight:bold;text-decoration: overline;">Accounts Officer</span></div>
 				<div class="col align-self-center"><span style="font-weight:bold;text-decoration: overline;">Manager (Advt. & Mkt.)</span></div>
 				<div class="col-4 align-self-center"><div style="float:right;"><span style="font-weight:bold;text-decoration: overline;">General Manager (Advt. & Mkt.)</span></div></div>
-			</div>			
-		</div>				
+			</div>
+		</div>
 	</div>
 </body>
 </html>

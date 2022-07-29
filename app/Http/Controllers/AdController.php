@@ -43,8 +43,8 @@ class AdController extends Controller
             ->where('ads.created_at', '<=', date('Y-m-d', strtotime($to)).' 23:59:59')->get();
             $count=$ad->count();
             $totalPaid=$ad->where('payment_status', 1)->sum('amount');
-            
-            $totalUnPaid=$ad->where('payment_status', 0)->sum('amount');        
+
+            $totalUnPaid=$ad->where('payment_status', 0)->sum('amount');
 
         }
         return view ('admin.ads.ads',['ad'=>$ad, 'totalpaid' =>$totalPaid, 'totalunpaid' =>$totalUnPaid, 'count' =>$count]);
@@ -71,7 +71,7 @@ class AdController extends Controller
         //     $query->where('ads.payment_status',$status))
         // ->when($status ==2 , fn($query) => $query->where('ads.upazila_id', 494))
         // ->when($status ==3, fn($query) => $query->where('ads.upazila_id','<>', 494))
-        // ->when(count($dates) > 0, function($query) use ($dates ) { 
+        // ->when(count($dates) > 0, function($query) use ($dates ) {
         //     return $query->whereBetween('ads.created_at',$dates);
         // })
         // ->when($req->corr_id , fn($query) => $query->where("ads.correspondent_id", $req->corr_id))
@@ -80,9 +80,9 @@ class AdController extends Controller
         $ad=Ad::whereStatus($status)
         ->leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
         ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
-        ->whereNull('ads.deleted_at')        
+        ->whereNull('ads.deleted_at')
         ->when($req->corr_id , fn($query) => $query->where("ads.correspondent_id", $req->corr_id))
-        ->when(count($dates) > 0, function($query) use ($dates ) { 
+        ->when(count($dates) > 0, function($query) use ($dates ) {
             return $query->whereBetween('ads.created_at',$dates);
         })
         ->get();
@@ -91,7 +91,7 @@ class AdController extends Controller
         $totalPaid=$ad->where('payment_status', 1)->sum('amount');
         $countPaid=$ad->where('payment_status', 1)->count();
         $totalUnPaid=$ad->where('payment_status', 0)->sum('amount');
-        $countUnPaid=$ad->where('payment_status', 0)->count(); 
+        $countUnPaid=$ad->where('payment_status', 0)->count();
         $totalSize=$ad->sum('total_size');
         return view ('admin.ads.ads',['ad'=>$ad, 'totalpaid' =>$totalPaid, 'totalunpaid' =>$totalUnPaid, 'count' =>$count, 'totalSize' =>$totalSize, 'countPaid' => $countPaid, 'countUnPaid' => $countUnPaid]);
     }
@@ -116,19 +116,19 @@ class AdController extends Controller
         // }
         try{
             $validator  = Validator::make($req->all(), [
-                'corr_name'         => 'required|max:50',            
-                'corr_id'           => 'required',            
-                'ad_type'           => 'required',            
-                'ad_position'       => 'required',          
-                'div_id'            => 'required',            
-                'dist_id'           => 'required',            
-                'upazila_id'        => 'required',            
-                'client'            => 'required',            
-                'gd_no'             => 'required|unique:ads,gd_no',            
-                'order_no'          => 'required',           
-                'order_date'        => 'required',           
-                'inch'              => 'required',            
-                'colum'             => 'required',      
+                'corr_name'         => 'required|max:50',
+                'corr_id'           => 'required',
+                'ad_type'           => 'required',
+                'ad_position'       => 'required',
+                'div_id'            => 'required',
+                'dist_id'           => 'required',
+                'upazila_id'        => 'required',
+                'client'            => 'required',
+                'gd_no'             => 'required|unique:ads,gd_no',
+                'order_no'          => 'required',
+                'order_date'        => 'required',
+                'inch'              => 'required',
+                'colum'             => 'required',
                 'payment_status'    => 'required',
                 'calculation_type'  => 'required',
             ]);
@@ -137,31 +137,31 @@ class AdController extends Controller
                 return back()->withErrors($validator )->withInput();
             }
 
-            $total_size = $req->inch*$req->colum; 
+            $total_size = $req->inch*$req->colum;
             $ads_price = AdsPrice::select('price')->where([
                 'ads_type'      => $req->ad_type,
                 'ads_position'  => $req->ad_position
             ])->first();
 
             if($req->calculation_type == 'regular'){
-                $validator2  = Validator::make($req->all(), [          
+                $validator2  = Validator::make($req->all(), [
                     'extra_charge'   => 'required',
                 ]);
 
                 if($validator2 ->fails()){
                     return back()->withErrors($validator2 )->withInput();
                 }
-                   
+
                 $extra_charge = $req->extra_charge;
-                $final_amount = ($total_size*$ads_price->price)+$req->extra_charge;          
+                $final_amount = ($total_size*$ads_price->price)+$req->extra_charge;
                 $custom_amount = 0;
                 $custom_commission = 0;
-            }           
+            }
 
            if($req->calculation_type == 'custom'){
                $validator3  = Validator::make($req->all(), [
-                    'custom_commission' => 'required',            
-                    'custom_charge'     => 'required',            
+                    'custom_commission' => 'required',
+                    'custom_charge'     => 'required',
                 ]);
 
                 if($validator3 ->fails()){
@@ -238,9 +238,9 @@ class AdController extends Controller
             ->where([
                 'ads_type' => $req->ad_type,
                 'ads_position' => $req->ad_position
-            ])->first();  
+            ])->first();
 
-            $total_size = $req->inch*$req->colum;  
+            $total_size = $req->inch*$req->colum;
             $final_amount = ($total_size*$ads_price->price)+$req->extra_charge;
 
             $ad->total_size = $total_size;
@@ -287,14 +287,14 @@ class AdController extends Controller
         }
         if($req->order_no){
             $ad->order_no=$req->order_no;
-        }         
+        }
         if($req->payment_status == 1){
             $ad->payment_status=$req->payment_status;
         }
         if($req->payment_status == 0){
             $ad->payment_status=$req->payment_status;
         }
-        
+
         $ad->save();
         log::insert([
             'user_id'           => Auth::user()->id,
@@ -313,7 +313,7 @@ class AdController extends Controller
                 'data'              => json_encode($ad),
                 'operation_type'    => 'Delete Ad',
             ]);
-        }        
+        }
         return back();
     }
 
@@ -339,7 +339,7 @@ class AdController extends Controller
         ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')
         ->leftjoin('district_list', 'correspondents.district_id', '=', 'district_list.district_id')
         ->first();
-        
+
         session()->forget([
             'count', 'total', 'totalPaid', 'countPaid', 'totalUnPaid', 'countUnPaid', 'totalSize', 'chequeAmount', 'chequeCount', 'duration', 'ad', 'previous_due', 'credit', 'last_comm', 'total_comm'
         ]);
@@ -374,13 +374,13 @@ class AdController extends Controller
   public function getAddress(Request $req){
     try{
             // $correspondent= Correspondent::where('name',$req->corr_name)->first();
-        $correspondent= Correspondent::            
+        $correspondent= Correspondent::
         leftjoin('division_list', 'correspondents.division_id', '=', 'division_list.division_id')
         ->leftjoin('district_list', 'correspondents.district_id', '=', 'district_list.district_id')
         ->where('name', $req->corr_name)->first();
 
-            // $correspondent= Correspondent::            
-            // leftjoin('division_list', 'correspondents.division_id', '=', 'division_list.division_id')            
+            // $correspondent= Correspondent::
+            // leftjoin('division_list', 'correspondents.division_id', '=', 'division_list.division_id')
             // ->where('name', $req->corr_name)->first();
 
             // $correspondent= Correspondent::
@@ -389,7 +389,7 @@ class AdController extends Controller
 
         if(!$correspondent){
             throw new Exception("Correspondent not found");
-        }            
+        }
         return response()->json(array(
             'status' => true,
             'data' => $correspondent,
@@ -417,7 +417,7 @@ class AdController extends Controller
                     leftjoin('district_list', 'ads.district_id', '=', 'district_list.district_id')
                     ->leftjoin('upazila_list', 'ads.upazila_id', '=', 'upazila_list.upazila_id')
                     ->where('correspondent_id',$req->corr_id)->where('payment_status',$req->payment_status)->get();
-                }            
+                }
 
                 if(!$ads){
                     throw new Exception("Ads not found");
@@ -440,5 +440,34 @@ class AdController extends Controller
 
     public function exportAds(){
         return Excel::download(new AdsExport, 'ads.xlsx');
+    }
+
+    public function dailyAds(){
+        $correspondents= Correspondent::select('name','upazila_name')
+        ->leftjoin('upazila_list', 'correspondents.upazila_id', '=', 'upazila_list.upazila_id')
+        ->get();
+        $division_names= Division::select('division_name')->get();
+        $district_names= District::select('district_name')->get();
+        $upazila_names= Upazila::select('upazila_name','upazila_id')->get();
+        return view('admin.ads.daily_ads')->with('correspondents', $correspondents)
+        ->with('division_names',$division_names)->with('district_names',$district_names)->with('upazila_names',$upazila_names);
+    }
+
+    public function dailyAdsPost(Request $request){
+        if($request->filled('publishing_date')){
+            $form_date = date('Y-m-d', strtotime($request->publishing_date));
+
+            $ads = Ad::whereDate('created_at', $form_date)->get();
+            $total_amount = $ads->sum('amount');
+            // $total_amount = Ad::sum('amount')->whereDate('created_at', $form_date)->get();
+            if(empty($ads)){
+                return 'No record found!!';
+            }
+            return view ('admin.prints.daily_ads_report')
+            ->with('ads', $ads)
+            ->with('form_date', $request->publishing_date)
+            ->with('total_amount', $total_amount);
+            return view('admin.ads.daily_ads_report')->with('ads', $ads);
+        }
     }
 }
