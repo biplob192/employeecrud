@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Bill</title>
+	<title>Daily Ads Report</title>
 	<link rel="stylesheet" type="text/css" href="{{asset('Backend')}}/vendors/styles/core.min.css">
 	<link rel="stylesheet" type="text/css" href="{{asset('Backend')}}/vendors/styles/mystyle.css">
 	<script src="{{asset('Backend')}}/vendors/scripts/core.min.js"></script>
@@ -102,7 +102,7 @@
 								<td style="vertical-align: middle">{{$loop->iteration}}</td>
 								<td style="vertical-align: middle">{{$ad->gd_no}}</td>
 								<td style="vertical-align: middle; width:30%; text-align: left">{{$ad->client}}</td>
-								<td style="vertical-align: middle">BW</td>
+								<td style="vertical-align: middle">{{$ad->ad_position == 'Inner Page' ? 'BW' : 'Color'}}</td>
 								<td style="vertical-align: middle">{{$ad->inch}}"X{{$ad->colum}}col</td>
 								<td style="vertical-align: middle"><?php echo number_format((float)$ad->rate, 2, '.', ''); ?></td>
 								<td style="text-align: center; vertical-align: middle"><?php echo number_format((float)$ad->amount, 2, '.', ''); ?></td>

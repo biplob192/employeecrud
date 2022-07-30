@@ -156,6 +156,16 @@ class AdController extends Controller
                 $final_amount = ($total_size*$ads_price->price)+$req->extra_charge;
                 $custom_amount = 0;
                 $custom_commission = 0;
+
+                if($req->ad_position == 'Inner_Color'){
+                    $final_amount = $final_amount + ($final_amount * 0.45);
+                }
+                else if($req->ad_position == 'Front Page'){
+                    $final_amount = ($final_amount * 2) + (($final_amount * 2) * 0.45);
+                }
+                else if($req->ad_position == 'Back Page'){
+                    $final_amount = ($final_amount + ($final_amount * 0.50)) + ($final_amount + ($final_amount * 0.50)) * 0.45;
+                }
             }
 
            if($req->calculation_type == 'custom'){

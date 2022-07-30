@@ -25,7 +25,15 @@
 						<ul class="submenu">
 							<li><a href="{{url('/ad')}}">Add New</a></li>
 							<li><a href="{{url('/ads')}}">All Ads</a></li>
-							<li><a href="{{url('/daily_ads')}}">Daily Ads</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-analytics-4"></span><span class="mtext">Reports</span>
+						</a>
+						<ul class="submenu">
+							<li><a href="{{url('/daily_ads_report')}}">Daily Ads Report</a></li>
+							<li><a href="{{url('/correspondent_report')}}">Correspondent Report</a></li>
 						</ul>
 					</li>
 					@role('super_admin|admin|editor')
@@ -83,7 +91,7 @@
 					@hasanyrole('super_admin|admin|editor')
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-settings2"></span><span class="mtext">Setting</span>
+							<span class="micon dw dw-settings2"></span><span class="mtext">Settings</span>
 						</a>
 						<ul class="submenu">
 							<li class="dropdown">

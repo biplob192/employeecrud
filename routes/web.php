@@ -47,6 +47,7 @@ Route::get('/dbtest', 'App\Http\Controllers\DatabaseController@dbConn');
 Route::post('/login', [LoginController::class, 'postLogin']);
 Route::get('/login', [LoginController::class, 'login']);
 Route::get('/dashboard', [HomeController::class, 'dashboard']);
+Route::get('/correspondent_report', [CorrespondentController::class, 'correspondentReport']);
 Route::get('/', [HomeController::class, 'home']);
 
 // Protected route for Login users
@@ -117,8 +118,8 @@ Route::group(['middleware' => [CheckAuth::class,'role:admin|super_admin|editor|u
     Route::get('/ad', [AdController::class, 'create']);
     Route::post('/ad', [AdController::class, 'store']);
     Route::get('/ads', [AdController::class, 'indexV2']);
-    Route::get('/daily_ads', [AdController::class, 'dailyAds']);
-    Route::post('/daily_ads', [AdController::class, 'dailyAdsPost']);
+    Route::get('/daily_ads_report', [AdController::class, 'dailyAds']);
+    Route::post('/daily_ads_report', [AdController::class, 'dailyAdsPost']);
     Route::get('/ads/export', [AdController::class, 'exportAds']);
     Route::get('/ad/{id}', [AdController::class, 'show']);
     Route::get('/ad/{id}/bill', [AdController::class, 'print_bill']);

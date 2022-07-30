@@ -130,15 +130,60 @@
 									?>
 								</td>
 
-								<td style="text-align: center; padding: 0.75rem; border: 1px solid black; vertical-align: middle;">{{$ad->extra_charge > 0 ? $ad->extra_charge : '--'}}</td>
+								<td style="text-align: center; padding: 0.75rem; border: 1px solid black; vertical-align: middle;">
+                                    {{-- {{$ad->extra_charge > 0 ? $ad->extra_charge : '--'}} --}}
+                                    @php
+                                        $ads_amount = $ad->rate * $ad->total_size;
+                                        $page_charge = 0;
+
+                                        if($ad->calculation_type == 'regular' && $ad->ad_position == 'Front Page'){
+                                            echo 'F. page ch: 100% </br>';
+                                            $page_charge = $ads_amount;
+                                            echo 'Tk. '. number_format((float)$page_charge, 2, '.', '');
+                                        }
+                                        else if($ad->calculation_type == 'regular' && $ad->ad_position == 'Back Page'){
+                                            echo 'Back page charge: 50% </br>';
+                                            $page_charge = $ads_amount * 0.50;
+                                            echo 'Tk. '. number_format((float)$page_charge, 2, '.', '');
+                                        }
+                                        else{
+                                            echo '--';
+                                        }
+                                        $total_ads_amount = $ads_amount + $page_charge;
+                                    @endphp
+                                </td>
 								<!-- <td style="vertical-align: middle">{{$ad->amount}}</td> -->
-								<td style="text-align: center; padding: 0.75rem; border: 1px solid black; vertical-align: middle;"><?php echo number_format((float)$ad->amount, 2, '.', ''); ?> </td>
-								<td style="text-align: center; padding: 0.75rem; border: 1px solid black; vertical-align: middle;">-- </br> + Vat 15%</td>
-								<td style="text-align: center; padding: 0.75rem; border: 1px solid black; vertical-align: middle;"><?php echo number_format((float)$ad->amount, 2, '.', ''); ?> <br><?php $vat = $ad->amount * 0.15; echo number_format((float)$vat, 2, '.', ''); ?></td>
+								<td style="text-align: center; padding: 0.75rem; border: 1px solid black; vertical-align: middle;"><?php echo number_format((float)$total_ads_amount, 2, '.', ''); ?> </td>
+								<td style="text-align: center; padding: 0.75rem; border: 1px solid black; vertical-align: middle;">
+                                    {{-- -- </br> + Vat 15% --}}
+                                    -- </br>
+                                    @php
+                                        if($ad->ad_position != 'Inner Page'){
+                                            echo 'Color Ch 45% </br> -- </br> -- </br>';
+                                        }
+                                    @endphp
+                                    + Vat 15% </br>
+                                    + IT 10% </br>
+                                </td>
+								<td style="text-align: center; padding: 0.75rem; border: 1px solid black; vertical-align: middle;">
+                                    {{-- <?php echo number_format((float)$ad->amount, 2, '.', ''); ?> <br><?php $vat = $ad->amount * 0.15; echo number_format((float)$vat, 2, '.', ''); ?> --}}
+                                    @php
+                                        $color_charge  = 0;
+                                        $sub_total = $total_ads_amount;
+                                        echo number_format((float)$total_ads_amount, 2, '.', '').'<br>';
+
+                                        if($ad->ad_position != 'Inner Page'){
+                                            echo number_format((float)$color_charge = $total_ads_amount * 0.45, 2, '.', '').'</br>----------------</br>';
+                                            echo number_format((float)$sub_total = ($total_ads_amount + $color_charge), 2, '.', '').'</br>';
+                                        }
+                                    @endphp
+                                    <?php $vat = $sub_total * 0.15; echo number_format((float)$vat, 2, '.', ''); ?> <br>
+                                    <?php $it = $sub_total * 0.10; echo number_format((float)$it, 2, '.', ''); ?>
+                                </td>
 							</tr>
 							<tr style="background-color: #ECECEC !important">
 								<td colspan="7" style="padding: 0.75rem; text-align: right;"><span style="font-weight:bold;">Net Payable Amount:</span></td>
-								<td style="padding: 0.75rem; text-align: center;"> <?php $total =  $ad->amount + $vat; echo number_format((float)$total, 2, '.', '').' Taka'; ?> </td>
+								<td style="padding: 0.75rem; text-align: center;"> <?php $total =  $sub_total + $vat + $it; echo number_format((float)$total, 2, '.', '').' Taka'; ?> </td>
 							</tr>
 						</tbody>
 					</table>

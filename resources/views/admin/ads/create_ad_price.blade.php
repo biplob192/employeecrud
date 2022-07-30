@@ -21,7 +21,7 @@ New Ad
 			<label class="col-sm-12 col-md-2 col-form-label">Ad Type</label>
 			<div class="col-sm-12 col-md-10">
 				<select class="custom-select col-12" name="ad_type">
-					<option value ="Govt">Government)</option>
+					<option value ="Govt">Government</option>
 					<option value ="Private">Private</option>
 					<option value ="Commercial">Commercial</option>
 				</select>

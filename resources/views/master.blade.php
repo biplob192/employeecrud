@@ -24,6 +24,7 @@
 	<div class="main-container">
 		<div class="pd-ltr-20">
 			@yield('Content')
+            @include('inc.developer')
 		</div>
 	</div>
 	@include('inc.script')
